@@ -16,7 +16,7 @@ COPY csv2siard.exe %RUNTIME%
 COPY xmllint.exe %RUNTIME%
 COPY sablot.dll %RUNTIME%
 COPY expat.dll %RUNTIME%
-COPY icon.dll %RUNTIME%
+COPY iconv.dll %RUNTIME%
 COPY _*.x* %RUNTIME%
 COPY *.prefs %RUNTIME%
 

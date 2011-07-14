@@ -18,4 +18,4 @@ CALL csv2siard.exe
 CALL csv2siard.exe gv-model-v8.xml csvdata test.siard
 
 PAUSE
-REM runtime_csv2siard.bat
+runtime_csv2siard.bat

@@ -12,5 +12,6 @@ embed c2sconfig.php
 embed c2screate.php
 embed c2sconvert.php
 embed c2sfunction.php
+embed c2sxml.php
 
 extension php_xslt.dll

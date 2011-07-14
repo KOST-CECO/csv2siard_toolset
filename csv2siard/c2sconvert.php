@@ -83,16 +83,14 @@ function writeSchemaFooter($siardhandle){
 // write content SIARD schema file
 function writeSchemacontent($siardhandle, &$table){
 	$colcount = 1;
-	foreach ($table as $column) {
+	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
-		
 			// Convert database type to xml type TO BE DONE
-			switch ($column['type']) {
+			switch ($column['_a']['type']) {
 				case "BIGINT":
 					$xstype = 'integer'; break;
 				case "DOUBLE":
-					$xstype = 'integer'; break;
-					// $xstype = 'double'; break;
+					$xstype = 'double'; break;
 				case "INTEGER":
 					$xstype = 'integer'; break;
 				case "VARCHAR":

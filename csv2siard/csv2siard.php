@@ -30,6 +30,7 @@ include 'c2sconfig.php';
 include 'c2screate.php';
 include 'c2sconvert.php';
 include 'c2sfunction.php';
+include 'c2sxml.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -44,11 +45,10 @@ $prgdir = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmv
 
 $prg_option['ERR'] = false;													// Programm optionen
 $torqueschema = '_database-torque-4-0.xsd';					// torque.v4 XML database schema
-$model2array = '_model2array.xsl';									// Transform XML database to array
 $siard_schema = '_metadata.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
-$siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml
+$siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
 $prefs = 'preferences.prefs';												// Preference file
-$dbm = array();				//nested array to hold database model and SIARD structure
+$dbmod = array();										//nested array to hold the database model
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile prefs
@@ -64,11 +64,20 @@ checkUtils();
 readCommandLine();
 readPreferences();
 checkTMP();
-loadDatabaseModell($dbm);
-creatSIARDFolder($dbm);
+loadDatabaseModell($dbmod);
+creatSIARDFolder($dbmod);
 
 print_r($prg_option);
-processDatabaseModell($dbm);
+
+$dbt = &$dbmod['database']['_c']['table'];
+reset($dbt);
+while (list($dbno, $table) = each($dbt)) {
+	// no assignment by reference in PHP 4 in foreach loops
+	creatSIARDTable($dbt[$dbno]);
+	creatSIARDSchema($dbt[$dbno]);
+	validateSIARDTable($dbt[$dbno]);
+}
+createSIARDMetadata($dbmod);
 
 exit(0);
 ?>

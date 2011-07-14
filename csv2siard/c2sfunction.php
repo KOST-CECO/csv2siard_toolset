@@ -1,6 +1,60 @@
 <?
 // Report all PHP errors
 error_reporting(E_ALL);
+
+// -----------------------------------------------------------------------------
+// Return "/database/table/option@key from XML array"
+function getTableOption(&$table,$key) {
+	// no options
+	if (!array_key_exists('option', $table['_c'])) {
+		return(FALSE);
+	}
+	// one option
+	elseif (!array_key_exists('0', $table['_c']['option'])) {
+		if ($table['_c']['option']['_a']['key'] == $key) {
+			return($table['_c']['option']['_a']['value']);
+		}
+	}
+	// multi options
+	else {
+		foreach ($table['_c']['option'] as $option) {
+			if ($option['_a']['key'] == $key) {
+				return($option['_a']['value']);
+			}
+		}
+	}
+	return(FALSE);
+}
+// -----------------------------------------------------------------------------
+// Enter "/database/table/option[@key='value'] into XML array"
+function setTableOption(&$table,$key, $value) {
+	// no options, <option> has to be the first element in <table>
+	if (!array_key_exists('option', $table['_c'])) {
+		$col = $table['_c']['column'];
+		unset($table['_c']['column']);
+		$table['_c']['option']['_a']['key']= $key;
+		$table['_c']['option']['_a']['value']= $value;
+		$table['_c']['option']['_v'] = '';
+		$table['_c']['column'] = $col;
+	}
+	// one option
+	elseif (!array_key_exists('0', $table['_c']['option'])) {
+		$table['_c']['option'][0]['_a']['key']= $table['_c']['option']['_a']['key'];
+		$table['_c']['option'][0]['_a']['value']= $table['_c']['option']['_a']['value'];
+		$table['_c']['option'][0]['_v'] = '';
+		$table['_c']['option'][1]['_a']['key']= $key;
+		$table['_c']['option'][1]['_a']['value']= $value;
+		$table['_c']['option'][1]['_v'] = '';
+		unset($table['_c']['option']['_a'], $table['_c']['option']['_v']);
+	}
+	// multi options
+	else {
+		$tbc = count ($table['_c']['option']);
+		$table['_c']['option'][$tbc]['_a']['key']= $key;
+		$table['_c']['option'][$tbc]['_a']['value']= $value;
+		$table['_c']['option'][$tbc]['_v'] = '';
+	}
+}
 // -----------------------------------------------------------------------------
 // Ersatz für PHP5 Funktion 'str_split'
 // array str_split ( string $string [, int $split_length = 1 ] )

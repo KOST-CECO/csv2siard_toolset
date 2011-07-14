@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
+	<table name="gv_gebaeude">
+		<option key="file" value="gv_gebaeude.dat"></option>
+		<option key="test" value="gv_gebaeude.dat"></option>
+		<option key="folder" value="table0"></option>
+		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutiger Schlüssel für das Gebäude"></column>
+		<column name="grundstueck_id" type="VARCHAR" size="20" description="Grundstücknummer"></column>
+		<column name="police_nr" type="VARCHAR" size="20" description="Nummer der Gebäude Police"></column>
+		<column name="suchbegriff" type="VARCHAR" size="100" description="Grundstück-Suchbegriff"></column>
+		<column name="status_code" type="VARCHAR" size="10" description="Gebäudestatus als Code"></column>
+		<column name="status_text" type="VARCHAR" size="1000" description="Gebäudestatus im Klartext"></column>
+		<column name="zweck_code" type="VARCHAR" size="10" description="Zweckcode des Gebäudes"></column>
+		<column name="zweck_text" type="VARCHAR" size="1000" description="Zwecktext des Gebäudes im Klartext"></column>
+		<column name="baujahr" type="INTEGER" description="Baujahr"></column>
+		<column name="bauart_code" type="VARCHAR" size="10" description="GBA 2: nicht massiv - GBA 1: massiv"></column>
+		<column name="bauart_text" type="VARCHAR" size="1000" description="Bauart massiv oder nicht massiv"></column>
+		<column name="lage_code" type="VARCHAR" size="10" description="?"></column>
+		<column name="lage_text" type="VARCHAR" size="1000" description="?"></column>
+		<column name="kanton" type="VARCHAR" size="2" description="Kantonskürzel, z.B. LU für Luzern"></column>
+		<column name="bezirk" type="VARCHAR" size="100" description="Bezirksname"></column>
+		<column name="gemeinde_bfs" type="VARCHAR" size="20" description="BfS -Gemeindenummer"></column>
+		<column name="gemeinde" type="VARCHAR" size="1000" description="Gemeindename"></column>
+		<column name="strasse" type="VARCHAR" size="1000" description="Strasse oder Flurbezeichnung"></column>
+		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35 oder “87, 89)"></column>
+		<column name="wohnung_nr" type="VARCHAR" size="20" description="?"></column>
+		<column name="plz" type="INTEGER" description="4-stellige Plz"></column>
+		<column name="plz_zusatz" type="VARCHAR" size="20" description="Ziffer 5+6 der 6-stelligen Plz, meist leer"></column>
+		<column name="ort" type="VARCHAR" size="1000" description="Ort"></column>
+		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung"></column>
+	</table>
+	<table name="gv_person">
+		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"></column>
+		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"></column>
+		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"></column>
+		<column name="klasse_code" type="VARCHAR" size="10" description="Personentyp als Code"></column>
+		<column name="klasse_text" type="VARCHAR" size="1000" description="NAT: natürliche Person - JUR: juristische (nicht natürliche) Person"></column>
+		<column name="name" type="VARCHAR" size="1000" description="Personen-Suchbegriff"></column>
+		<column name="strasse" type="VARCHAR" size="1000" description="Strasse oder Flurbezeichnung"></column>
+		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35‘ oder “87, 89)"></column>
+		<column name="wohnung_nr" type="VARCHAR" size="20" description="Wohnungsnummer"></column>
+		<column name="land" type="VARCHAR" size="1000" description="Land"></column>
+		<column name="plz" type="INTEGER" description="Postleitzahl"></column>
+		<column name="plz_zusatz" type="VARCHAR" size="20" description="Postleitzahl Zusatzziffern"></column>
+		<column name="ort" type="VARCHAR" size="1000" description="Ort"></column>
+		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung. Verwendet meist für Postfach."></column>
+		<column name="gueltig_ab" type="VARCHAR" size="10" description="Handänderungs- oder technisches Gültig-ab-Datum"></column>
+		<column name="gueltig_bis" type="VARCHAR" size="10" description="Gültig-bis-Datum. Wenn Beziehung noch gültig ist, wird kein Datum (leer) geliefert."></column>
+		<column name="rolle_code" type="VARCHAR" size="1000" description="Rolle als Code"></column>
+		<column name="rolle_text" type="VARCHAR" size="1000" description="Rolle im Klartext"></column>
+		<foreign-key foreignTable="gv_gebaeude" name="person_gebaeude">
+			<reference local="gebaeude_id" foreign="id"></reference>
+		</foreign-key>
+		<option key="folder" value="table1"></option>
+	</table>
+	<table name="gv_anlage">
+		<option key="file" value="gv_anlage.dat"></option>
+		<option key="folder" value="table2"></option>
+		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige Anlage-ID"></column>
+		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"></column>
+		<column name="typ_code" type="VARCHAR" size="10" description="Anlagetyp codiert"></column>
+		<column name="typ_text" type="VARCHAR" size="1000" description="Anlagetyp im Klartext"></column>
+		<foreign-key foreignTable="gv_gebaeude" name="anlage_gebaeude">
+			<reference local="gebaeude_id" foreign="id"></reference>
+		</foreign-key>
+	</table>
+	<table name="gv_schaden">
+		<option key="file" value="gv_schaden.dat"></option>
+		<option key="folder" value="table3"></option>
+		<column name="id" type="BIGINT" primaryKey="true" description="Eindeutige Schaden-ID"></column>
+		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"></column>
+		<column name="nummer" type="VARCHAR" size="20" description="Nummer der Bauzeitversicherung"></column>
+		<column name="datum" type="VARCHAR" size="10" description="Schadendatum"></column>
+		<column name="datum_erledigung" type="VARCHAR" size="10" description="?"></column>
+		<column name="art_code" type="VARCHAR" size="10" description="Schadenart codiert"></column>
+		<column name="art_text" type="VARCHAR" size="1000" description="Schadenart im Klartext"></column>
+		<column name="ursache_code" type="VARCHAR" size="10" description="Schadenursache codiert"></column>
+		<column name="ursache_text" type="VARCHAR" size="1000" description="Schadenursache im Klartext"></column>
+		<column name="ursache_zusatz" type="VARCHAR" size="1000" description="Zusatztext zur Schadenursache"></column>
+		<column name="schadensumme" type="INTEGER" description="Schadensumme"></column>
+		<column name="status_code" type="VARCHAR" size="10" description="Schadenstatus codiert"></column>
+		<column name="status_text" type="VARCHAR" size="1000" description="Schadenstatus  im Klartext"></column>
+		<column name="versicherungswert" type="INTEGER" description="Versicherungswert zum Zeitpunkt des Schadens"></column>
+		<column name="vkf_code" type="VARCHAR" size="1000" description="VKF-Code. "></column>
+		<column name="vkf_text" type="VARCHAR" size="1000" description="VKF-Bezeichnung im Klartext"></column>
+		<foreign-key foreignTable="gv_gebaeude" name="schaden_gebaeude">
+			<reference local="gebaeude_id" foreign="id"></reference>
+		</foreign-key>
+	</table>
+	<table name="gv_schaetzung">
+		<option key="file" value="gv_schaetzung.dat"></option>
+		<option key="folder" value="table4"></option>
+		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID für die Schätzung"></column>
+		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"></column>
+		<column name="datum_ausfuehrung" type="VARCHAR" size="10" description="Schätzungsdatum"></column>
+		<column name="grund_code" type="VARCHAR" size="10" description="Schätzungsgrund codiert"></column>
+		<column name="grund_text" type="VARCHAR" size="1000" description="Schätzungsgrund im Klartext"></column>
+		<column name="wertvermehrung" type="DOUBLE" description="Wertvermehrende Investitionen"></column>
+		<column name="wertvermehrung_kommentar" type="VARCHAR" size="1000" description="Kommentar wertvermehrende Investitionen."></column>
+		<column name="kommentar_zusatz" type="VARCHAR" size="1000" description="?"></column>
+		<column name="datum_erledigung" type="VARCHAR" size="10" description="Erledigungsdatum"></column>
+		<column name="status_code" type="VARCHAR" size="10" description="Dispostatus codiert"></column>
+		<column name="status_text" type="VARCHAR" size="1000" description="Dispostatus im Klartext"></column>
+		<column name="ereignis_code" type="VARCHAR" size="10" description="Ereignis codiert"></column>
+		<column name="ereignis_text" type="VARCHAR" size="1000" description="Ereignis im Klartext. -SBE SCHAETZ: Werte stammen von Schätzung -SBE NACHTRAG: Werte stammen aus einem Nachtrag"></column>
+		<column name="versicherungsart_code" type="VARCHAR" size="10" description="Versicherungsart codiert"></column>
+		<column name="versicherungsart_text" type="VARCHAR" size="1000" description="Versicherungsart mit grösstem Anteil im Klartext -VSA ABBRUCHW: Abbruchwert -VSA DOPPZEITW: Doppelter Zeitwert -VSA FESTSUMME: Feste Summe -VSA NEUWERT: Neuwert -VSA ZEITWERT: Zeitwert"></column>
+		<column name="versicherungswert_aktuell" type="DOUBLE" description="Versicherungswert aktuell (aufgewertet bzw. aufindexiert)"></column>
+		<column name="versicherungswert_schaetzung" type="DOUBLE" description="Versicherungswert zum Zeitpunkt der Schätzung"></column>
+		<column name="basiswert" type="DOUBLE" description="?"></column>
+		<column name="volumen" type="DOUBLE" description="Gebäudevolumen m3"></column>
+		<foreign-key foreignTable="gv_gebaeude" name="schaetzung_gebaeude">
+			<reference local="gebaeude_id" foreign="id"></reference>
+		</foreign-key>
+	</table>
+	<table name="gv_position">
+		<option key="file" value="gv_position.dat"></option>
+		<option key="folder" value="table5"></option>
+		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID der Schätzposition"></column>
+		<column name="schaetzung_id" type="VARCHAR" description="ID für die Referenz zur Schätzung"></column>
+		<column name="art_code" type="VARCHAR" size="10" description="Positionsart codiert"></column>
+		<column name="art_text" type="VARCHAR" size="1000" description="Positionsart "></column>
+		<column name="text" type="VARCHAR" size="1000" description="Text"></column>
+		<column name="volumen" type="DOUBLE" description="Volumen m3"></column>
+		<column name="versicherungswert" type="DOUBLE" description="Wert"></column>
+		<column name="laenge" type="DOUBLE" description="Ausmasse: Länge"></column>
+		<column name="breite" type="DOUBLE" description="Ausmasse: Breite"></column>
+		<column name="hoehe" type="DOUBLE" description="Ausmasse: Höhe"></column>
+		<column name="abnutzung" type="DOUBLE" description="Abnützung in Prozent"></column>
+		<column name="erfasster_wert" type="INTEGER" description="Dieser interne Wert enthält den durch den Benutzer erfassten Wert pro Schätzposition"></column>
+		<column name="bauart_code" type="VARCHAR" size="10" description="Bauart Code"></column>
+		<column name="bauart_text" type="VARCHAR" size="1000" description="Bauart"></column>
+		<foreign-key foreignTable="gv_schaetzung" name="position_schaetzung">
+			<reference local="schaetzung_id" foreign="id"></reference>
+		</foreign-key>
+	</table>
+</database>
