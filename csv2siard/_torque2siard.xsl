@@ -3,12 +3,18 @@
 	<xsl:output method="xml" indent="yes" encoding="UTF-8" media-type="application/xml"/>
 	<xsl:variable name="location">http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd metadata.xsd</xsl:variable>
 	<!--                        begin params                       -->
-	<!-- <xsl:param name="archivalDate"/>  -->
-	<!-- <xsl:param name="databaseUser"/>  -->
+	<xsl:param name="archivalDate"/>
+	<xsl:param name="databaseUser"/>
+	<xsl:param name="databaseSchema"/>
+	<xsl:param name="messageDigest"/>
+	<xsl:param name="producerApplication"/>
+	<xsl:param name="databaseProduct"/>
+	<!-- 
 	<xsl:param name="archivalDate">2010-12-28</xsl:param>
 	<xsl:param name="databaseUser">admin</xsl:param>
 	<xsl:param name="databaseSchema">admin</xsl:param>
 	<xsl:param name="messageDigest">MD5</xsl:param>
+	-->
 	<!--                        end params                         -->
 	<xsl:template match="/">
 		<xsl:element name="siardArchive">
@@ -24,7 +30,7 @@
 				<xsl:text>(...)</xsl:text>
 			</xsl:element>
 			<xsl:element name="producerApplication">
-				<xsl:text>csv2siard</xsl:text>
+				<xsl:value-of select="$producerApplication"/>
 			</xsl:element>
 			<xsl:element name="archivalDate">
 				<xsl:value-of select="$archivalDate"/>
@@ -33,7 +39,7 @@
 				<xsl:value-of select="$messageDigest"/>
 			</xsl:element>
 			<xsl:element name="databaseProduct">
-				<xsl:text>CSV</xsl:text>
+				<xsl:value-of select="$databaseProduct"/>
 			</xsl:element>
 			<xsl:element name="databaseUser">
 				<xsl:text>"</xsl:text>
@@ -83,9 +89,11 @@
 			<xsl:element name="columns">
 				<xsl:apply-templates/>
 			</xsl:element>
-			<!-- PRIMARY KEY 
+			<!-- PRIMARY KEY -->
 			<xsl:if test="db:column/@primaryKey='true'">
 				<xsl:element name="primaryKey">
+					<xsl:element name="name">	<xsl:text>pk_</xsl:text><xsl:value-of select="@name"/>
+					</xsl:element>
 					<xsl:for-each select="db:column">
 						<xsl:if test="@primaryKey='true'">
 							<xsl:element name="column">
@@ -94,9 +102,8 @@
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:element>
-			</xsl:if> 
-			-->
-			<!-- FOREIGN KEYS
+			</xsl:if>
+			<!-- FOREIGN KEYS -->
 			<xsl:if test="db:foreign-key">
 				<xsl:element name="foreignKeys">
 					<xsl:for-each select="db:foreign-key">
@@ -121,7 +128,7 @@
 						</xsl:element>
 					</xsl:for-each>
 				</xsl:element>
-			</xsl:if>  -->
+			</xsl:if>
 			<!-- ROWS -->
 			<xsl:element name="rows">
 				<xsl:value-of select="db:option[@key='rowcount']/@value"/>

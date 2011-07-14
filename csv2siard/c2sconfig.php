@@ -65,6 +65,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['SIARD_USER'] = 'admin';							// default user
 	$prg_option['SIARD_SCHEMA'] = 'schema0';					// default schema
 	$prg_option['PI_COUNT'] = 20;						// progress indicator per line processed
+	$prg_option['DB_TYPE'] = 'CSV';					// Type of Database or database product
 
 	// specific preference file
 	if ($argc == 5) {

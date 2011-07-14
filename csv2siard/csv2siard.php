@@ -42,18 +42,18 @@ $version = '0.4';		// Write SIARD metadata files
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
 $prgname = strtolower(basename($argv[0], '.exe'));	// ProgrammName
 $prgname = basename($prgname, '.php');							// ProgrammName
-$prgdir = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
+$prgdir  = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
 
 $prg_option['ERR'] = 0;															// Programm optionen
-$torqueschema = '_database-torque-4-0.xsd';					// torque.v4 XML database schema
-$siard_schema = '_metadata.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
-$siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
-$torque2siard = '_torque2siard.xsl';//convert torque.v4 XML datamodel to SIARD XML metadata file
-$prefs = 'preferences.prefs';												// Preference file
-$dbmod = array();										//nested array to hold the database model
+$torqueschema   = '_database-torque-4-0.xsd';				// torque.v4 XML database schema
+$siard_schema   = '_metadata.xsd';			// XML schema defines the structure of the metadata.xml in SIARD
+$siard2html     = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
+$torque2siard   = '_torque2siard.xsl';	//convert torque.v4 XML datamodel to SIARD XML metadata file
+$prefs          = 'preferences.prefs';	// Preference file
+$dbmod = array();												//nested array to hold the database model
 
 $usage ="
-       Usage :: $prgname.exe database csvpath siardfile prefs
+       Usage :: $prgname.exe database csvpath siardfile [prefs]
     database :: database XML description according to torque.v4 schema
      csvpath :: path where to find the csv files
    siardfile :: SIARD file to be created

@@ -31,7 +31,7 @@
 	<table name="gv_person" description="Die Tabellen enthält für alle zu exportierenden Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwaltung auftreten">
 		<option key="file" value="gv_person.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
-		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"/>
+		<column name="person_id" type="BIGINT" primaryKey="true" description="Eindeutige Personen-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
 		<column name="klasse_code" type="VARCHAR" size="10" description="Personentyp als Code"/>
 		<column name="klasse_text" type="VARCHAR" size="1000" description="NAT: natürliche Person - JUR: juristische (nicht natürliche) Person"/>
@@ -48,7 +48,7 @@
 		<column name="gueltig_bis" type="VARCHAR" size="10" description="Gültig-bis-Datum. Wenn Beziehung noch gültig ist, wird kein Datum (leer) geliefert."/>
 		<column name="rolle_code" type="VARCHAR" size="1000" description="Rolle als Code"/>
 		<column name="rolle_text" type="VARCHAR" size="1000" description="Rolle im Klartext"/>
-		<foreign-key foreignTable="gv_gebaeude" name="person_gebaeude">
+		<foreign-key foreignTable="gv_gebaeude" name="fk_person_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
@@ -58,7 +58,7 @@
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
 		<column name="typ_code" type="VARCHAR" size="10" description="Anlagetyp codiert"/>
 		<column name="typ_text" type="VARCHAR" size="1000" description="Anlagetyp im Klartext"/>
-		<foreign-key foreignTable="gv_gebaeude" name="anlage_gebaeude">
+		<foreign-key foreignTable="gv_gebaeude" name="fk_anlage_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
@@ -80,7 +80,7 @@
 		<column name="versicherungswert" type="INTEGER" description="Versicherungswert zum Zeitpunkt des Schadens"/>
 		<column name="vkf_code" type="VARCHAR" size="1000" description="VKF-Code. "/>
 		<column name="vkf_text" type="VARCHAR" size="1000" description="VKF-Bezeichnung im Klartext"/>
-		<foreign-key foreignTable="gv_gebaeude" name="schaden_gebaeude">
+		<foreign-key foreignTable="gv_gebaeude" name="fk_schaden_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
@@ -105,7 +105,7 @@
 		<column name="versicherungswert_schaetzung" type="DOUBLE" description="Versicherungswert zum Zeitpunkt der Schätzung"/>
 		<column name="basiswert" type="DOUBLE" description="?"/>
 		<column name="volumen" type="DOUBLE" description="Gebäudevolumen m3"/>
-		<foreign-key foreignTable="gv_gebaeude" name="schaetzung_gebaeude">
+		<foreign-key foreignTable="gv_gebaeude" name="fk_schaetzung_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
@@ -125,7 +125,7 @@
 		<column name="erfasster_wert" type="INTEGER" description="Dieser interne Wert enthält den durch den Benutzer erfassten Wert pro Schätzposition"/>
 		<column name="bauart_code" type="VARCHAR" size="10" description="Bauart Code"/>
 		<column name="bauart_text" type="VARCHAR" size="1000" description="Bauart"/>
-		<foreign-key foreignTable="gv_schaetzung" name="position_schaetzung">
+		<foreign-key foreignTable="gv_schaetzung" name="fk_position_schaetzung">
 			<reference local="schaetzung_id" foreign="id"/>
 		</foreign-key>
 	</table>

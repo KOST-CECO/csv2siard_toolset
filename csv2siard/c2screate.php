@@ -164,7 +164,7 @@ global $prgdir, $prg_option;
 // -----------------------------------------------------------------------------
 // write SIARD XML metadata file
 function createSIARDMetadata(&$dbmod) {
-global $prgdir, $prg_option, $torque2siard;
+global $prgdir, $prgname, $prg_option, $torque2siard;
 
 	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
@@ -174,11 +174,20 @@ global $prgdir, $prg_option, $torque2siard;
 	
 	//convert torque.v4 XML datamodel to SIARD XML metadata file
 	$xh = xslt_create();
+	
+	$parameters = array (
+		'archivalDate'        => date("Y-m-d"),
+		'databaseUser'        => $prg_option['SIARD_USER'],
+		'databaseSchema'      => $prg_option['SIARD_SCHEMA'],
+		'messageDigest'       => 'MD5',
+		'producerApplication' => $prgname,
+		'databaseProduct'     => $prg_option['DB_TYPE']
+);
 	$arguments = array(
 		'/_xml' => $xmldata,
 		'/_xsl' => file_get_contents("$prgdir/$torque2siard")
 	);
-	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
+	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments, $parameters);
 	xslt_free($xh);
 	file_put_contents($siardmetadata, $result);;
 	
