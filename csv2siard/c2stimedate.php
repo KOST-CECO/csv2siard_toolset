@@ -160,7 +160,7 @@ if(function_exists("strptime") == false)
         // ===== Create the other value of the result array ===== 
         $nParsedDateTimestamp = @mktime($aResult['tm_hour'], $aResult['tm_min'], $aResult['tm_sec'], 
                                 $aResult['tm_mon'] + 1, $aResult['tm_mday'], $aResult['tm_year'] + 1900); 
-         
+
         // Before PHP 5.1 return -1 when error 
         if(($nParsedDateTimestamp === false) 
         ||($nParsedDateTimestamp === -1)) return false; 

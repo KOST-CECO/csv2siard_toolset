@@ -136,7 +136,7 @@ global $prg_option;
 					break;
 				case "BOOLEANINT":
 				case "BOOLEANCHAR":
-					$buf = (_bool($buf)) ? 'true' : 'false';
+					$buf = (to_bool($buf)) ? 'true' : 'false';
 					break;
 				default:
 					break;

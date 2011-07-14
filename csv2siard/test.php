@@ -2,49 +2,12 @@
 // Report all PHP errors
 error_reporting(E_ALL);
 
-function _bool($var){
-	if(is_bool($var)){
-		return $var;
-	} else if($var === NULL || $var === 'NULL' || $var === 'null'){
-		return false;
-	} else if(is_string($var)){
-		$var = trim($var);
-		if($var=='false'){ return false;
-		} else if($var=='true'){ return true;
-		} else if($var=='no'){ return false;
-		} else if($var=='yes'){ return true;
-		} else if($var=='off'){ return false;
-		} else if($var=='on'){ return true;
-		} else if($var==''){ return false;
-		} else if(ctype_digit($var)){
-			if((int) $var)
-				return true;
-				else
-				return false;
-		} else { return true; }
-	} else if(ctype_digit((string) $var)){
-			if((int) $var)
-				return true;
-				else
-				return false;
-	} else if(is_array($var)){
-		if(count($var))
-			return true;
-			else
-			return false;
-	} else if(is_object($var)){
-		return true;// No reason to (bool) an object, we assume OK for crazy logic
-	} else {
-		return true;// Whatever came though must be something,	OK for crazy logic
-	}
-}
-
 include 'c2sfunction.php';
 include 'c2stimedate.php';
 
 // -----------------------------------------------------------------------------
 /*
-print_r(check4Date("20080701223517"));
+print_r(convert2XMLdate("20080701223517"));
 print_r(convert2XMLdate("20080701"));
 print_r(convert2XMLdate("20080701t223517"));
 print_r(convert2XMLdate("20080701T223517"));
@@ -71,8 +34,14 @@ print_r(convert2XMLdate("0"));
 print_r(convert2XMLdate("120.50"));
 
 */
-print_r(convert2XMLdate("1988-05-09"));
+print_r(convert2XMLdate("2001-09-09 01:46:40"));
 
-if(_bool('0')){ echo 'true'; } else { echo 'false'; }
+//9. September 2001   01:46:40
+echo mktime(01, 46, 40, 9, 9, 2001)."\n";
+echo unixTime(1, 46, 40, 9, 9, 2001)."\n";
+//1. Januar 1970 00:00:00
+echo unixTime(0, 0, 0, 1, 1, 1970)."\n";
+//1. Januar 1601 00:00:00
+echo unixTime(0, 0, 0, 1, 1, 1601)."\n";
 
 ?>

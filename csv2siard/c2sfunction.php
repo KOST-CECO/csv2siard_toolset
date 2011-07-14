@@ -284,7 +284,7 @@ function Wildcard2Regex($pattern) {
  * @author Kim Steinhaug, <kim@steinhaug.com>           
  * @param mixed $var, the variable to check             
 */
-function _bool($var){
+function to_bool($var){
 	if(is_bool($var)){
 		return $var;
 	} else if($var === NULL || $var === 'NULL' || $var === 'null'){
@@ -319,5 +319,33 @@ function _bool($var){
 	} else {
 		return true;// Whatever came though must be something,	OK for crazy logic
 	}
+}
+// ----------------------------------------------------------------------------
+/* Konvertiert gegliederte UTC-Angaben in Unix-Zeit, Parameter und ihre Werte-Bereiche:
+ * - jahr [1970..2038]
+ * - monat [1..12]
+ * - tag [1..31]
+ * - stunde [0..23]
+ * - minute [0..59]
+ * - sekunde [0..59]
+ *
+ * PHP 4: mktime(hour, minute, second, month, day, year)
+ * negative timestamps were not supported under Windows, therefore the range of valid years was limited to 1970 through 2038
+*/
+function unixTime( $stunde, $minute, $sekunde, $monat, $tag, $jahr ) {
+	$tage_bis_monatsanfang = /* ohne Schalttag */
+			array(0,31,59,90,120,151,181,212,243,273,304,334);
+
+	$jahre=$jahr-1970;
+	$schaltjahre=floor( (($jahr-1)-1968)/4 - (($jahr-1)-1900)/100 + (($jahr-1)-1600)/400 );
+
+	$unix_zeit=$sekunde + 60*$minute + 60*60*$stunde +
+			($tage_bis_monatsanfang[$monat-1]+$tag-1)*60*60*24 +
+			($jahre*365+$schaltjahre)*60*60*24;
+ 
+	if ( ($monat>2) && ($jahr%4==0 && ($jahr%100!=0 || $jahr%400==0)) ) {
+		$unix_zeit+=60*60*24; /* +Schalttag wenn jahr Schaltjahr ist */
+	}
+	return($unix_zeit);
 }
 ?>
