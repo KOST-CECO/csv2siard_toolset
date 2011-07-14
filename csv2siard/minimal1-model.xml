@@ -4,6 +4,7 @@
 		<column name="id" type="SMALLINT" description="ID" size="10"/>
 		<column name="name" type="CHAR" description="Personen-Suchbegriff" size="50"/>
 		<column name="price" type="DECIMAL" description="Preis" size="20" scale="2"/>
-		<column name="date" type="DATE" description="Geburtsdatum"/>
+		<column name="date" type="TIMESTAMP" description="Geburtsdatum"/>
+		<column name="calc" type="REAL" size="60"/>
 	</table>
 </database>

@@ -77,6 +77,7 @@ global $prg_option;
 			// multiple columns or only one column
 			$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			$buf = trim($buf);
 			$b = $buf;
 			switch ($type) {
 				case "TINYINT":
@@ -108,7 +109,7 @@ global $prg_option;
 					if ($td['date'] == '') {
 						echo "\nDate/time type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
-						$buf = $td['date'];
+						$buf = $td['date'].'.000000000Z';
 					}
 					break;
 				case "TIME":

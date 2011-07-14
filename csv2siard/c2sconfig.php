@@ -38,6 +38,7 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 		if (!validateXML("$temp/$torque_schema", $dbmodel, "'$argv[1]' is not a valid database schema according to Torque v4.0")) {
 			exit(16);
 		}
+		unlink("$temp/$torque_schema");
 		$prg_option['DB_MODEL'] = $dbmodel;
 	}
 	// check folder with csv files

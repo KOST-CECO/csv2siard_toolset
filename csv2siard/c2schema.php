@@ -2983,6 +2983,19 @@ $static_torque2siard = '<?xml version="1.0"?>
 							<xsl:text>)</xsl:text>
 						</xsl:if>
 					</xsl:when>
+					<!-- FLOAT REAL DOUBLE -->
+					<xsl:when test="@type=\'FLOAT\' or @type=\'REAL\' or @type=\'DOUBLE\'">
+						<xsl:text>FLOAT</xsl:text>
+						<xsl:if test="@size">
+							<xsl:text>(</xsl:text>
+							<xsl:value-of select="@size"/>
+							<xsl:if test="@scale">
+								<xsl:text>,</xsl:text>
+								<xsl:value-of select="@scale"/>
+							</xsl:if>
+							<xsl:text>)</xsl:text>
+						</xsl:if>
+					</xsl:when>
 					<!-- all other data type -->
 					<xsl:otherwise>
 						<xsl:value-of select="@type"/>

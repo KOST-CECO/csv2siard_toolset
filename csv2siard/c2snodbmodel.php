@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
 global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
-$order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'DATE' => 2, 'VARCHAR' => 3);
+$order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE' => 3, 'VARCHAR' => 4);
 
 // Create CSV file list
 	$file_arr = array();
@@ -115,6 +115,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'DATE' => 2, 'VARCHA
 	if (!validateXML("$prg_option[TMPDIR]/$torque_schema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
 		exit(16);
 	}
+	unlink("$prg_option[TMPDIR]/$torque_schema");
 
 	// write console message
 	echo "\nNew XML database model written: $wdir/no_db_model.xml\n";
@@ -139,7 +140,13 @@ function guessDataType($buf) {
 	// == DECIMAL
 	$b = strtr ($buf, ',', '.');
 	if (is_numeric ($buf)) {
-		return('DECIMAL');
+		if (stristr($buf, 'E') or stristr($buf, '-')) {
+			return('FLOAT');
+		} 
+		else {
+			return('DECIMAL');
+		
+		}
 	}
 	// == DATE
 	$bd = convert2XMLdate($buf);

@@ -155,7 +155,7 @@ $tmpdir = sys_get_temp_dir();
 $handle = opendir($tmpdir);
 while (false !== ($file = readdir($handle))) {
 	if (preg_match('/^php.+\.tmp$/', $file)) {
-		//@unlink("$tmpdir/$file");
+		@unlink("$tmpdir/$file");
 	}
 }
 closedir($handle);
