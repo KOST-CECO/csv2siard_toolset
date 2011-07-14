@@ -2945,15 +2945,77 @@ $static_torque2siard = '<?xml version="1.0"?>
 	<!-- COLUMN -->
 	<xsl:template match="/db:database/db:table/db:column">
 		<xsl:element name="column">
+		
 			<xsl:element name="name">
 				<xsl:value-of select="@name"/>
 			</xsl:element>
+			
 			<xsl:element name="type">
-				<xsl:value-of select="@type"/>
+				<xsl:choose>
+					<!-- CHAR VARCHAR LONGVARCHAR CLOB -->
+					<xsl:when test="@type=\'CHAR\' or @type=\'VARCHAR\' or @type=\'LONGVARCHAR\' or @type=\'CLOB\'">
+						<xsl:text>CHARACTER VARYING</xsl:text>
+							<xsl:choose>
+								<xsl:when test="@size">
+									<xsl:text>(</xsl:text>
+									<xsl:value-of select="@size"/>
+									<xsl:text>)</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>(255)</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+					</xsl:when>
+					<!-- TINYINT SMALLINT INTEGER BIGINT -->
+					<xsl:when test="@type=\'TINYINT\' or @type=\'SMALLINT\' or @type=\'INTEGER\' or @type=\'BIGINT\'">
+						<xsl:text>INTEGER</xsl:text>
+					</xsl:when>
+					<!-- NUMERIC DECIMAL -->
+					<xsl:when test="@type=\'NUMERIC\' or @type=\'DECIMAL\'">
+						<xsl:text>NUMERIC</xsl:text>
+						<xsl:if test="@size">
+							<xsl:text>(</xsl:text>
+							<xsl:value-of select="@size"/>
+							<xsl:if test="@scale">
+								<xsl:text>,</xsl:text>
+								<xsl:value-of select="@scale"/>
+							</xsl:if>
+							<xsl:text>)</xsl:text>
+						</xsl:if>
+					</xsl:when>
+					<!-- all other data type -->
+					<xsl:otherwise>
+						<xsl:value-of select="@type"/>
+						<xsl:if test="@size">
+							<xsl:text>(</xsl:text>
+							<xsl:value-of select="@size"/>
+							<xsl:if test="@scale">
+								<xsl:text>,</xsl:text>
+								<xsl:value-of select="@scale"/>
+							</xsl:if>
+							<xsl:text>)</xsl:text>
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:element>
+			
+			<xsl:element name="typeOriginal">
+				<xsl:value-of select="@type"/>
+				<xsl:if test="@size">
+					<xsl:text>(</xsl:text>
+					<xsl:value-of select="@size"/>
+					<xsl:if test="@scale">
+						<xsl:text>,</xsl:text>
+						<xsl:value-of select="@scale"/>
+					</xsl:if>
+					<xsl:text>)</xsl:text>
+				</xsl:if>
+			</xsl:element>
+			
 			<xsl:element name="nullable">
 				<xsl:text>true</xsl:text>
 			</xsl:element>
+			
 			<xsl:if test="@description">
 				<xsl:element name="description">
 					<xsl:value-of select="@description"/>

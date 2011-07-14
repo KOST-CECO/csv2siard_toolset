@@ -1,12 +1,14 @@
 @ECHO OFF
 DEL /Q test.siard
 REM php.exe csv2siard.php gv-model-v8.xml csvdata test.siard
-csv2siard.exe gv-model-v8.xml csvdata_originale test.siard
+REM csv2siard.exe gv-model-v8.xml csvdata_originale test.siard
 REM csv2siard.exe gv-model-v8.xml csvdata test.siard
 REM php.exe csv2siard.php table2-model.xml csvdata test.siard
 REM php.exe csv2siard.php minimal2-model.xml csvdata test.siard
-REM php.exe csv2siard.php minimal1-model.xml csvdata test.siard
-REM php.exe csv2siard.php NO_DB_MODEL gvtest test.siard
+
+php.exe csv2siard.php minimal1-model.xml csvdata test.siard
+
+REM php.exe csv2siard.php NO_DB_MODEL csvtest test.siard
 REM php.exe csv2siard.php NO_DB_MODEL csvdata test.siard
 
 if "%errorlevel%"=="0" (

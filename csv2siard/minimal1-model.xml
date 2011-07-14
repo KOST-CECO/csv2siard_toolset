@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_minimal1">
-		<column name="name" type="VARCHAR" size="1000" description="Personen-Suchbegriff"/>
+		<column name="id" type="SMALLINT" description="ID" size="10"/>
+		<column name="name" type="CHAR" description="Personen-Suchbegriff" size="50"/>
+		<column name="price" type="DECIMAL" description="Preis" size="20" scale="2"/>
+		<column name="date" type="DATE" description="Geburtsdatum"/>
 	</table>
 </database>
