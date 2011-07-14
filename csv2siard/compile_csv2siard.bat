@@ -13,6 +13,8 @@ GREP -v "dl(" csv2siard.php > main.php
 BAMCOMPILE.EXE csv2siard.bcp
 DEL main.php
 
+@ECHO ON
 CALL csv2siard.exe
+CALL csv2siard.exe gv-model-v8.xml testdata test.siard
 
 PAUSE

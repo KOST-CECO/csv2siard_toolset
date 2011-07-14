@@ -1,0 +1,16 @@
+; Bamcompile example project file
+
+mainfile main.php
+outfile csv2siard.exe
+
+compress
+;windowed
+;dontencode
+
+embed main.php
+embed c2sconfig.php
+embed c2sfunction.php
+embed c2srun.php
+embed php.ini
+
+extension php_xslt.dll 
