@@ -35,12 +35,20 @@ global $prg_option;
 	for ($i=1; $i <= $columcount; $i++) {
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
-			// type convertion *** TO BE DONE ***
 			// type checking *** TO BE DONE ***
-			// multiple haracterset encoding *** TO BE DONE ***
-			if (strcasecmp($prg_option['CHARSET'], 'UTF-8') != 0) {
-				$buf = utf8_encode($buf);
+			switch ($prg_option['CHARSET']) {
+				case "ASCII":
+					$buf = utf8_encode(ascii2ansi($buf)); break;
+				case "ISO-8859-1":
+					$buf = utf8_encode($buf); break;
+				case "UTF-8":
+					break;
 			}
+
+			//if (strcasecmp($prg_option['CHARSET'], 'UTF-8') != 0) {
+			//	$buf = utf8_encode($buf);
+			//}
+			
 			// write a <column> into SIARD XML file
 			$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
 			fwrite ($siardhandle, $buf);

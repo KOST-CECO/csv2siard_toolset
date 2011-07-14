@@ -158,7 +158,7 @@ function rrmdir($dir) {
 // ----------------------------------------------------------------------------
 // Voici donc une fonction PHP qui permet de convertir les fichiers codés en
 // ANSI vers de l'ASCII Par Nicolas Debras
-function ansi2ascii($string) {
+function ascii2ansi($string) {
 	$asciiarray[] = 142; $ansiarray[] = 196;
 	$asciiarray[] = 143; $ansiarray[] = 197;
 	$asciiarray[] = 146; $ansiarray[] = 198;
@@ -200,7 +200,7 @@ function ansi2ascii($string) {
 	}
 	return ($string);
 }
-function ascii2ansi($string) {
+function ansi2ascii($string) {
 	$asciiarray[] = 142; $ansiarray[] = 196;
 	$asciiarray[] = 143; $ansiarray[] = 197;
 	$asciiarray[] = 146; $ansiarray[] = 198;

@@ -164,7 +164,7 @@ global $prgdir, $prg_option;
 // -----------------------------------------------------------------------------
 // write SIARD XML metadata file
 function createSIARDMetadata(&$dbmod) {
-global $prgdir, $prgname, $prg_option, $torque2siard;
+global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard;
 
 	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
@@ -174,14 +174,20 @@ global $prgdir, $prgname, $prg_option, $torque2siard;
 	
 	//convert torque.v4 XML datamodel to SIARD XML metadata file
 	$xh = xslt_create();
-	
 	$parameters = array (
-		'archivalDate'        => date("Y-m-d"),
-		'databaseUser'        => $prg_option['SIARD_USER'],
-		'databaseSchema'      => $prg_option['SIARD_SCHEMA'],
-		'messageDigest'       => 'MD5',
+		'description'         => $prg_option['DESCRIPTION'],
+		'archiver'            => $prg_option['ARCHIVED_BY'],
+		'archiverContact'     => $prg_option['CONTACT'],
+		'dataOwner'           => $prg_option['OWNER'],
+		'dataOriginTimespan'  => $prg_option['TIMESPAN'],
 		'producerApplication' => $prgname,
-		'databaseProduct'     => $prg_option['DB_TYPE']
+		'archivalDate'        => date("Y-m-d"),
+		'messageDigest'       => 'MD5',
+		'clientMachine'       => $_SERVER['COMPUTERNAME'],
+		'databaseProduct'     => $prg_option['DB_TYPE'],
+		'connection'          => 'file://'.$prg_option['CSV_FOLDER'],
+		'databaseUser'        => $prg_option['SIARD_USER'],
+		'databaseSchema'      => $prg_option['SIARD_SCHEMA']
 );
 	$arguments = array(
 		'/_xml' => $xmldata,

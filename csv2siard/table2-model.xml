@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
-<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
+<database name="table2" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
 	<table name="gv_person">
 		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
 		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"/>

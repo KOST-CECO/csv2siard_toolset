@@ -37,6 +37,8 @@ $version = '0.1';		// Read and check command-line arguments
 $version = '0.2';		// Load Datamodel
 $version = '0.3';		// Write SIARD XML files
 $version = '0.4';		// Write SIARD metadata files
+$version = '0.5';		// Read preference settings into metadata.xml
+$version = '0.6';		// CSV encoding ISO-8859-1 and UTF-8
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
@@ -66,10 +68,16 @@ checkUtils();
 readCommandLine();
 readPreferences();
 checkTMP();
+checkProgramOptions();
 loadDatabaseModell($dbmod);
 creatSIARDFolder($dbmod);
 
-print_r($prg_option);
+// Print options
+reset($prg_option);
+while (list($key, $val) = each($prg_option)) {
+	$val = ansi2ascii(utf8_decode($val));
+	echo "  [$key] => $val\n";
+}
 
 $dbt = &$dbmod['database']['_c']['table'];
 // only one table

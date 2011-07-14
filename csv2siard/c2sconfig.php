@@ -62,10 +62,16 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['CHECK_FIELD_TYPE'] = false;
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;
 	$prg_option['TMPDIR'] = sys_get_temp_dir();				// default temp dir
+	$prg_option['PI_COUNT'] = 20;						// progress indicator per line processed
+	// Optional content settings
+	$prg_option['DESCRIPTION'] = '';				// Database description
+	$prg_option['ARCHIVED_BY'] = '';				// Database archived by
+	$prg_option['CONTACT'] = '';						// Archivist's contact details
+	$prg_option['OWNER'] = '(...)';					// Data owner prior to archiving
+	$prg_option['TIMESPAN'] = '(...)';			// Data creation time span
+	$prg_option['DB_TYPE'] = 'CSV';					// Type of Database or database product
 	$prg_option['SIARD_USER'] = 'admin';							// default user
 	$prg_option['SIARD_SCHEMA'] = 'schema0';					// default schema
-	$prg_option['PI_COUNT'] = 20;						// progress indicator per line processed
-	$prg_option['DB_TYPE'] = 'CSV';					// Type of Database or database product
 
 	// specific preference file
 	if ($argc == 5) {
@@ -90,33 +96,32 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 			if (strcasecmp($val, 'true') == 0) { $prg_option[$key] = true; }
 			elseif (strcasecmp($val, 'false') == 0) { $prg_option[$key] = false; }
 			elseif ($val == '\t') { $prg_option[$key] = "\t"; }
-			else { $prg_option[$key] = $val; }
+			else { $prg_option[$key] = utf8_encode(utf8_decode($val)); }
 		}
 	}
 }
-
 // check utility programms  ----------------------------------------------------
 function checkUtils() {
-global $prg_option;
+global $prgdir, $prg_option;
 // Libraries missing
 	// <eXpat/> the Expat XML Parser http://expat.sourceforge.net and www.sysinternals.com
-	if ((@md5_file("expat.dll") != '3e860d331271c23e46efb1ba019701d1')
+	if ((@md5_file("$prgdir/expat.dll") != '3e860d331271c23e46efb1ba019701d1')
 	// iconv.dll (LGPLed libiconv for Windows NT/2000/XP and Windows 95/98/ME) is a component from the 
 	// software libiconv: character set conversion library version 1.9.0 by Free Software Foundation
-	or (@md5_file("iconv.dll") != 'e4341fb69cb24cf63e9063f4d8967ebf')
+	or (@md5_file("$prgdir/iconv.dll") != 'e4341fb69cb24cf63e9063f4d8967ebf')
 	// The sablot.dll module is utilized by the processor of Sablotron XSLT (Extensible Stylesheet Language (XSL) 
 	// Transformations), http://www.gingerall.cz/
-	or (@md5_file("sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
+	or (@md5_file("$prgdir/sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
 		echo "Some libraries are missing or corrupt\n"; exit(-1);
 	}
 // Programs missing
-	elseif (@md5_file("xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
+	elseif (@md5_file("$prgdir/xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
 		echo "Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
 	}
-	elseif (@md5_file("7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
+	elseif (@md5_file("$prgdir/7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
 		echo "Program 7z.exe is missing, corrupt or wrong version (7z.exe version 4.65)\n"; exit(-1);
 	}
-	elseif (@md5_file("7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
+	elseif (@md5_file("$prgdir/7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
 		echo "Program 7z.exe is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(-1);
 	}
 }
@@ -135,5 +140,23 @@ global $prg_option;
 	}
 	@unlink("$tmpdir/$prgname.tmp");
 	$prg_option['TMPDIR'] = str_replace('\\', '/', $tmpdir);
+}
+// check  TMP directory --------------------------------------------------------
+function checkProgramOptions() {
+global $prg_option;
+	
+	$prg_option['CHARSET'] = strtoupper($prg_option['CHARSET']);
+	switch ($prg_option['CHARSET']) {
+		case "ASCII":
+		case "OEM":
+			$prg_option['CHARSET'] = "ASCII"; break;
+		case "ANSI":
+		case "ISO-8859-1":
+			$prg_option['CHARSET'] = "ISO-8859-1"; break;
+		case "UTF-8":
+			$prg_option['CHARSET'] = "UTF-8"; break;
+		default:
+			echo "Only the following character sets are supported: ASCII, OEM, ANSI, ISO-8859-1, and UTF-8\n"; exit(-1);
+	}
 }
 ?>

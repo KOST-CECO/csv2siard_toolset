@@ -3,31 +3,48 @@
 	<xsl:output method="xml" indent="yes" encoding="UTF-8" media-type="application/xml"/>
 	<xsl:variable name="location">http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd metadata.xsd</xsl:variable>
 	<!--                        begin params                       -->
+	<xsl:param name="description"/>
+	<xsl:param name="archiver"/>
+	<xsl:param name="archiverContact"/>
+	<xsl:param name="dataOwner"/>
+	<xsl:param name="dataOriginTimespan"/>
+	<xsl:param name="producerApplication"/>
 	<xsl:param name="archivalDate"/>
+	<xsl:param name="messageDigest"/>
+	<xsl:param name="clientMachine"/>
+	<xsl:param name="databaseProduct"/>
+	<xsl:param name="connection"/>
 	<xsl:param name="databaseUser"/>
 	<xsl:param name="databaseSchema"/>
-	<xsl:param name="messageDigest"/>
-	<xsl:param name="producerApplication"/>
-	<xsl:param name="databaseProduct"/>
-	<!-- 
-	<xsl:param name="archivalDate">2010-12-28</xsl:param>
-	<xsl:param name="databaseUser">admin</xsl:param>
-	<xsl:param name="databaseSchema">admin</xsl:param>
-	<xsl:param name="messageDigest">MD5</xsl:param>
-	-->
 	<!--                        end params                         -->
 	<xsl:template match="/">
 		<xsl:element name="siardArchive">
 			<xsl:attribute name="version"><xsl:text>1.0</xsl:text></xsl:attribute>
 			<xsl:attribute name="xsi:schemaLocation"><xsl:text>http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd metadata.xsd</xsl:text></xsl:attribute>
 			<xsl:element name="dbname">
-				<xsl:value-of select="/db:database/@name"/>
+				<xsl:choose>
+					<xsl:when test="/db:database/@name=''">
+						<xsl:text>unknown</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="/db:database/@name"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:element>
+			<xsl:element name="description">
+				<xsl:value-of select="$description"/>
+			</xsl:element>
+			<xsl:element name="archiver">
+				<xsl:value-of select="$archiver"/>
+			</xsl:element>
+			<xsl:element name="archiverContact">
+				<xsl:value-of select="$archiverContact"/>
 			</xsl:element>
 			<xsl:element name="dataOwner">
-				<xsl:text>(...)</xsl:text>
+				<xsl:value-of select="$dataOwner"/>
 			</xsl:element>
 			<xsl:element name="dataOriginTimespan">
-				<xsl:text>(...)</xsl:text>
+				<xsl:value-of select="$dataOriginTimespan"/>
 			</xsl:element>
 			<xsl:element name="producerApplication">
 				<xsl:value-of select="$producerApplication"/>
@@ -38,8 +55,14 @@
 			<xsl:element name="messageDigest">
 				<xsl:value-of select="$messageDigest"/>
 			</xsl:element>
+			<xsl:element name="clientMachine">
+				<xsl:value-of select="$clientMachine"/>
+			</xsl:element>
 			<xsl:element name="databaseProduct">
 				<xsl:value-of select="$databaseProduct"/>
+			</xsl:element>
+			<xsl:element name="connection">
+				<xsl:value-of select="$connection"/>
 			</xsl:element>
 			<xsl:element name="databaseUser">
 				<xsl:text>"</xsl:text>
@@ -50,10 +73,10 @@
 			<xsl:element name="schemas">
 				<xsl:element name="schema">
 					<xsl:element name="name">
-						<xsl:value-of select="$databaseUser"/>
+						<xsl:value-of select="$databaseSchema"/>
 					</xsl:element>
 					<xsl:element name="folder">
-						<xsl:text>schema0</xsl:text>
+						<xsl:value-of select="$databaseSchema"/>
 					</xsl:element>
 					<!-- TABLES -->
 					<xsl:element name="tables">
@@ -92,7 +115,9 @@
 			<!-- PRIMARY KEY -->
 			<xsl:if test="db:column/@primaryKey='true'">
 				<xsl:element name="primaryKey">
-					<xsl:element name="name">	<xsl:text>pk_</xsl:text><xsl:value-of select="@name"/>
+					<xsl:element name="name">
+						<xsl:text>pk_</xsl:text>
+						<xsl:value-of select="@name"/>
 					</xsl:element>
 					<xsl:for-each select="db:column">
 						<xsl:if test="@primaryKey='true'">
