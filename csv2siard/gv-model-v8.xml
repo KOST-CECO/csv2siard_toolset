@@ -3,6 +3,7 @@
 <?xml-stylesheet type="text/xsl" href="model2array.xsl"?>
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
 	<table name="gv_gebaeude">
+		<option key="file" value="gv_gebaeude.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutiger Schlüssel für das Gebäude"/>
 		<column name="grundstueck_id" type="VARCHAR" size="20" description="Grundstücknummer"/>
 		<column name="police_nr" type="VARCHAR" size="20" description="Nummer der Gebäude Police"/>
@@ -29,6 +30,7 @@
 		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung"/>
 	</table>
 	<table name="gv_person">
+		<option key="file" value="gv_person.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
 		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
@@ -62,6 +64,7 @@
 		</foreign-key>
 	</table>
 	<table name="gv_schaden">
+		<option key="file" value="gv_schaden.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Eindeutige Schaden-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
 		<column name="nummer" type="VARCHAR" size="20" description="Nummer der Bauzeitversicherung"/>
@@ -83,6 +86,7 @@
 		</foreign-key>
 	</table>
 	<table name="gv_schaetzung">
+		<option key="file" value="gv_schaetzung.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID für die Schätzung"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
 		<column name="datum_ausfuehrung" type="VARCHAR" size="10" description="Schätzungsdatum"/>
@@ -107,6 +111,7 @@
 		</foreign-key>
 	</table>
 	<table name="gv_position">
+		<option key="file" value="gv_position.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID der Schätzposition"/>
 		<column name="schaetzung_id" type="VARCHAR" description="ID für die Referenz zur Schätzung"/>
 		<column name="art_code" type="VARCHAR" size="10" description="Positionsart codiert"/>

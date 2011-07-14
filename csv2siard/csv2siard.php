@@ -47,6 +47,7 @@ $prg_option['ERR'] = false;													// Programm optionen
 $torqueschema = '_database-torque-4-0.xsd';					// torque.v4 XML database schema
 $siard_schema = '_metadata.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
 $siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
+$torque2siard = '_torque2siard.xsl';//convert torque.v4 XML datamodel to SIARD XML metadata file
 $prefs = 'preferences.prefs';												// Preference file
 $dbmod = array();										//nested array to hold the database model
 
@@ -70,12 +71,22 @@ creatSIARDFolder($dbmod);
 print_r($prg_option);
 
 $dbt = &$dbmod['database']['_c']['table'];
-reset($dbt);
-while (list($dbno, $table) = each($dbt)) {
+// only one table
+if (!array_key_exists('0', $dbt)) {
 	// no assignment by reference in PHP 4 in foreach loops
-	creatSIARDTable($dbt[$dbno]);
-	creatSIARDSchema($dbt[$dbno]);
-	validateSIARDTable($dbt[$dbno]);
+	creatSIARDTable($dbt);
+	creatSIARDSchema($dbt);
+	validateSIARDTable($dbt);
+} 
+else {
+	// multiple tables
+	reset($dbt);
+	while (list($dbno, $table) = each($dbt)) {
+		// no assignment by reference in PHP 4 in foreach loops
+		creatSIARDTable($dbt[$dbno]);
+		creatSIARDSchema($dbt[$dbno]);
+		validateSIARDTable($dbt[$dbno]);
+	}
 }
 createSIARDMetadata($dbmod);
 

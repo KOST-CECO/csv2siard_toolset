@@ -3,10 +3,10 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
-// process the first CSV line (work in progress)
+// process the first CSV line and check column names
 function processCSVColumnNames($buffer, $file, $name, $table) {
 global $prg_option;
-	// TO BE DONE
+	// check column names *** TO BE DONE ***
 	return(true);
 }
 // -----------------------------------------------------------------------------
@@ -27,18 +27,21 @@ function writeSIARDFooter($siardhandle){
 	return;
 }
 // -----------------------------------------------------------------------------
-// process a single CSV line and write a into SIARD XML file
-function writeSIARDColumn($siardhandle, $buffer, $columcount){
+// process a single CSV line and write a <row> into SIARD XML file
+function writeSIARDColumn($siardhandle, $buffer, $columcount, $table){
 global $prg_option;
 	fwrite ($siardhandle, "<row>");
 	
 	for ($i=1; $i <= $columcount; $i++) {
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
-			// Characterset encoding TO BE DONE
+			// type convertion *** TO BE DONE ***
+			// type checking *** TO BE DONE ***
+			// multiple haracterset encoding *** TO BE DONE ***
 			if (strcasecmp($prg_option['CHARSET'], 'UTF-8') != 0) {
 				$buf = utf8_encode($buf);
 			}
+			// write a <column> into SIARD XML file
 			$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
 			fwrite ($siardhandle, $buf);
 		}
@@ -85,8 +88,10 @@ function writeSchemacontent($siardhandle, &$table){
 	$colcount = 1;
 	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
-			// Convert database type to xml type TO BE DONE
-			switch ($column['_a']['type']) {
+			// Convert database type to xml type ***TO BE DONE***
+			// multiple columns or only one column
+			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			switch ($type) {
 				case "BIGINT":
 					$xstype = 'integer'; break;
 				case "DOUBLE":
@@ -109,6 +114,7 @@ function writeSchemacontent($siardhandle, &$table){
 function array2xml(&$xmlary){
 	$xml = '';
 	if (is_array($xmlary)) {
+		reset($xmlary);
 		while (list($name, $ary) = each($xmlary)) {
 			$xml = $xml . "<$name>" . array2xml($ary) . "</$name>\n";
 		}

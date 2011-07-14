@@ -42,12 +42,20 @@ $folderstructur ="
 	mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema", 0777, true);
 	
 	$dbt = &$dbmod['database']['_c']['table'];
-	reset($dbt);
 	$tbc = 0;
-	while (list($dbno, $tables) = each($dbt)) {
+	// only one table
+	if (!array_key_exists('0', $dbt)) {
 		mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema/table$tbc", 0777, true);
-		setTableOption($dbt[$dbno],"folder", "table$tbc");
-		$tbc++;
+		setTableOption($dbt,"folder", "table$tbc");
+	} 
+	// multiple tables
+	else {
+		reset($dbt);
+		while (list($dbno, $tables) = each($dbt)) {
+			mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema/table$tbc", 0777, true);
+			setTableOption($dbt[$dbno],"folder", "table$tbc");
+			$tbc++;
+		}
 	}
 	return;
 }
@@ -62,6 +70,7 @@ global $prg_option;
 	// check for CSV file and open it for reading
 	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
 	setTableOption($table, 'file', $csvfile);
+
 	if(!is_file($csvfile)) {
 		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = true; return;
 	}
@@ -80,6 +89,7 @@ global $prg_option;
 	writeSIARDHeader($siardhandle, $tablefolder);
 	
 	// read and process CSV file
+	reset($table);
 	$rowcount = 1;
 	$columcount = count($table['_c']['column']);
 	while (($buf = fgetcsv($csvhandle, 100000, $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
@@ -92,7 +102,7 @@ global $prg_option;
 			processCSVColumnNames($buffer, $csvfile, $tablename, $table);
 		}
 		else {
-			writeSIARDColumn($siardhandle, $buffer, $columcount);
+			writeSIARDColumn($siardhandle, $buffer, $columcount, $table);
 		}
 		if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
 		$rowcount++;
@@ -152,16 +162,28 @@ global $prgdir, $prg_option;
 	unlink("$tablefolder.out");
 }
 // -----------------------------------------------------------------------------
-// write  SIARD XML metadata file
+// write SIARD XML metadata file
 function createSIARDMetadata(&$dbmod) {
-global $prgdir, $prg_option;
+global $prgdir, $prg_option, $torque2siard;
 
+	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/header/metadata.xsd";
 	$xmldump = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n" . ary2xml($dbmod);
 	file_put_contents($siardmetadata, $xmldump);
 	return;
 	
+	//convert torque.v4 XML datamodel to SIARD XML metadata file
+	$xh = xslt_create();
+	$arguments = array(
+		'/_xml' => $xmldump,
+		'/_xsl' => file_get_contents("$prgdir/$torque2siard")
+	);
+	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
+	xslt_free($xh);
+	file_put_contents($siardmetadata, $result);;
+	
+	//validate SIARD XML metadata file
 	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardheader 2>metadata.out", $result, $retval);
 	if ($retval) {
 		$result = file_get_contents("metadata.out");

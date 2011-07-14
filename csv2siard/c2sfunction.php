@@ -28,17 +28,31 @@ function getTableOption(&$table,$key) {
 // -----------------------------------------------------------------------------
 // Enter "/database/table/option[@key='value'] into XML array"
 function setTableOption(&$table,$key, $value) {
+	$tail = array();
 	// no options, <option> has to be the first element in <table>
 	if (!array_key_exists('option', $table['_c'])) {
-		$col = $table['_c']['column'];
-		unset($table['_c']['column']);
+		//echo "no options\n";
+		reset($table['_c']);
+		while (list($tableprop, $tbl) = each($table['_c'])) {
+			$tail[$tableprop] = $table['_c'][$tableprop];
+		}
+		reset($tail);
+		while (list($tableprop, $tbl) = each($tail)) {
+			unset($table['_c'][$tableprop]);;
+		}
+		
 		$table['_c']['option']['_a']['key']= $key;
 		$table['_c']['option']['_a']['value']= $value;
 		$table['_c']['option']['_v'] = '';
-		$table['_c']['column'] = $col;
+		
+		reset($tail);
+		while (list($tableprop, $tbl) = each($tail)) {
+			$table['_c'][$tableprop] = $tbl;
+		}
 	}
 	// one option
 	elseif (!array_key_exists('0', $table['_c']['option'])) {
+		//echo "one option\n";
 		$table['_c']['option'][0]['_a']['key']= $table['_c']['option']['_a']['key'];
 		$table['_c']['option'][0]['_a']['value']= $table['_c']['option']['_a']['value'];
 		$table['_c']['option'][0]['_v'] = '';
@@ -50,6 +64,7 @@ function setTableOption(&$table,$key, $value) {
 	// multi options
 	else {
 		$tbc = count ($table['_c']['option']);
+		//echo "$tbc options\n";
 		$table['_c']['option'][$tbc]['_a']['key']= $key;
 		$table['_c']['option'][$tbc]['_a']['value']= $value;
 		$table['_c']['option'][$tbc]['_v'] = '';

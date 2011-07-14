@@ -31,5 +31,3 @@ COPY *.css %SOURCESAVE%\mergeAIP_%_timestamp%\
 COPY *.bat %SOURCESAVE%\mergeAIP_%_timestamp%\
 COPY *.ini %SOURCESAVE%\mergeAIP_%_timestamp%\
 COPY *.prefs %SOURCESAVE%\mergeAIP_%_timestamp%\
-
-PAUSE

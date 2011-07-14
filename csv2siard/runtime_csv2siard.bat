@@ -20,4 +20,7 @@ COPY iconv.dll %RUNTIME%
 COPY _*.x* %RUNTIME%
 COPY *.prefs %RUNTIME%
 
-PAUSE
+@ECHO ON
+CD %RUNTIME%
+CALL csv2siard.exe
+CALL csv2siard.exe table2-model.xml csvdata test.siard
