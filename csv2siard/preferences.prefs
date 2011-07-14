@@ -1,10 +1,11 @@
 # Default Preferences
+# FILE_MASK: wild card is replaced with table name
 # 
 DELIMITED=;
 QUOTE="
 COLUMN_NAMES=TRUE
-CHARSET=ISO 8859-1
-FILE_MASK=gv_*.dat
+CHARSET=ISO-8859-1
+FILE_MASK=*.dat
 CHECK_FIELD_TYPE=FALSE
 CHECK_DATABASE_INTEGRITY=FALSE
 TMPDIR=./temp

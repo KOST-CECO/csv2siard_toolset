@@ -10,7 +10,8 @@ compress
 embed main.php
 embed c2sconfig.php
 embed c2sfunction.php
-embed c2srun.php
+embed c2screate.php
+embed c2sconvert.php
 embed php.ini
 
 extension php_xslt.dll 

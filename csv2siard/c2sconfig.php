@@ -57,11 +57,14 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['DELIMITED'] = ';';
 	$prg_option['QUOTE'] = '"';
 	$prg_option['COLUMN_NAMES'] = true;
-	$prg_option['CHARSET'] = 'ISO 8859-1';
+	$prg_option['CHARSET'] = 'ISO-8859-1';						// default character-set
 	$prg_option['FILE_MASK'] = '*.dat';
 	$prg_option['CHECK_FIELD_TYPE'] = false;
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;
-	$prg_option['TMPDIR'] = sys_get_temp_dir();
+	$prg_option['TMPDIR'] = sys_get_temp_dir();				// default temp dir
+	$prg_option['SIARD_USER'] = 'admin';							// default user
+	$prg_option['SIARD_SCHEMA'] = 'schema0';					// default schema
+
 
 	// specific preference file
 	if ($argc == 5) {

@@ -15,6 +15,6 @@ DEL main.php
 
 @ECHO ON
 CALL csv2siard.exe
-CALL csv2siard.exe gv-model-v8.xml testdata test.siard
+CALL csv2siard.exe gv-model-v8.xml csvdata test.siard
 
 PAUSE
