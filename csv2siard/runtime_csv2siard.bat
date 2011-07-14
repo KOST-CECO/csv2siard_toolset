@@ -54,6 +54,8 @@ COPY gv-model-v8.xml %RUNTIME%
 COPY *.php %RUNTIME%\source
 COPY csv2siard.bcp %RUNTIME%\source
 
+COPY csvdata\* %RUNTIME%\csvdata
+
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%\bin
 DEL /Q ..\..\test.siard

@@ -49,6 +49,7 @@ $version = '1.0';		// XSL and XSD include in program source
 $version = '1.1';		// convert date/time fields to xs:date
 $version = '1.2';		// check column type for NO_DB_MODEL 
 $version = '1.3';		// correct field type setting
+$version = '1.4';		// fix in NO_DB_MODEL and MS-Excel flavour
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis

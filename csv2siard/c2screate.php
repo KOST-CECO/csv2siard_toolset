@@ -102,7 +102,9 @@ global $prg_option, $prgdir;
 	
 	while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
-			echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
+			if ($prg_option['CHECK_COLUMN']) {
+				echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
+			}
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names

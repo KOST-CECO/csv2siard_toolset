@@ -29,12 +29,8 @@ global $prg_option;
 	
 	// check column count
 	$buf = array_chunk($input, 1);
-	$ict = 0;
-	foreach ($buf as $b) {
-		if (trim($b[0]) != '') {
-			$ict++;
-		}
-	}
+	$ict = count($buf)-1;
+	$ict = (trim($buf[$ict][0]) != '') ? $ict+1 : $ict;
 	if ($fct != $ict) {
 		echo "\nTo many columns in CSV file $file"; $prg_option['ERR'] = 27; return(false);
 	}

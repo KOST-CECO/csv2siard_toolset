@@ -79,10 +79,10 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['COLUMN_NAMES'] = true;				// First row contains column names
 	$prg_option['CHARSET'] = 'ISO-8859-1';		// default character-set (choose: ASCII, OEM, ANSI, ISO-8859-1 and UTF-8)
 	$prg_option['FILE_MASK'] = '*.dat';				// Wild card is replaced with table name
-	$prg_option['CHECK_FIELD_TYPE'] = false;	// Compare column names in first row with database model
-	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;
+	$prg_option['CHECK_COLUMN'] = true;				// Check column count, not applicable with MS-Exel CSV
+	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;	// Not implemented yet
 	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
-	$prg_option['PI_COUNT'] = 100;							// progress indicator per line processed
+	$prg_option['PI_COUNT'] = 100;						// progress indicator per line processed
 	$prg_option['MAX_ROWSIZE'] = 100000;			// maximal CSV row size
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description

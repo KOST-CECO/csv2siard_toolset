@@ -46,37 +46,45 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		$colarr = array();
 		while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 			if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
+			// truncate last field when empty
+			if (trim($buf[count($buf)-1]) == '') {
+				array_pop($buf);
+			}
 			// Read first line to detect columns
 			if ($rowcount == 0) {
 				$colcnt = 0;
+				reset($buf);
 				foreach ($buf as $b) {
-					if ($b != '') {
-						$type['name'] = ($prg_option['COLUMN_NAMES']) ? $b : "column$colcnt";
-						$type['type'] = 'INTEGER'; // preset with INTEGER
-						$type['size'] = 0;
-						$colarr[] = $type;
-						$colcnt++;
-					}
+					$type['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
+					$type['type'] = 'INTEGER'; // preset with INTEGER
+					$type['size'] = 0;
+					$colarr[] = $type;
+					$colcnt++;
 				}
-			} 
+			}
 			// Read entire file to detect column type
 			if (!($prg_option['COLUMN_NAMES'] and $rowcount == 0)) {
 				$colcnt = 0;
+				reset($buf);
 				foreach ($buf as $b) {
-					if ($b != '') {
-						if (strlen($b) > $colarr[$colcnt]['size']) {
-							$colarr[$colcnt]['size'] = strlen($b);
-						}
-						$bt = guessDataType($b);
-						if ($order_of_datatype[$bt] > $order_of_datatype[$colarr[$colcnt]['type']]) {
-							$colarr[$colcnt]['type'] = $bt;
-						}
-						$colcnt++;
+					if (!array_key_exists($colcnt, $colarr)) {
+						$colarr[$colcnt]['name'] = "column$colcnt";
+						$colarr[$colcnt]['type'] = 'INTEGER';;
+						$colarr[$colcnt]['size'] = 0;
 					}
+					if (strlen($b) > $colarr[$colcnt]['size']) {
+						$colarr[$colcnt]['size'] = strlen($b);
+					}
+					$bt = guessDataType($b);
+					if ($order_of_datatype[$bt] > $order_of_datatype[$colarr[$colcnt]['type']]) {
+						$colarr[$colcnt]['type'] = $bt;
+					}
+					$colcnt++;
 				}
 			}
 			$rowcount++;
 		}
+		// Check for empty column names
 		$csv_arr[$name] = $colarr;
 		fclose($csvhandle);
 	}
