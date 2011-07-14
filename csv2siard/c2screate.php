@@ -13,8 +13,8 @@ global $prg_option, $prgdir, $model2array;
 		'/_xsl' => file_get_contents("$prgdir/$model2array")
 	);
 	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
-	eval('$dbm[\'DATABASE_STRUCTURE\'] = '.$result);
-	
+	eval('$dbm = '.$result);
+
 	xslt_free($xh);
 	return;
 }
@@ -47,25 +47,36 @@ $folderstructur ="
 	copy ("$prgdir/_metadata.xsd", "$prg_option[SIARD_DIR]/header/metadata.xsd");
 	copy ("$prgdir/_metadata.xsl", "$prg_option[SIARD_DIR]/header/metadata.xsl");
 
-	// Create SIARD content
+	// Create SIARD content and folder
 	mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema", 0777, true);
 	$siardstructur = array();
-	foreach ($dbm['DATABASE_STRUCTURE'] as $db) {
+
+	foreach ($dbm as $dbname => $tables) {
 		$tbc = 0;
-		foreach (array_keys($db) as $table) {
+		foreach (array_keys($tables) as $tablename) {
 			mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema/table$tbc", 0777, true);
-			$siardstructur[$defaultschema]["table$tbc"] = $table;
+			$dbm[$dbname][$tablename]['$$$_folder_name'] = "table$tbc";
 			$tbc++;
 		}
 	}
-	$dbm['SIARD_STRUCTURE'] = $siardstructur;
 	return;
 }
 // -----------------------------------------------------------------------------
-// read CSV file and write SIARD table
-function creatSIARDTable(&$table, $tablename, &$siardstructur) {
+// read CSV Files according DB Modell and create SIARD tables
+function processDatabaseModell(&$dbm) {
+	foreach ($dbm as $dbname => $tables) {
+		foreach ($tables as $tablename => $table) {
+			//No assignment of foreach arrays by reference in PHP 4
+			creatSIARDTable($dbm[$dbname][$tablename], $tablename);
+			creatSIARDSchema($dbm[$dbname][$tablename], $tablename);
+		}
+	}
+}
+// -----------------------------------------------------------------------------
+// read a CSV file and write a SIARD table
+function creatSIARDTable(&$table, $tablename) {
 global $prg_option;
-
+echo "Process table $tablename...\n";
 	// check for CSV file and open it for reading
 	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
 	if(!is_file($csvfile)) {
@@ -77,41 +88,64 @@ global $prg_option;
 	}
 	
 	// open SIARD file for writing
-	$tablefolder = array_search($tablename, $siardstructur);
+	$tablefolder = $table['$$$_folder_name'];
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardhandle = fopen($siardfile, "w");
 	if(!$siardhandle) {
-		echo "Could not open SIARD file $siardfile\n"; $prg_option['ERR'] = true; return;
+		echo "Could not open SIARD xml file $siardfile\n"; $prg_option['ERR'] = true; return;
 	}
 	
 	// write SIARD file XML header
 	writeSIARDHeader($siardhandle, $tablefolder);
 	
 	// read and process CSV file
-	$linecount = 1;
+	$rowcount = 1;
 	$columcount = count($table);
 	while (($buf = fgetcsv($csvhandle, 100000, $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
-			echo "Incorrect CSV on line $linecount in file $csvfile\n"; $prg_option['ERR'] = true;
+			echo "Incorrect CSV on line $rowcount in file $csvfile\n"; $prg_option['ERR'] = true;
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names
-		if ($linecount == 1 and $prg_option['COLUMN_NAMES'] === true) {
+		if ($rowcount == 1 and $prg_option['COLUMN_NAMES']) {
 			processCSVColumnNames($buffer, $csvfile, $tablename, $table);
 		}
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount);
 		}
-		$linecount++;
+		$rowcount++;
 	}
 
 	// write SIARD file XML footer
 	writeSIARDFooter($siardhandle);
 	
-	// update table linecounter
-	print_r($dbm['SIARD_STRUCTURE']);
-	
+	// update table row counter
+	$table['$$$_row_count'] = ($prg_option['COLUMN_NAMES']) ? $rowcount-2 : $rowcount-1;
+//print_r($table);
+
 	fclose($csvhandle);
+	fclose($siardhandle);
+}
+// -----------------------------------------------------------------------------
+// write a SIARD Schema file
+function creatSIARDSchema(&$table, $tablename) {
+global $prg_option;
+	// open SIARD file for writing
+	$tablefolder = $table['$$$_folder_name'];
+	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
+	$siardhandle = fopen($siardfile, "w");
+	if(!$siardhandle) {
+		echo "Could not open SIARD schema file $siardfile\n"; $prg_option['ERR'] = true; return;
+	}
+	
+	// write SIARD schema header
+	writeSchemaHeader($siardhandle, $tablefolder);
+
+
+
+	// write SIARD schema footer
+	writeSchemaFooter($siardhandle);
+
 	fclose($siardhandle);
 }
 ?>

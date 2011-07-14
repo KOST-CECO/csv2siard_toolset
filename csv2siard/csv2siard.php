@@ -57,7 +57,6 @@ $usage ="
 
      version :: $version
 ";
-
 // MAIN ------------------------------------------------------------------------
 checkUtils();
 readCommandLine();
@@ -67,11 +66,7 @@ loadDatabaseModell($dbm);
 creatSIARDFolder($dbm);
 
 print_r($prg_option);
-foreach ($dbm['DATABASE_STRUCTURE'] as $db) {
-	foreach (array_keys($db) as $table) {
-		creatSIARDTable($db[$table], $table, $dbm['SIARD_STRUCTURE'][$prg_option['SIARD_SCHEMA']]);
-		exit;
-	}
-}
+processDatabaseModell($dbm);
+
 exit(0);
 ?>

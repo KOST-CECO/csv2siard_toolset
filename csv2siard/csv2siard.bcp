@@ -3,7 +3,7 @@
 mainfile main.php
 outfile csv2siard.exe
 
-compress
+;compress
 ;windowed
 ;dontencode
 
