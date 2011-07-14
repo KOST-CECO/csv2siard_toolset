@@ -54,24 +54,24 @@ function readPreferences() {
 global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 
 	// set default preferences
-	$prg_option['DELIMITED'] = ';';
-	$prg_option['QUOTE'] = '"';
-	$prg_option['COLUMN_NAMES'] = true;
-	$prg_option['CHARSET'] = 'ISO-8859-1';						// default character-set
-	$prg_option['FILE_MASK'] = '*.dat';
-	$prg_option['CHECK_FIELD_TYPE'] = false;
+	$prg_option['DELIMITED'] = ';';						// CSV column separator
+	$prg_option['QUOTE'] = '"';								// Optional field Quotation
+	$prg_option['COLUMN_NAMES'] = true;				// First row contains column names
+	$prg_option['CHARSET'] = 'ISO-8859-1';		// default character-set (choose: ASCII, OEM, ANSI, ISO-8859-1 and UTF-8)
+	$prg_option['FILE_MASK'] = '*.dat';				// Wild card is replaced with table name
+	$prg_option['CHECK_FIELD_TYPE'] = false;	// Compare column names in first row with database model
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;
-	$prg_option['TMPDIR'] = sys_get_temp_dir();				// default temp dir
-	$prg_option['PI_COUNT'] = 20;						// progress indicator per line processed
+	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
+	$prg_option['PI_COUNT'] = 20;							// progress indicator per line processed
 	// Optional content settings
-	$prg_option['DESCRIPTION'] = '';				// Database description
-	$prg_option['ARCHIVED_BY'] = '';				// Database archived by
-	$prg_option['CONTACT'] = '';						// Archivist's contact details
-	$prg_option['OWNER'] = '(...)';					// Data owner prior to archiving
-	$prg_option['TIMESPAN'] = '(...)';			// Data creation time span
-	$prg_option['DB_TYPE'] = 'CSV';					// Type of Database or database product
-	$prg_option['SIARD_USER'] = 'admin';							// default user
-	$prg_option['SIARD_SCHEMA'] = 'schema0';					// default schema
+	$prg_option['DESCRIPTION'] = '';					// Database description
+	$prg_option['ARCHIVED_BY'] = '';					// Database archived by
+	$prg_option['CONTACT'] = '';							// Archivist's contact details
+	$prg_option['OWNER'] = '(...)';						// Data owner prior to archiving
+	$prg_option['TIMESPAN'] = '(...)';				// Data creation time span
+	$prg_option['DB_TYPE'] = 'CSV';						// Type of Database or database product
+	$prg_option['SIARD_USER'] = 'admin';			// default user
+	$prg_option['SIARD_SCHEMA'] = 'schema0';	// default schema
 
 	// specific preference file
 	if ($argc == 5) {

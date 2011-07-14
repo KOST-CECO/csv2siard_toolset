@@ -35,7 +35,8 @@ REM COPY gdiplus.dll %RUNTIME%
 
 COPY _*.x* %RUNTIME%
 
-COPY *.prefs %RUNTIME%
+COPY preferences.prefs %RUNTIME%
+COPY gv-model-v8.xml %RUNTIME%
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%
@@ -49,4 +50,4 @@ CALL csv2siard.exe ..\table2-model.xml ..\csvdata ..\test.siard
 @ECHO OFF
 REM zip ------------------------------------------------------------------------
 CD ..
-REM 7z.exe a -mx9 %RUNTIME%.zip %RUNTIME%
+7z.exe a -mx9 %RUNTIME%.zip %RUNTIME%
