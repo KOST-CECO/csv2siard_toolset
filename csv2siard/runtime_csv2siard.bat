@@ -17,10 +17,12 @@ COPY xmllint.exe %RUNTIME%
 COPY sablot.dll %RUNTIME%
 COPY expat.dll %RUNTIME%
 COPY iconv.dll %RUNTIME%
+COPY 7z.* %RUNTIME%
 COPY _*.x* %RUNTIME%
 COPY *.prefs %RUNTIME%
 
 @ECHO ON
 CD %RUNTIME%
+DEL /Q test.siard
 CALL csv2siard.exe
 CALL csv2siard.exe table2-model.xml csvdata test.siard

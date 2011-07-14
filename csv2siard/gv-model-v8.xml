@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
-<?xml-stylesheet type="text/xsl" href="model2array.xsl"?>
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
 	<table name="gv_gebaeude">
 		<option key="file" value="gv_gebaeude.dat"/>

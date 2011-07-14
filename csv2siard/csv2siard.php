@@ -36,6 +36,7 @@ include 'c2sxml.php';
 $version = '0.1';		// Read and check command-line arguments
 $version = '0.2';		// Load Datamodel
 $version = '0.3';		// Write SIARD XML files
+$version = '0.4';		// Write SIARD metadata files
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
@@ -89,6 +90,7 @@ else {
 	}
 }
 createSIARDMetadata($dbmod);
+createSIARDFile();
 
 exit(0);
 ?>

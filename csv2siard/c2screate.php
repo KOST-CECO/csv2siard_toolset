@@ -169,14 +169,13 @@ global $prgdir, $prg_option, $torque2siard;
 	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/header/metadata.xsd";
-	$xmldump = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n" . ary2xml($dbmod);
-	file_put_contents($siardmetadata, $xmldump);
-	return;
+	$xmldata = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n" . ary2xml($dbmod);
+	//file_put_contents($siardmetadata, $xmldata);
 	
 	//convert torque.v4 XML datamodel to SIARD XML metadata file
 	$xh = xslt_create();
 	$arguments = array(
-		'/_xml' => $xmldump,
+		'/_xml' => $xmldata,
 		'/_xsl' => file_get_contents("$prgdir/$torque2siard")
 	);
 	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments);
@@ -184,12 +183,31 @@ global $prgdir, $prg_option, $torque2siard;
 	file_put_contents($siardmetadata, $result);;
 	
 	//validate SIARD XML metadata file
-	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardheader 2>metadata.out", $result, $retval);
+	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardmetadata 2>metadata.out", $result, $retval);
 	if ($retval) {
 		$result = file_get_contents("metadata.out");
 		$result_array = explode("\n", $result, 2);
 		echo "metadata.xml is not a valid XML file:\n$result_array[0]\n";
 	}
 	unlink("metadata.out");
+}
+// -----------------------------------------------------------------------------
+// create SIARD ZIP file
+function createSIARDFile( ) {
+global $prgdir, $prg_option;
+
+	//write torque.v4 XML datamodel
+	$siarddir = "$prg_option[SIARD_DIR]/*";
+	$zipfile = tempnam(sys_get_temp_dir(), 'siard').'.zip';
+	@unlink($zipfile);
+	
+	// create ZIP file
+	exec("$prgdir/7z.exe a -w $zipfile $siarddir", $result, $retval);
+	if ($retval != 0) {
+		echo "Temporary ZIP file could not be created: $zipfile"; return(-1); 
+	}
+	// rename ZIP file to SIARD file
+	rrmdir($prg_option['SIARD_DIR']);
+	rename($zipfile, $prg_option['SIARD_FILE']);
 }
 ?>
