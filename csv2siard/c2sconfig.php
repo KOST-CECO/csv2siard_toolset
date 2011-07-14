@@ -97,7 +97,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 // check utility programms  ----------------------------------------------------
 function checkUtils() {
 global $prg_option;
-// Libraries
+// Libraries missing
 	// <eXpat/> the Expat XML Parser http://expat.sourceforge.net and www.sysinternals.com
 	if ((@md5_file("expat.dll") != '3e860d331271c23e46efb1ba019701d1')
 	// iconv.dll (LGPLed libiconv for Windows NT/2000/XP and Windows 95/98/ME) is a component from the 
@@ -108,12 +108,17 @@ global $prg_option;
 	or (@md5_file("sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
 		echo "Some libraries are missing or corrupt\n"; exit(-1);
 	}
-// Programs
+// Programs missing
 	elseif (@md5_file("xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
 		echo "Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
 	}
+	elseif (@md5_file("7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
+		echo "Program 7z.exe is missing, corrupt or wrong version (7z.exe version 4.65)\n"; exit(-1);
+	}
+	elseif (@md5_file("7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
+		echo "Program 7z.exe is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(-1);
+	}
 }
-
 // check  TMP directory --------------------------------------------------------
 function checkTMP() {
 global $prg_option;

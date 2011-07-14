@@ -1,7 +1,6 @@
 @ECHO OFF
 SETLOCAL
 
-SET APP=..\runAPP
 REM settings -------------------------------------------------------------------
 SET JAVA_HOME=C:\Software\jdk1.6.0_01
 SET UNIX_HOME=C:\Software\PCUnixUtils
@@ -14,5 +13,6 @@ BAMCOMPILE.EXE csv2siard.bcp
 DEL main.php
 
 @ECHO ON
+DEL /Q test.siard
 CALL csv2siard.exe
 CALL csv2siard.exe table2-model.xml csvdata test.siard

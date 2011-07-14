@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
-	<table name="gv_gebaeude">
+	<table name="gv_gebaeude" description="Übernommen werden in dieser Tabelle die Basisdaten zu versicherte und fremdversicherte Gebäude sowie abgebrochenen Gebäude mit einem Schadenfall in der Beobachtungsperiode">
 		<option key="file" value="gv_gebaeude.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutiger Schlüssel für das Gebäude"/>
 		<column name="grundstueck_id" type="VARCHAR" size="20" description="Grundstücknummer"/>
@@ -28,7 +28,7 @@
 		<column name="ort" type="VARCHAR" size="1000" description="Ort"/>
 		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung"/>
 	</table>
-	<table name="gv_person">
+	<table name="gv_person" description="Die Tabellen enthält für alle zu exportierenden Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwaltung auftreten">
 		<option key="file" value="gv_person.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
 		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"/>

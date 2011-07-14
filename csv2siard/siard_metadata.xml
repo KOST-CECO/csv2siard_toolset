@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="metadata.xsl"?>
+<siardArchive version="1.0" xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd metadata.xsd">
+	<dbname>gvtg</dbname>
+	<dataOwner>(...)</dataOwner>
+	<dataOriginTimespan>(...)</dataOriginTimespan>
+	<producerApplication>csv2siard</producerApplication>
+	<archivalDate>2010-12-28</archivalDate>
+	<messageDigest/>
+	<databaseProduct>CSV  </databaseProduct>
+	<databaseUser>"admin"</databaseUser>
+	<schemas>
+		<schema>
+			<name>admin</name>
+			<folder>schema0</folder>
+			<tables>
+				<table>
+					<name>Gv_person</name>
+					<folder>table1</folder>
+					<description/>
+					<columns>
+						<column>
+							<name>id</name>
+							<type>INTEGER</type>
+							<typeOriginal>INTEGER</typeOriginal>
+							<nullable>true</nullable>
+							<description>Personen-ID</description>
+						</column>
+						<column>
+							<name>person_id</name>
+							<type>INTEGER</type>
+							<typeOriginal>INTEGER</typeOriginal>
+							<nullable>true</nullable>
+							<description>Eindeutige Personen-ID</description>
+						</column>
+						<column>
+							<name>gebaeude_id</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+							<description>ID für die Referenz zum Gebäude</description>
+						</column>
+						<column>
+							<name>klasse_code</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>klasse_text</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>name</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>strasse</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>strasse_nr</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>wohnung_nr</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>land</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>plz</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>plz_zusatz</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>ort</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>ort_zusatz</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>gueltig_ab</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>gueltig_bis</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>rolle_code</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>rolle_text</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+					</columns>
+					<foreignKeys>
+						<foreignKey>
+							<name>Gv_gebaeudeGv_person</name>
+							<referencedSchema>admin</referencedSchema>
+							<referencedTable>Gv_gebaeude</referencedTable>
+							<reference>
+								<column>gebaeude_id</column>
+								<referenced>id</referenced>
+							</reference>
+							<deleteAction>CASCADE</deleteAction>
+							<updateAction>CASCADE</updateAction>
+						</foreignKey>
+					</foreignKeys>
+					<candidateKeys>
+						<candidateKey>
+							<name>PrimaryKey1</name>
+							<column>person_id</column>
+							<column>gebaeude_id</column>
+						</candidateKey>
+					</candidateKeys>
+					<rows>14</rows>
+				</table>
+				<table>
+					<name>Gv_position</name>
+					<folder>table5</folder>
+					<description/>
+					<columns>
+						<column>
+							<name>id</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+							<description>Eindeutige ID der Schätzposition</description>
+						</column>
+						<column>
+							<name>schaetzung_id</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>art_code</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>art_text</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>text</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>volumen</name>
+							<type>INTEGER</type>
+							<typeOriginal>INTEGER</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>versicherungswert</name>
+							<type>INTEGER</type>
+							<typeOriginal>INTEGER</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>laenge</name>
+							<type>FLOAT(53)</type>
+							<typeOriginal>DOUBLE</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>breite</name>
+							<type>FLOAT(53)</type>
+							<typeOriginal>DOUBLE</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>hoehe</name>
+							<type>FLOAT(53)</type>
+							<typeOriginal>DOUBLE</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>abnutzung</name>
+							<type>INTEGER</type>
+							<typeOriginal>INTEGER</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>erfasster_wert</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>bauart_code</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+						<column>
+							<name>bauart_text</name>
+							<type>CHARACTER VARYING(255)</type>
+							<typeOriginal>TEXT</typeOriginal>
+							<nullable>true</nullable>
+						</column>
+					</columns>
+					<foreignKeys>
+						<foreignKey>
+							<name>Gv_schaetzungGv_position</name>
+							<referencedSchema>admin</referencedSchema>
+							<referencedTable>Gv_schaetzung</referencedTable>
+							<reference>
+								<column>schaetzung_id</column>
+								<referenced>id</referenced>
+							</reference>
+							<deleteAction>CASCADE</deleteAction>
+							<updateAction>CASCADE</updateAction>
+						</foreignKey>
+					</foreignKeys>
+					<rows>19</rows>
+				</table>
+			</tables>
+		</schema>
+	</schemas>
+	<users>
+		<user>
+			<name>admin</name>
+		</user>
+	</users>
+</siardArchive>

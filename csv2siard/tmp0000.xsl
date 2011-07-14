@@ -83,20 +83,19 @@
 			<xsl:element name="columns">
 				<xsl:apply-templates/>
 			</xsl:element>
-			<!-- PRIMARY KEY 
-			<xsl:if test="db:column/@primaryKey='true'">
+			<!-- PRIMARY KEY -->
+			<xsl:if test="db:column/@primaryKey">
 				<xsl:element name="primaryKey">
 					<xsl:for-each select="db:column">
-						<xsl:if test="@primaryKey='true'">
+						<xsl:if test="@primaryKey">
 							<xsl:element name="column">
 								<xsl:value-of select="@name"/>
 							</xsl:element>
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:element>
-			</xsl:if> 
-			-->
-			<!-- FOREIGN KEYS
+			</xsl:if>
+			<!-- FOREIGN KEYS -->
 			<xsl:if test="db:foreign-key">
 				<xsl:element name="foreignKeys">
 					<xsl:for-each select="db:foreign-key">
@@ -121,7 +120,7 @@
 						</xsl:element>
 					</xsl:for-each>
 				</xsl:element>
-			</xsl:if>  -->
+			</xsl:if>
 			<!-- ROWS -->
 			<xsl:element name="rows">
 				<xsl:value-of select="db:option[@key='rowcount']/@value"/>

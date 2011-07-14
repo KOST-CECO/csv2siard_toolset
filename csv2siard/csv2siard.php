@@ -44,7 +44,7 @@ $prgname = strtolower(basename($argv[0], '.exe'));	// ProgrammName
 $prgname = basename($prgname, '.php');							// ProgrammName
 $prgdir = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
 
-$prg_option['ERR'] = false;													// Programm optionen
+$prg_option['ERR'] = 0;															// Programm optionen
 $torqueschema = '_database-torque-4-0.xsd';					// torque.v4 XML database schema
 $siard_schema = '_metadata.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
 $siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
@@ -92,5 +92,13 @@ else {
 createSIARDMetadata($dbmod);
 createSIARDFile();
 
-exit(0);
+if ($prg_option['ERR'] == 0) {
+	echo "\nSIARD file created: $prg_option[SIARD_FILE]\n";
+	exit(0);
+}
+else {
+	echo "\nNo valid SIARD file created\n";
+	@unlink($prg_option['SIARD_FILE']);
+	exit($prg_option['ERR']);
+}
 ?>

@@ -72,18 +72,18 @@ global $prg_option;
 	setTableOption($table, 'file', $csvfile);
 
 	if(!is_file($csvfile)) {
-		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = true; return;
+		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = -1; return;
 	}
 	$csvhandle = fopen($csvfile, "r");
 	if(!$csvhandle) {
-		echo "Could not read CSV file $csvfile\n"; $prg_option['ERR'] = true; return;
+		echo "Could not read CSV file $csvfile\n"; $prg_option['ERR'] = -1; return;
 	}
 	// open SIARD file for writing
 	$tablefolder = getTableOption($table, 'folder');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardhandle = fopen($siardfile, "w");
 	if(!$siardhandle) {
-		echo "Could not open SIARD xml file $siardfile\n"; $prg_option['ERR'] = true; return;
+		echo "Could not open SIARD xml file $siardfile\n"; $prg_option['ERR'] = -1; return;
 	}
 	// write SIARD file XML header
 	writeSIARDHeader($siardhandle, $tablefolder);
@@ -94,7 +94,7 @@ global $prg_option;
 	$columcount = count($table['_c']['column']);
 	while (($buf = fgetcsv($csvhandle, 100000, $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
-			echo "Incorrect CSV on line $rowcount in file $csvfile\n"; $prg_option['ERR'] = true;
+			echo "Incorrect CSV on line $rowcount in file $csvfile\n"; $prg_option['ERR'] = -1;
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names
@@ -129,7 +129,7 @@ global $prg_option;
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	$siardhandle = fopen($siardschema, "w");
 	if(!$siardhandle) {
-		echo "Could not open SIARD schema file $siardfile\n"; $prg_option['ERR'] = true; return;
+		echo "Could not open SIARD schema file $siardfile\n"; $prg_option['ERR'] = -1; return;
 	}
 	
 	// write SIARD schema header
@@ -188,6 +188,7 @@ global $prgdir, $prg_option, $torque2siard;
 		$result = file_get_contents("metadata.out");
 		$result_array = explode("\n", $result, 2);
 		echo "metadata.xml is not a valid XML file:\n$result_array[0]\n";
+		$prg_option['ERR'] = -1;
 	}
 	unlink("metadata.out");
 }
@@ -198,13 +199,14 @@ global $prgdir, $prg_option;
 
 	//write torque.v4 XML datamodel
 	$siarddir = "$prg_option[SIARD_DIR]/*";
-	$zipfile = tempnam(sys_get_temp_dir(), 'siard').'.zip';
+	$zipfile = tempnam($prg_option['TMPDIR'], 'siard');
 	@unlink($zipfile);
+	$zipfile = $zipfile.'.zip';
 	
 	// create ZIP file
 	exec("$prgdir/7z.exe a -w $zipfile $siarddir", $result, $retval);
 	if ($retval != 0) {
-		echo "Temporary ZIP file could not be created: $zipfile"; return(-1); 
+		echo "Temporary ZIP file could not be created: $zipfile"; return(-1);
 	}
 	// rename ZIP file to SIARD file
 	rrmdir($prg_option['SIARD_DIR']);

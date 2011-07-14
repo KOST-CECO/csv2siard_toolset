@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 function getTableOption(&$table,$key) {
 	// no options
 	if (!array_key_exists('option', $table['_c'])) {
-		return(FALSE);
+		return(false);
 	}
 	// one option
 	elseif (!array_key_exists('0', $table['_c']['option'])) {
@@ -23,7 +23,7 @@ function getTableOption(&$table,$key) {
 			}
 		}
 	}
-	return(FALSE);
+	return(false);
 }
 // -----------------------------------------------------------------------------
 // Enter "/database/table/option[@key='value'] into XML array"
