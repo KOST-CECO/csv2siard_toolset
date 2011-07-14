@@ -40,6 +40,7 @@ $version = '0.4';		// Write SIARD metadata files
 $version = '0.5';		// Read preference settings into metadata.xml
 $version = '0.6';		// CSV encoding ISO-8859-1 and UTF-8
 $version = '0.7';		// check CSV column names
+$version = '0.8';		// necessary exe and dll
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis

@@ -118,11 +118,17 @@ global $prgdir, $prg_option;
 	elseif (@md5_file("$prgdir/xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
 		echo "Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
 	}
+	elseif (@md5_file("$prgdir/libxml2.dll") != 'a48f3cbb3f0176e33099274126724ea0'){
+		echo "Library libxml2.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
+	}
+	elseif (@md5_file("$prgdir/zlib1.dll") != 'f5b8b7054675d6aaf4ce3e727395f402'){
+		echo "Library zlib1.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
+	}
 	elseif (@md5_file("$prgdir/7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
 		echo "Program 7z.exe is missing, corrupt or wrong version (7z.exe version 4.65)\n"; exit(-1);
 	}
 	elseif (@md5_file("$prgdir/7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
-		echo "Program 7z.exe is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(-1);
+		echo "Library 7z.dll is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(-1);
 	}
 }
 // check  TMP directory --------------------------------------------------------
