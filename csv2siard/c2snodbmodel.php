@@ -3,6 +3,7 @@ error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
 global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
+$order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'DATE' => 2, 'VARCHAR' => 3);
 
 // Create CSV file list
 	$file_arr = array();
@@ -41,24 +42,43 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
 		if(!$csvhandle) {
 			echo "Could not read CSV file $file\n"; exit(2);
 		}
-		// Read first line to detect columns
-		if (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
-			$colcnt = 0;
-			$colarr = array();
-			// Read entire file to detect column type *** TO BE DONE ***
-			foreach ($buf as $b) {
-				if ($b != '') {
-					$type['name'] = ($prg_option['COLUMN_NAMES']) ? $b : "column$colcnt";
-					$type['type'] = 'VARCHAR';
-					$type['size'] = '';
-					$colarr[] = $type;
-					$colcnt++;
+		$rowcount = 0;
+		$colarr = array();
+		while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
+			if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
+			// Read first line to detect columns
+			if ($rowcount == 0) {
+				$colcnt = 0;
+				foreach ($buf as $b) {
+					if ($b != '') {
+						$type['name'] = ($prg_option['COLUMN_NAMES']) ? $b : "column$colcnt";
+						$type['type'] = 'INTEGER'; // preset with INTEGER
+						$type['size'] = 0;
+						$colarr[] = $type;
+						$colcnt++;
+					}
+				}
+			} 
+			// Read entire file to detect column type
+			if (!($prg_option['COLUMN_NAMES'] and $rowcount == 0)) {
+				$colcnt = 0;
+				foreach ($buf as $b) {
+					if ($b != '') {
+						if (strlen($b) > $colarr[$colcnt]['size']) {
+							$colarr[$colcnt]['size'] = strlen($b);
+						}
+						$bt = guessDataType($b);
+						if ($order_of_datatype[$bt] > $order_of_datatype[$colarr[$colcnt]['type']]) {
+							$colarr[$colcnt]['type'] = $bt;
+						}
+						$colcnt++;
+					}
 				}
 			}
+			$rowcount++;
 		}
 		$csv_arr[$name] = $colarr;
 		fclose($csvhandle);
-		
 	}
 
 	// create database description according to torque.v4 XML model
@@ -71,8 +91,12 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
 		$xmldata = $xmldata . "\t<table name=\"$name\">\n";
 		reset($columns);
 		while (list($name, $attributes) = each($columns)) {
-			$size = ($attributes['size'] == '') ? '' : " size=\"$attributes[size]\"";
-			$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"$size/>\n";
+			if ($attributes['type'] == 'VARCHAR') {
+				$size = ($attributes['size'] == '') ? '' : " size=\"$attributes[size]\"";
+				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"$size/>\n";
+			} else {
+				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"/>\n";			
+			}
 		}
 		$xmldata = $xmldata . "\t</table>\n";
 	}
@@ -93,11 +117,36 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
 	}
 
 	// write console message
-	echo "New XML database model written: $wdir/no_db_model.xml\n";
+	echo "\nNew XML database model written: $wdir/no_db_model.xml\n";
 	reset($file_arr);
 	while (list($key, $val) = each($file_arr)) {
 		$val = ansi2ascii(utf8_decode($val));
 		echo "  [$key] => $val\n";
 	}
+}
+
+// -----------------------------------------------------------------------------
+// guess data type of string $buf, returns data type
+function guessDataType($buf) {
+	// == empty string
+	if ($buf == '' or $buf == ' ') {
+		return('VARCHAR');
+	}
+	// == INTEGER
+	if (ctype_digit($buf)) {
+		return('INTEGER');
+	}
+	// == DECIMAL
+	$b = strtr ($buf, ',', '.');
+	if (is_numeric ($buf)) {
+		return('DECIMAL');
+	}
+	// == DATE
+	$bd = convert2XMLdate($buf);
+	if ($bd and $bd['type'] != 'UNIX native date format' and $bd['date'] != '') {
+		return('DATE');
+	}
+	// == anything else is VARCHAR
+	return('VARCHAR');
 }
 ?>

@@ -28,7 +28,7 @@
 		<column name="ort" type="VARCHAR" size="1000" description="Ort"/>
 		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung"/>
 	</table>
-	<table name="gv_person" description="Die Tabellen enthält für alle zu exportierenden Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwaltung auftreten">
+	<table name="gv_person" description="Die Tabellen enthält für alle exportiertem Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwaltung auftreten">
 		<option key="file" value="gv_person.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
 		<column name="person_id" type="BIGINT" primaryKey="true" description="Eindeutige Personen-ID"/>
@@ -40,7 +40,7 @@
 		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35‘ oder “87, 89)"/>
 		<column name="wohnung_nr" type="VARCHAR" size="20" description="Wohnungsnummer"/>
 		<column name="land" type="VARCHAR" size="1000" description="Land"/>
-		<column name="plz" type="INTEGER" description="Postleitzahl"/>
+		<column name="plz" type="VARCHAR" size="6" description="Postleitzahl"/>
 		<column name="plz_zusatz" type="VARCHAR" size="20" description="Postleitzahl Zusatzziffern"/>
 		<column name="ort" type="VARCHAR" size="1000" description="Ort"/>
 		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung. Verwendet meist für Postfach."/>
@@ -52,7 +52,7 @@
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
-	<table name="gv_anlage">
+	<table name="gv_anlage" description="Die Tabellen beschreibt den Anlagetyp für die exportierten Gebäude">
 		<option key="file" value="gv_anlage.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige Anlage-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
@@ -62,7 +62,7 @@
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
-	<table name="gv_schaden">
+	<table name="gv_schaden" description="Alle Schadensmeldungen für die exportierten Gebäude">
 		<option key="file" value="gv_schaden.dat"/>
 		<column name="id" type="BIGINT" primaryKey="true" description="Eindeutige Schaden-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
@@ -84,7 +84,7 @@
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
-	<table name="gv_schaetzung">
+	<table name="gv_schaetzung" description="Aktuelle Schätzungen für die exportierten Gebäude">
 		<option key="file" value="gv_schaetzung.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID für die Schätzung"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
@@ -109,7 +109,7 @@
 			<reference local="gebaeude_id" foreign="id"/>
 		</foreign-key>
 	</table>
-	<table name="gv_position">
+	<table name="gv_position" description="Alle Zusatzpostitionen (Informationen) zu den Schätzungen">
 		<option key="file" value="gv_position.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID der Schätzposition"/>
 		<column name="schaetzung_id" type="VARCHAR" description="ID für die Referenz zur Schätzung"/>

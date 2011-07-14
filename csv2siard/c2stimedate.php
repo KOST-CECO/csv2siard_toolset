@@ -194,7 +194,7 @@ $retval = array();
 	elseif (is_array($arr = strptime($str, '%Y-%m-%dT%H:%M:%S')) 
 			and ($arr['unparsed'] == '' 
 				or preg_match('/\.\d\d/', $arr['unparsed'])
-				or preg_match('/\.\d\d\+\d\d\:00', $arr['unparsed']) 
+				or preg_match('/\.\d\d\+\d\d\:00/', $arr['unparsed']) 
 			)) {
 		$retval['type'] = "ISO 8601 / SOAP";
 	}

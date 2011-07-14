@@ -123,6 +123,7 @@ global $prg_option;
 				case "VARCHAR":
 				case "LONGVARCHAR":
 				case "CLOB":
+					$buf = xml_encode($buf);
 					break;
 				case "BIT":
 				case "BINARY":

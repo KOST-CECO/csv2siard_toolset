@@ -47,6 +47,7 @@ $version = '0.8';		// necessary exe and dll
 $version = '0.9';		// NO_DB_MODEL implementieren
 $version = '1.0';		// XSL and XSD include in program source
 $version = '1.1';		// convert date/time fields to xs:date
+$version = '1.2';		// check column type for NO_DB_MODEL 
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
