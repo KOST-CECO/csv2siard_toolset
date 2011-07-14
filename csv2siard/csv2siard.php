@@ -44,8 +44,9 @@ $prg_option = array();															// Programm Optionen
 $dbschema = 'database-torque-4-0.xsd';							// torque.v4 schema
 $prefs = 'preferences.prefs';												// Preference file
 $model2array = 'model2array.xsl';										// Transform XML Database to array
+$dbm = array();				//nested array to hold database model and SIARD structure
 
-$dbm = array();				//multi-dimensional array to hold the database model
+$siard_user = 'admin';
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile prefs
@@ -64,7 +65,7 @@ readPreferences();
 checkTMP();
 
 loadDatabaseModell($dbm);
-creatSIARDHeader($dbm);
+creatSIARDStructur($dbm);
 
 print_r($prg_option);
 
