@@ -1,17 +1,22 @@
 @ECHO OFF
 SETLOCAL
 
-SET RUNTIME=.\runtime
+csv2siard.exe | grep version |  cut -d " " -f 8 >version.tmp
+COPY $setversion$ + version.tmp $tmp$.bat > nul
+CALL $tmp$.bat
+DEL $tmp$.bat
+DEL version.tmp
 
-REM settings -------------------------------------------------------------------
-SET JAVA_HOME=C:\Software\jdk1.6.0_01
-SET UNIX_HOME=C:\Software\PCUnixUtils
-SET PERL_HOME=C:\Software\Perl
-SET PATH=%UNIX_HOME%;%JAVA_HOME%\2_arcun;%PERL_HOME%\2_arcun;%PATH%
+ECHO +++ csv2siard Version %VERSION% +++
+
+SET RUNTIME=.\csv2siard_v.%VERSION%
 
 REM copy -----------------------------------------------------------------------
 ECHO .
-REM DEL /Q %RUNTIME%
+DEL /Q %RUNTIME%\*
+RMDIR %RUNTIME%
+MKDIR %RUNTIME%
+
 COPY csv2siard.exe %RUNTIME%
 COPY xmllint.exe %RUNTIME%
 COPY sablot.dll %RUNTIME%
@@ -23,6 +28,6 @@ COPY *.prefs %RUNTIME%
 
 @ECHO ON
 CD %RUNTIME%
-DEL /Q test.siard
+DEL /Q ..\test.siard
 CALL csv2siard.exe
-CALL csv2siard.exe table2-model.xml csvdata test.siard
+CALL csv2siard.exe ..\table2-model.xml ..\csvdata ..\test.siard

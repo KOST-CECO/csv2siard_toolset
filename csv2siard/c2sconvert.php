@@ -4,9 +4,36 @@ error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
 // process the first CSV line and check column names
-function processCSVColumnNames($buffer, $file, $name, $table) {
+function processCSVColumnNames($buffer, $file, $table, $input) {
 global $prg_option;
-	// check column names *** TO BE DONE ***
+
+	$fct = 0;
+	foreach ($table['_c']['column'] as $column) {
+		if (is_array($column)) {
+			// multiple columns or only one column
+			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
+			if (strcasecmp($name, $buffer[$fct]) != 0) {
+				if ($buffer[$fct] == '') {
+					echo "\nColumn '$name' in database model is missing in CSV file $file";
+				} else {
+					echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
+				}
+				$prg_option['ERR'] = -1;
+				return(false);
+			}
+			$fct++;
+		}
+	}
+	$buf = array_chunk($input, 1);
+	$ict = 0;
+	foreach ($buf as $b) {
+		if ($b[0] != '') {
+			$ict++;
+		}
+	}
+	if ($fct != $ict) {
+		echo "\nTo many columns in CSV file $file"; $prg_option['ERR'] = -1; return(false);
+	}
 	return(true);
 }
 // -----------------------------------------------------------------------------
@@ -35,7 +62,7 @@ global $prg_option;
 	for ($i=1; $i <= $columcount; $i++) {
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
-			// type checking *** TO BE DONE ***
+			// check field type *** TO BE DONE ***
 			switch ($prg_option['CHARSET']) {
 				case "ASCII":
 					$buf = utf8_encode(ascii2ansi($buf)); break;
@@ -44,11 +71,6 @@ global $prg_option;
 				case "UTF-8":
 					break;
 			}
-
-			//if (strcasecmp($prg_option['CHARSET'], 'UTF-8') != 0) {
-			//	$buf = utf8_encode($buf);
-			//}
-			
 			// write a <column> into SIARD XML file
 			$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
 			fwrite ($siardhandle, $buf);

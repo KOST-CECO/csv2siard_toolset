@@ -99,7 +99,7 @@ global $prg_option;
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names
 		if ($rowcount == 1 and $prg_option['COLUMN_NAMES']) {
-			processCSVColumnNames($buffer, $csvfile, $tablename, $table);
+			processCSVColumnNames($buffer, $csvfile, $table, $buf);
 		}
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount, $table);
