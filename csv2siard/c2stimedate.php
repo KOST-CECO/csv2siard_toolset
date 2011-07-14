@@ -2,8 +2,6 @@
 // Report all PHP errors
 error_reporting(E_ALL);
 
-include 'c2sfunction.php';
-
 // -----------------------------------------------------------------------------
 /**
  * Parse a time/date generated with strftime().
@@ -160,7 +158,7 @@ if(function_exists("strptime") == false)
         } // END of while($sFormat != "") 
          
         // ===== Create the other value of the result array ===== 
-        $nParsedDateTimestamp = mktime($aResult['tm_hour'], $aResult['tm_min'], $aResult['tm_sec'], 
+        $nParsedDateTimestamp = @mktime($aResult['tm_hour'], $aResult['tm_min'], $aResult['tm_sec'], 
                                 $aResult['tm_mon'] + 1, $aResult['tm_mday'], $aResult['tm_year'] + 1900); 
          
         // Before PHP 5.1 return -1 when error 
@@ -176,7 +174,10 @@ if(function_exists("strptime") == false)
 } // END of if(function_exists("strptime") == false) 
 
 // -----------------------------------------------------------------------------
-function check4Date($str) {
+// Returns array with [type] of date and [date] in XML format
+// limited from 1970 to 2038 *** TO BE DONE ***
+// empty [date] means convertion failor
+function convert2XMLdate($str) {
 $retval = array();
 
 	// non-standard: YY MM DD hh II SS like '20080701223807'
@@ -234,39 +235,11 @@ $retval = array();
 		// mktime ($hour, $minute, $second, $month, $day, $year) 
 		$tmp = mktime($arr['tm_hour'], $arr['tm_min'], $arr['tm_sec'], $arr['tm_mon']+1, $arr['tm_mday'], $arr['tm_year']);
 		$retval['date'] = strftime('%Y-%m-%dT%H:%M:%S', $tmp).$arr['unparsed'];
-		// $xmldate = "$arr[tm_year]-$arr[tm_mon]-$arr[tm_mday]T$arr[tm_hour]:$arr[tm_min]:$arr[tm_sec]$arr[unparsed]";
+		//$retval['date'] = "$arr[tm_year]-$arr[tm_mon]-$arr[tm_mday]T$arr[tm_hour]:$arr[tm_min]:$arr[tm_sec]$arr[unparsed]";
 		return($retval);
 	}
 	else {
 		return(false);
 	}
 }
-// -----------------------------------------------------------------------------
-
-print_r(check4Date("20080701223517"));
-print_r(check4Date("20080701"));
-print_r(check4Date("20080701t223517"));
-print_r(check4Date("20080701T223517"));
-print_r(check4Date("20080701T22:35:17"));
-print_r(check4Date("2008-07-01T22:35:17.02"));
-print_r(check4Date("2008-07-01T22:35:17.03+08:00"));
-print_r(check4Date("2008:08:07 18:11:31"));
-print_r(check4Date("2008-08-07 18:11:31"));
-print_r(check4Date('13-NOV-92'));
-print_r(check4Date('2008-7-1T9:3:37'));
-echo "-------------------------------------------------";
-print_r(check4Date("now"));
-print_r(check4Date("10 September 2000"));
-print_r(check4Date("26-Oct 0010 12:00:00 +0100"));
-print_r(check4Date("10/Oct/2000:13:55:36 -0700"));
-print_r(check4Date("10 Oct 2000 13:55:36 -0700"));
-print_r(check4Date("+1 day"));
-print_r(check4Date("+1 week"));
-print_r(check4Date("+1 week 2 days 4 hours 2 seconds"));
-print_r(check4Date("next Thursday"));
-print_r(check4Date("last Monday"));
-echo "-------------------------------------------------";
-print_r(check4Date("0"));
-print_r(check4Date("120.50"));
-
 ?>

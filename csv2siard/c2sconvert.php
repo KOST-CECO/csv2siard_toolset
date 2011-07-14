@@ -3,17 +3,19 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
-// process the first CSV line and check column names
+// process the first CSV line and check and count column names
 function processCSVColumnNames($buffer, $file, $table, $input) {
 global $prg_option;
 
 	$fct = 0;
+	// check for column names
 	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
 			// multiple columns or only one column
 			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
-			if (strcasecmp($name, $buffer[$fct]) != 0) {
-				if ($buffer[$fct] == '') {
+			$colname = trim($buffer[$fct]);
+			if (strcasecmp($name, $colname) != 0) {
+				if ($colname == '') {
 					echo "\nColumn '$name' in database model is missing in CSV file $file";
 				} else {
 					echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
@@ -24,10 +26,12 @@ global $prg_option;
 			$fct++;
 		}
 	}
+	
+	// check column count
 	$buf = array_chunk($input, 1);
 	$ict = 0;
 	foreach ($buf as $b) {
-		if ($b[0] != '') {
+		if (trim($b[0]) != '') {
 			$ict++;
 		}
 	}
@@ -73,31 +77,47 @@ global $prg_option;
 			// multiple columns or only one column
 			$column = $table['_c']['column'][$i-1];
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			$b = $buf;
 			switch ($type) {
 				case "TINYINT":
 				case "SMALLINT":
 				case "INTEGER":
 				case "BIGINT":
-					if (!ctype_digit($buf)){
-						echo "Integer type convertion failed in row $rowcount, column $i => '$buf'\n"; $prg_option['ERR'] = 32;
+					if (!ctype_digit($buf)) {
+						echo "\nInteger type convertion failed in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
 					}
 					break;
 				case "FLOAT":
 				case "REAL":
 				case "DOUBLE":
-					$b = $buf;
 					$buf = strtr ($buf, ',', '.');
-					if (!is_numeric ($buf)){
-						echo "Double type convertion failed in row $rowcount, column $i => '$b'\n"; $prg_option['ERR'] = 32;
+					if (!is_numeric ($buf)) {
+						echo "\nDouble type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					break;
 				case "NUMERIC":
 				case "DECIMAL":
+					$buf = strtr ($buf, ',', '.');
+					if (!is_numeric ($buf)) {
+						echo "\nDecimal type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					}
 					break;
 				case "DATE":
 				case "TIMESTAMP":
+				$td = convert2XMLdate($buf);
+					if ($td['date'] == '') {
+						echo "\nDate/time type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					} else {
+						$buf = $td['date'];
+					}
 					break;
 				case "TIME":
+					$td = convert2XMLdate($buf);
+					if ($td['date'] == '') {
+						echo "\nDate/time type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					} else {
+						$buf = substr($td['date'], 11);
+					}
 					break;
 				case "CHAR":
 				case "VARCHAR":
@@ -110,11 +130,13 @@ global $prg_option;
 				case "VARBINARY":
 				case "LONGVARBINARY":
 				case "BLOB":
+					$buf = base64_encode($buf);
 					break;
-				case "DATALINK ":
+				case "DATALINK":
 					break;
-				case "BOOLEANINT ":
-				case "BOOLEANCHAR ":
+				case "BOOLEANINT":
+				case "BOOLEANCHAR":
+					$buf = (_bool($buf)) ? 'true' : 'false';
 					break;
 				default:
 					break;
@@ -164,7 +186,6 @@ function writeSchemaContent($siardhandle, &$table){
 	$colcount = 1;
 	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
-			// Convert database type to xml type ***TO BE DONE***
 			// multiple columns or only one column
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
 			switch ($type) {
@@ -197,10 +218,10 @@ function writeSchemaContent($siardhandle, &$table){
 				case "LONGVARBINARY":
 				case "BLOB":
 					$xstype = 'base64Binary'; break;
-				case "DATALINK ":
+				case "DATALINK":
 					$xstype = 'anyURI'; break;
-				case "BOOLEANINT ":
-				case "BOOLEANCHAR ":
+				case "BOOLEANINT":
+				case "BOOLEANCHAR":
 					$xstype = 'boolean'; break;
 				default:
 					$xstype = 'string'; break;

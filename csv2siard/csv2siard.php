@@ -33,6 +33,7 @@ include 'c2sfunction.php';
 include 'c2sxml.php';
 include 'c2snodbmodel.php';
 include 'c2schema.php';
+include 'c2stimedate.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
