@@ -111,7 +111,7 @@ global $prg_option, $prgdir;
 		}
 		// write SIARD table
 		else {
-			writeSIARDColumn($siardhandle, $buffer, $columcount, $table);
+			writeSIARDColumn($siardhandle, $buffer, $columcount, $rowcount, $table);
 		}
 		if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
 		$rowcount++;

@@ -45,6 +45,7 @@ $version = '0.7';		// check CSV column names
 $version = '0.8';		// necessary exe and dll
 $version = '0.9';		// NO_DB_MODEL implementieren
 $version = '1.0';		// XSL and XSD include in program source
+$version = '1.1';		// convert date fields to xs:date
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
@@ -73,7 +74,8 @@ $dbmod = array();													//nested array to hold the database model
 //ERR 16: Not a valid database schema according to Torque v4.0
 //ERR 16: Could not write database description no_db_model.xml
 //ERR 32: Column in database model is missing or not confirm with CSV file
-//ERR 64: XML Schema Validation failed
+//ERR 32: Column type convertion failed
+//ERR 64: SIARD XML Schema Validation failed
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]

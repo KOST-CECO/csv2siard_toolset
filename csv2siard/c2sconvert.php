@@ -37,6 +37,7 @@ global $prg_option;
 	return(true);
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // write header for SIARD XML file
 function writeSIARDHeader($siardhandle, $tablefolder) {
 global $prg_option;
@@ -48,14 +49,8 @@ global $prg_option;
 	return;
 }
 // -----------------------------------------------------------------------------
-// write footer for SIARD XML file
-function writeSIARDFooter($siardhandle){
-	fwrite ($siardhandle, "</table>\n");
-	return;
-}
-// -----------------------------------------------------------------------------
 // process a single CSV line and write a <row> into SIARD XML file
-function writeSIARDColumn($siardhandle, $buffer, $columcount, $table){
+function writeSIARDColumn($siardhandle, $buffer, $columcount, $rowcount, &$table){
 global $prg_option;
 
 	$columcount = ($columcount > count($buffer)) ? count($buffer) : $columcount;
@@ -65,13 +60,63 @@ global $prg_option;
 	for ($i=1; $i <= $columcount; $i++) {
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
-			// check field type *** TO BE DONE ***
+			// convert to XML characterset utf-8
 			switch ($prg_option['CHARSET']) {
 				case "ASCII":
 					$buf = utf8_encode(ascii2ansi($buf)); break;
 				case "ISO-8859-1":
 					$buf = utf8_encode($buf); break;
 				case "UTF-8":
+					break;
+			}
+			// check field type and convert to XML type *** TO BE DONE ***
+			// multiple columns or only one column
+			$column = $table['_c']['column'][$i-1];
+			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			switch ($type) {
+				case "TINYINT":
+				case "SMALLINT":
+				case "INTEGER":
+				case "BIGINT":
+					if (!ctype_digit($buf)){
+						echo "Integer type convertion failed in row $rowcount, column $i => '$buf'\n"; $prg_option['ERR'] = 32;
+					}
+					break;
+				case "FLOAT":
+				case "REAL":
+				case "DOUBLE":
+					$b = $buf;
+					$buf = strtr ($buf, ',', '.');
+					if (!is_numeric ($buf)){
+						echo "Double type convertion failed in row $rowcount, column $i => '$b'\n"; $prg_option['ERR'] = 32;
+					}
+					break;
+				case "NUMERIC":
+				case "DECIMAL":
+					break;
+				case "DATE":
+				case "TIMESTAMP":
+					break;
+				case "TIME":
+					break;
+				case "CHAR":
+				case "VARCHAR":
+				case "LONGVARCHAR":
+				case "CLOB":
+					break;
+				case "BIT":
+				case "BINARY":
+					break;
+				case "VARBINARY":
+				case "LONGVARBINARY":
+				case "BLOB":
+					break;
+				case "DATALINK ":
+					break;
+				case "BOOLEANINT ":
+				case "BOOLEANCHAR ":
+					break;
+				default:
 					break;
 			}
 			// write a <column> into SIARD XML file
@@ -82,6 +127,13 @@ global $prg_option;
 
 	fwrite ($siardhandle, "</row>\n");
 }
+// -----------------------------------------------------------------------------
+// write footer for SIARD XML file
+function writeSIARDFooter($siardhandle){
+	fwrite ($siardhandle, "</table>\n");
+	return;
+}
+// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // write header for SIARD schema file
 function writeSchemaHeader($siardhandle, $tablefolder) {
@@ -107,17 +159,8 @@ global $prg_option;
 	return;
 }
 // -----------------------------------------------------------------------------
-// write footer for SIARD schema file
-function writeSchemaFooter($siardhandle){
-	fwrite ($siardhandle, "
-				</xs:sequence>
-			</xs:complexType>
-		</xs:schema>");
-	return;
-}
-// -----------------------------------------------------------------------------
 // write content SIARD schema file
-function writeSchemacontent($siardhandle, &$table){
+function writeSchemaContent($siardhandle, &$table){
 	$colcount = 1;
 	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
@@ -125,14 +168,40 @@ function writeSchemacontent($siardhandle, &$table){
 			// multiple columns or only one column
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
 			switch ($type) {
+				case "TINYINT":
+				case "SMALLINT":
+				case "INTEGER":
 				case "BIGINT":
 					$xstype = 'integer'; break;
+				case "FLOAT":
+				case "REAL":
 				case "DOUBLE":
 					$xstype = 'double'; break;
-				case "INTEGER":
-					$xstype = 'integer'; break;
+				case "NUMERIC":
+				case "DECIMAL":
+					$xstype = 'decimal'; break;
+				case "DATE":
+				case "TIMESTAMP":
+					$xstype = 'dateTime'; break;
+				case "TIME":
+					$xstype = 'time'; break;
+				case "CHAR":
 				case "VARCHAR":
+				case "LONGVARCHAR":
+				case "CLOB":
 					$xstype = 'string'; break;
+				case "BIT":
+				case "BINARY":
+					$xstype = 'byte'; break;
+				case "VARBINARY":
+				case "LONGVARBINARY":
+				case "BLOB":
+					$xstype = 'base64Binary'; break;
+				case "DATALINK ":
+					$xstype = 'anyURI'; break;
+				case "BOOLEANINT ":
+				case "BOOLEANCHAR ":
+					$xstype = 'boolean'; break;
 				default:
 					$xstype = 'string'; break;
 			}
@@ -143,18 +212,12 @@ function writeSchemacontent($siardhandle, &$table){
 	return;
 }
 // -----------------------------------------------------------------------------
-// convert array to xml string
-function array2xml(&$xmlary){
-	$xml = '';
-	if (is_array($xmlary)) {
-		reset($xmlary);
-		while (list($name, $ary) = each($xmlary)) {
-			$xml = $xml . "<$name>" . array2xml($ary) . "</$name>\n";
-		}
-	}
-	else {
-		$xml = $xmlary;
-	}
-	return($xml);
+// write footer for SIARD schema file
+function writeSchemaFooter($siardhandle){
+	fwrite ($siardhandle, "
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>");
+	return;
 }
 ?>
