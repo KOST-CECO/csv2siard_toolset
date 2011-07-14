@@ -11,9 +11,9 @@ REM php.exe csv2siard.php minimal1-model.xml csvtest test.siard
 REM php.exe csv2siard.php NO_DB_MODEL csvtest test.siard
 REM php.exe csv2siard.php NO_DB_MODEL csvdata test.siard
 
-csv2siard.exe gv-model-v8.xml csvdata test.siard
+REM csv2siard.exe gv-model-v8.xml csvdata test.siard
 REM csv2siard.exe gv-model-v8.xml csvdata_TG test.siard
-REM csv2siard.exe NO_DB_MODEL csvdata_TG test.siard
+csv2siard.exe NO_DB_MODEL csvdata_TG test.siard
 
 echo --------- %time%
 
