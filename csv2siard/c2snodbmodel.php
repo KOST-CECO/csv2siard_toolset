@@ -7,18 +7,25 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 
 // Create CSV file list
 	$file_arr = array();
-	$reg = '#'.Wildcard2Regex($prg_option['FILE_MASK']).'#i';
+	$reg = '#^'.Wildcard2Regex($prg_option['FILE_MASK']).'$#i';
 	if ( $dirhandle = opendir($prg_option['CSV_FOLDER'])) {
 		while (false !== ($file = readdir($dirhandle))) {
 			if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
 				$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
 				if ($name != '') {
-					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
 					// detect mime type with GNU file-5.03
+					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
 					$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-type -bm "'.$prgdir.'/magic.mgc" '.'"'.$csvfile.'"';
 					$mime_type = exec($commandline);
 					if ($mime_type == 'text/plain') {
-						$file_arr[$name] = $csvfile;
+						// check DBMS name conformity
+						if (testDBMSNaming($name) === true){
+							$file_arr[$name] = $csvfile;
+						}
+						else {
+							$fl = ansi2ascii($file);
+							echo "CSV file name $fl does not conforme to SQL naming convention \n";
+						}
 					}
 					else {
 						echo "Incorrect CSV file: ($mime_type) $csvfile\n";
@@ -33,6 +40,19 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		echo "No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"; exit(2);
 	}
 	
+	// Create encoding list
+	$encoding_arr = array();
+	reset($file_arr);
+	while (list($name, $file) = each($file_arr)) {
+		// detect encoding with GNU file-5.03
+		$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-encoding -bm "'.$prgdir.'/magic.mgc" '.'"'.$file.'"';
+		$encoding_arr[$name] = strtoupper(exec($commandline));
+		if ($encoding_arr[$name] != $prg_option['CHARSET']) {
+			$fl = ansi2ascii($file);
+			echo "CSV file $fl does not conforme to $prg_option[CHARSET] encoding \n";
+		}
+	}
+	
 	// Create column list for each file
 	$csv_arr = array();
 	reset($file_arr);
@@ -45,7 +65,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		$rowcount = 0;
 		$colarr = array();
 		while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
-			if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
+			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo '.'; }
 			// truncate last field when empty
 			if (trim($buf[count($buf)-1]) == '') {
 				array_pop($buf);
@@ -55,10 +75,18 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 				$colcnt = 0;
 				reset($buf);
 				foreach ($buf as $b) {
-					$type['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
-					$type['type'] = 'INTEGER'; // preset with INTEGER
-					$type['size'] = 0;
-					$colarr[] = $type;
+					$col = array();
+					$col['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
+					if (testDBMSNaming($col['name']) === false){
+						echo "\nColumn $colcnt does not conforme to SQL naming convention \n";
+						$orgname = ($encoding_arr[$name] == 'UTF-8') ? utf8_decode($col['name']) : $col['name'];
+						$col['description'] = "Original column name: '$orgname'";
+						$col['name'] = "column$colcnt";
+						$prg_option['CHECK_NAMES'] = false;
+					}
+					$col['type'] = 'INTEGER'; // preset with INTEGER
+					$col['size'] = 0;
+					$colarr[] = $col;
 					$colcnt++;
 				}
 			}
@@ -96,15 +124,19 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	$xmldata = $xmldata . "<database name=\"$dbname\" xmlns=\"http://db.apache.org/torque/4.0/templates/database\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd\">\n";
 	reset($csv_arr);
 	while (list($name, $columns) = each($csv_arr)) {
-		$xmldata = $xmldata . "\t<table name=\"$name\">\n";
+		$xmldata = $xmldata . "\t<table name=\"$name\" description=\"$file_arr[$name]\">\n";
 		reset($columns);
 		while (list($name, $attributes) = each($columns)) {
 			if ($attributes['type'] == 'VARCHAR') {
 				$size = ($attributes['size'] == '') ? '' : " size=\"$attributes[size]\"";
-				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"$size/>\n";
+				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"$size";
 			} else {
-				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"/>\n";			
+				$xmldata = $xmldata . "\t\t<column name=\"$attributes[name]\" type=\"$attributes[type]\"";
 			}
+			if (array_key_exists('description', $attributes)) {
+				$xmldata = $xmldata . " description=\"$attributes[description]\"";
+			}
+			$xmldata = $xmldata . "/>\n";
 		}
 		$xmldata = $xmldata . "\t</table>\n";
 	}

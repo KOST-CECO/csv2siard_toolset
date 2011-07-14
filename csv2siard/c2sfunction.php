@@ -3,9 +3,30 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
+// US-ASCII or digit, first character must be a letter, case insensitive, max 30 character
+function testDBMSNaming($buf) {
+	$ascii = str_split('012345679ABCDEFGHIJKLMNOPQRSTUVWXYZ_');
+	
+	// max 30 character
+	if (strlen($buf) > 30) {
+		return(false);
+	}	
+	//US-ASCII letter or digit
+	$strarr = str_split(strtoupper($buf));
+	foreach ($strarr as $ch) {
+		if (!in_array($ch, $ascii)){
+			return(false);
+		}
+	}
+	//first character must be a letter
+	if (ord($strarr[0]) < 65 or ord($strarr[0]) > 90) {
+		return(false);
+	}
+	return(true);
+}
+// -----------------------------------------------------------------------------
 // encode string with xml entities: < &lt;  > &gt;  & &amp;  " &quot;  ' &apos; 
 function xml_encode($buf) {
-	//Sonderzeichen & und ' in Datei/Pfadnamen richtig behandeln (=> &amp; und &apos;)
 	$buf = str_replace ("&", "&amp;", $buf);
 	$buf = str_replace ("'", "&apos;", $buf);
 	$buf = str_replace ('"', "&quot;", $buf);

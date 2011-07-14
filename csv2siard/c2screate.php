@@ -69,7 +69,19 @@ global $prg_option, $prgdir;
 	$tablename = $table['_a']['name'];
 
 	// check for CSV file and open it for reading
-	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
+	//$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
+	$reg = '#^'.Wildcard2Regex($prg_option['FILE_MASK']).'$#i';
+	if ( $dirhandle = opendir($prg_option['CSV_FOLDER'])) {
+		while (false !== ($file = readdir($dirhandle))) {
+			if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
+				$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
+				if ($name == $tablename) {
+					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
+				}
+			}
+		}
+		closedir($dirhandle);
+	}
 	setTableOption($table, 'localfile', $csvfile);
 
 	if(!is_file($csvfile)) {

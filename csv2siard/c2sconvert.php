@@ -14,7 +14,12 @@ global $prg_option;
 			// multiple columns or only one column
 			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
 			$colname = trim($buffer[$fct]);
-			if (strcasecmp($name, $colname) != 0) {
+			if (!testDBMSNaming($name)) {
+				$cn = $fct + 1;
+				echo "\nColumn no $cn '$name' does not confirm with SQL naming convention";
+				$prg_option['ERR'] = 32;
+			}
+			if ($prg_option['CHECK_NAMES'] and strcasecmp($name, $colname) != 0) {
 				if ($colname == '') {
 					echo "\nColumn '$name' in database model is missing in CSV file $file";
 				} else {

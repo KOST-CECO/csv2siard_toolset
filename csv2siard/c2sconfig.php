@@ -77,8 +77,9 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['DELIMITED'] = ';';						// CSV column separator
 	$prg_option['QUOTE'] = '"';								// Optional field Quotation
 	$prg_option['COLUMN_NAMES'] = true;				// First row contains column names
+	$prg_option['CHECK_NAMES'] = true;				// Check column names with first row
 	$prg_option['CHARSET'] = 'ISO-8859-1';		// default character-set (choose: ASCII, OEM, ANSI, ISO-8859-1 and UTF-8)
-	$prg_option['FILE_MASK'] = '*.dat';				// Wild card is replaced with table name
+	$prg_option['FILE_MASK'] = '*.dat';				// Wild card is replaced with table name or converted to tablename
 	$prg_option['CHECK_COLUMN'] = true;				// Check column count, not applicable with MS-Exel CSV
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;	// Not implemented yet
 	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
