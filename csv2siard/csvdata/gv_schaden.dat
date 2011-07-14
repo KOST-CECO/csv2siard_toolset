@@ -1,0 +1,2 @@
+id;gebaeude_id;nummer;datum;datum_erledigung;art_code;art_text;ursache_code;ursache_text;ursache_zusatz;schadensumme;status_code;status_text;versicherungswert;vkf_code;vkf_text;
+200603910;01 10005;200603910;20060627;00000000;3;Elementarschaden;02;Hagel; ;7898; ; ;997000; ; ;

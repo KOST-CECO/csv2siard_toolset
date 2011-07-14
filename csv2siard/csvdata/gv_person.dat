@@ -1,0 +1,13 @@
+id;person_id;gebaeude_id;klasse_code;klasse_text;name;strasse;strasse_nr;wohnung_nr;land;plz;plz_zusatz;ort;ort_zusatz;gueltig_ab;gueltig_bis;rolle_code;rolle_text
+115586;115586;01 10003;;;Züger Martin;Wängistr.;6;;;4469;;Anwil;;;;E;Eigentuemer
+109469;109469;01 10007;;;Golfclub;Rosseidstr.;22;;;4469;;Anwil;;;;E;Eigentuemer
+97552;97552;01 10002;;;Ott Wilhelm;Ott Thomas;;;;;;Anwil;;;;E;Eigentuemer
+97551;97551;01 10002;;;Ott Marianne (-Langenegger);Bohlstr.;28;;;4469;;Anwil;;;;V;Verwalter
+96950;96950;01 10001;;;Bieli Barbara (-Troxler);Feldstr.;3;;;4469;;Anwil;;;;E;Eigentuemer
+94180;94180;01 10004;;;Hämmerli Barbara & Peter;Elgg;;;;4469;;Anwil;;;;V;Verwalter
+64610;64610;01 10008;;;Sacchet Ernestina;Baslerstr.;2;;;4469;;Anwil;;;;V;Verwalter
+62057;62057;01 10009;;;Dalcher Marchel;Grill El Capone;;;;4469;;Anwil;;;;E;Eigentuemer
+60327;60327;01 10004;;;Etter Ursula;Dorfstr.;30;;;4469;;Anwil;;;;E;Eigentuemer
+29777;29777;01 10007;;;Bitzer Peter;;;;;4432;;Lampenberg;;;;E;Eigentuemer
+24400;24400;01 10008;;;Sacchet Italo Erben;;;;;4432;;Lampenberg;;;;E;Eigentuemer
+23807;23807;01 10006;;;Meier Ernst (-Stierlin);Grüntal;;;;4469;;Anwil;;;;E;Eigentuemer

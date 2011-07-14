@@ -1,4 +1,4 @@
-# Default preferences
+﻿# StATG sample preferences
 # FILE_MASK: wild card is replaced with table name
 # 
 DELIMITED=;
@@ -6,9 +6,7 @@ QUOTE="
 COLUMN_NAMES=TRUE
 CHARSET=ISO-8859-1
 FILE_MASK=*.dat
-CHECK_FIELD_TYPE=FALSE
-CHECK_DATABASE_INTEGRITY=FALSE
-#TMPDIR=./temp
+CHECK_COLUMN=TRUE
 #
 # Optional content settings
 #
@@ -16,7 +14,9 @@ DESCRIPTION=Gebäuderversicherungdaten Kanton Thurgau 2006               # Datab
 ARCHIVED_BY=Staatsarchiv Thurgau                                        # Database archived by
 CONTACT=Staatsarchiv Thurgau, Regierungsgebäude, CH-8510 Frauenfeld     # Archivist's contact details
 OWNER=Gebäuderversicherung Thurgau                                      # Data owner prior to archiving
-#TIMESPAN=2006 - 2007                                                    # Data creation time span
+TIMESPAN=2006 - 2007                                                    # Data creation time span
 DB_TYPE=GV-CSV                                                          # Type of Database or database product
 SIARD_USER=StATG                                                        # default user
-SIARD_SCHEMA=gv0                                                        #default schema
+SIARD_SCHEMA=gv0                                                        # default schema
+
+
