@@ -5,13 +5,12 @@ outfile csv2siard.exe
 
 ;compress
 ;windowed
-;dontencode
+dontencode
 
 embed main.php
 embed c2sconfig.php
-embed c2sfunction.php
 embed c2screate.php
 embed c2sconvert.php
-embed php.ini
+embed c2sfunction.php
 
-extension php_xslt.dll 
+extension php_xslt.dll

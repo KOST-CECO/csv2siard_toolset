@@ -21,7 +21,7 @@ global $prg_option, $prgdir, $model2array;
 // -----------------------------------------------------------------------------
 // create SIARD file header and content in TMP directory
 function creatSIARDFolder(&$dbm) {
-global $prg_option, $prgdir;
+global $prg_option, $prgdir, $siard_schema, $siard2html;
 $defaultschema = $prg_option['SIARD_SCHEMA'];
 $folderstructur ="
     ├───header
@@ -44,14 +44,17 @@ $folderstructur ="
 	// Create SIARD header
 	mkdirPHP4("$prg_option[SIARD_DIR]/header", 0777, true);
 	// for convenience digestType: "(|(MD5|SHA-1).*)" => "(MD5.+|SHA-1.+)*"
-	copy ("$prgdir/_metadata.xsd", "$prg_option[SIARD_DIR]/header/metadata.xsd");
-	copy ("$prgdir/_metadata.xsl", "$prg_option[SIARD_DIR]/header/metadata.xsl");
+	copy ("$prgdir/$siard_schema", "$prg_option[SIARD_DIR]/header/metadata.xsd");
+	copy ("$prgdir/$siard2html", "$prg_option[SIARD_DIR]/header/metadata.xsl");
 
 	// Create SIARD content and folder
 	mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema", 0777, true);
 	$siardstructur = array();
 
-	foreach ($dbm as $dbname => $tables) {
+	reset($dbm);
+	// not properly supported in PHP 4
+	// foreach ($dbm as $dbname => $tables) {
+	while (list($dbname, $tables) = each($dbm)) {
 		$tbc = 0;
 		foreach (array_keys($tables) as $tablename) {
 			mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema/table$tbc", 0777, true);
@@ -64,11 +67,18 @@ $folderstructur ="
 // -----------------------------------------------------------------------------
 // read CSV Files according DB Modell and create SIARD tables
 function processDatabaseModell(&$dbm) {
-	foreach ($dbm as $dbname => $tables) {
-		foreach ($tables as $tablename => $table) {
-			//No assignment of foreach arrays by reference in PHP 4
+
+	reset($dbm);
+	// not properly supported in PHP 4
+	// foreach ($dbm as $dbname => $tables) {
+	while (list($dbname, $tables) = each($dbm)) {
+		// not properly supported in PHP 4
+		// foreach ($tables as $tablename => $table) {
+			while (list($tablename, $table) = each($tables)) {
+			// no assignment by reference in PHP 4 in foreach loops
 			creatSIARDTable($dbm[$dbname][$tablename], $tablename);
 			creatSIARDSchema($dbm[$dbname][$tablename], $tablename);
+			validateSIARDTable($dbm[$dbname][$tablename], $tablename);
 		}
 	}
 }
@@ -76,7 +86,9 @@ function processDatabaseModell(&$dbm) {
 // read a CSV file and write a SIARD table
 function creatSIARDTable(&$table, $tablename) {
 global $prg_option;
-echo "Process table $tablename...\n";
+
+	echo "Process table $tablename .";
+
 	// check for CSV file and open it for reading
 	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
 	if(!is_file($csvfile)) {
@@ -113,6 +125,7 @@ echo "Process table $tablename...\n";
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount);
 		}
+		if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
 		$rowcount++;
 	}
 
@@ -123,6 +136,7 @@ echo "Process table $tablename...\n";
 	$table['$$$_row_count'] = ($prg_option['COLUMN_NAMES']) ? $rowcount-2 : $rowcount-1;
 //print_r($table);
 
+	echo "\n";
 	fclose($csvhandle);
 	fclose($siardhandle);
 }
@@ -130,10 +144,11 @@ echo "Process table $tablename...\n";
 // write a SIARD Schema file
 function creatSIARDSchema(&$table, $tablename) {
 global $prg_option;
+
 	// open SIARD file for writing
 	$tablefolder = $table['$$$_folder_name'];
-	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
-	$siardhandle = fopen($siardfile, "w");
+	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
+	$siardhandle = fopen($siardschema, "w");
 	if(!$siardhandle) {
 		echo "Could not open SIARD schema file $siardfile\n"; $prg_option['ERR'] = true; return;
 	}
@@ -141,11 +156,30 @@ global $prg_option;
 	// write SIARD schema header
 	writeSchemaHeader($siardhandle, $tablefolder);
 
-
+	// write SIARD schema content
+	writeSchemaContent($siardhandle, $table);
 
 	// write SIARD schema footer
 	writeSchemaFooter($siardhandle);
 
 	fclose($siardhandle);
+}
+
+// -----------------------------------------------------------------------------
+// validate a SIARD XML file with xmllint
+function validateSIARDTable(&$table, $tablename) {
+global $prgdir, $prg_option;
+
+	$tablefolder = $table['$$$_folder_name'];
+	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
+	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
+	
+	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardfile 2>$tablefolder.out", $result, $retval);
+	if ($retval) {
+		$result = file_get_contents("$tablefolder.out");
+		$result_array = explode("\n", $result, 2);
+		echo "$tablefolder.xml is not a valid XML file:\n$result_array[0]\n";
+	}
+	unlink("$tablefolder.out");
 }
 ?>

@@ -27,9 +27,9 @@ error_reporting(E_ALL);
 // Achtung dlls in der kompilierten Version nicht mit 'dl' laden
 dl('php_xslt.dll');
 include 'c2sconfig.php';
-include 'c2sfunction.php';
 include 'c2screate.php';
 include 'c2sconvert.php';
+include 'c2sfunction.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -42,10 +42,12 @@ $prgname = strtolower(basename($argv[0], '.exe'));	// ProgrammName
 $prgname = basename($prgname, '.php');							// ProgrammName
 $prgdir = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
 
-$prg_option['ERR'] = false;													// Programm Optionen
-$dbschema = 'database-torque-4-0.xsd';							// torque.v4 schema
+$prg_option['ERR'] = false;													// Programm optionen
+$torqueschema = '_database-torque-4-0.xsd';					// torque.v4 XML database schema
+$model2array = '_model2array.xsl';									// Transform XML database to array
+$siard_schema = '_metadata.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
+$siard2html = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml
 $prefs = 'preferences.prefs';												// Preference file
-$model2array = 'model2array.xsl';										// Transform XML Database to array
 $dbm = array();				//nested array to hold database model and SIARD structure
 
 $usage ="

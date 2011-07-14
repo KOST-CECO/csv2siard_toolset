@@ -47,7 +47,7 @@ global $prg_option;
 	fwrite ($siardhandle, "</row>\n");
 }
 // -----------------------------------------------------------------------------
-// write header for schema file
+// write header for SIARD schema file
 function writeSchemaHeader($siardhandle, $tablefolder) {
 global $prg_option;
 
@@ -71,12 +71,39 @@ global $prg_option;
 	return;
 }
 // -----------------------------------------------------------------------------
-// write footer for schema file
+// write footer for SIARD schema file
 function writeSchemaFooter($siardhandle){
 	fwrite ($siardhandle, "
 				</xs:sequence>
 			</xs:complexType>
 		</xs:schema>");
+	return;
+}
+// -----------------------------------------------------------------------------
+// write content SIARD schema file
+function writeSchemacontent($siardhandle, &$table){
+	$colcount = 1;
+	foreach ($table as $column) {
+		if (is_array($column)) {
+		
+			// Convert database type to xml type TO BE DONE
+			switch ($column['type']) {
+				case "BIGINT":
+					$xstype = 'integer'; break;
+				case "DOUBLE":
+					$xstype = 'integer'; break;
+					// $xstype = 'double'; break;
+				case "INTEGER":
+					$xstype = 'integer'; break;
+				case "VARCHAR":
+					$xstype = 'string'; break;
+				default:
+					$xstype = 'string'; break;
+			}
+			fwrite ($siardhandle, "<xs:element name=\"c$colcount\" type=\"xs:$xstype\" minOccurs=\"0\"/>\n");
+			$colcount++;
+		}
+	}
 	return;
 }
 ?>

@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 // read and check command-line arguments ---------------------------------------
 function readCommandLine() {
-global $argc, $argv, $usage, $wdir, $prgdir, $dbschema, $prg_option;
+global $argc, $argv, $usage, $wdir, $prgdir, $torqueschema, $prg_option;
 	if ($argc < 4) {
 		echo $usage; exit(-1);
 	}
@@ -14,9 +14,9 @@ global $argc, $argv, $usage, $wdir, $prgdir, $dbschema, $prg_option;
 	if (!is_file($database)) {
 		echo "Database description $argv[1] not found\n"; exit(-1);
 	}
-	exec("$prgdir/xmllint.exe -noout -schema $prgdir/$dbschema $database 2>$database.out", $result, $database_retval);
+	exec("$prgdir/xmllint.exe -noout -schema $prgdir/$torqueschema $database 2>$database.out", $result, $database_retval);
 	if ($database_retval) {
-		echo "'$argv[1]' does not validate with torque.v4 schema\n"; 
+		echo "'$argv[1]' is not a valid database schema according to Torque v4.0\n"; 
 		$result = file_get_contents("$database.out");
 		echo $result;
 		exit(-1);
@@ -64,7 +64,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['TMPDIR'] = sys_get_temp_dir();				// default temp dir
 	$prg_option['SIARD_USER'] = 'admin';							// default user
 	$prg_option['SIARD_SCHEMA'] = 'schema0';					// default schema
-
+	$prg_option['PI_COUNT'] = 20;						// progress indicator per line processed
 
 	// specific preference file
 	if ($argc == 5) {
@@ -98,10 +98,14 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 function checkUtils() {
 global $prg_option;
 // Libraries
+	// <eXpat/> the Expat XML Parser http://expat.sourceforge.net and www.sysinternals.com
 	if ((@md5_file("expat.dll") != '3e860d331271c23e46efb1ba019701d1')
-	and (@md5_file("iconv.dll") != 'e4341fb69cb24cf63e9063f4d8967ebf')
-	and (@md5_file("php_xslt.dll") != 'f172b4d0ee4dbbe2e73d4516729a4cd3')
-	and (@md5_file("sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
+	// iconv.dll (LGPLed libiconv for Windows NT/2000/XP and Windows 95/98/ME) is a component from the 
+	// software libiconv: character set conversion library version 1.9.0 by Free Software Foundation
+	or (@md5_file("iconv.dll") != 'e4341fb69cb24cf63e9063f4d8967ebf')
+	// The sablot.dll module is utilized by the processor of Sablotron XSLT (Extensible Stylesheet Language (XSL) 
+	// Transformations), http://www.gingerall.cz/
+	or (@md5_file("sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
 		echo "Some libraries are missing or corrupt\n"; exit(-1);
 	}
 // Programs
