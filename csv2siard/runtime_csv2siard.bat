@@ -38,8 +38,8 @@ COPY magic.mgc %RUNTIME%
 COPY magic1.dll %RUNTIME%
 COPY regex2.dll %RUNTIME%
 
-COPY _*.xsd %RUNTIME%
-COPY _*.xsl %RUNTIME%
+REM COPY _*.xsd %RUNTIME%
+REM COPY _*.xsl %RUNTIME%
 COPY database-torque-4-0.xsd %RUNTIME%
 
 COPY preferences.prefs %RUNTIME%

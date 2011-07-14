@@ -11,9 +11,9 @@ global $torque_schema, $siard_schema, $siard2html, $torque2siard;
 	$schema['torque2siard'] = file_get_contents($torque2siard);
 	
 	$export = var_export($schema, true);
-	file_put_contents('export.txt',$export);
+	file_put_contents('c2schema.php.txt',$export);
 }
-
+//loadSchema();
 // -----------------------------------------------------------------------------
 $static_torque_schema = '<?xml version="1.0" encoding="UTF-8"?>
 <!--

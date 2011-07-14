@@ -12,7 +12,7 @@ global $prg_option;
 // -----------------------------------------------------------------------------
 // create SIARD file header and content in TMP directory
 function creatSIARDFolder(&$dbmod) {
-global $prg_option, $prgdir, $siard_schema, $siard2html;
+global $prg_option, $prgdir, $siard_schema, $static_siard_schema, $siard2html, $static_siard2html;
 $defaultschema = $prg_option['SIARD_SCHEMA'];
 $folderstructur ="
     ├───header
@@ -35,8 +35,10 @@ $folderstructur ="
 	// Create SIARD header
 	mkdirPHP4("$prg_option[SIARD_DIR]/header", 0777, true);
 	// for convenience digestType: "(|(MD5|SHA-1).*)" => "(MD5.+|SHA-1.+)*"
-	copy ("$prgdir/$siard_schema", "$prg_option[SIARD_DIR]/header/metadata.xsd");
-	copy ("$prgdir/$siard2html", "$prg_option[SIARD_DIR]/header/metadata.xsl");
+	file_put_contents("$prg_option[SIARD_DIR]/header/metadata.xsd", $static_siard_schema);
+	file_put_contents("$prg_option[SIARD_DIR]/header/metadata.xsl", $static_siard2html);
+	//copy ("$prgdir/$siard_schema", "$prg_option[SIARD_DIR]/header/metadata.xsd");
+	//copy ("$prgdir/$siard2html", "$prg_option[SIARD_DIR]/header/metadata.xsl");
 
 	// Create SIARD content and folder
 	mkdirPHP4("$prg_option[SIARD_DIR]/content/$defaultschema", 0777, true);
@@ -193,7 +195,6 @@ global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard, $static_torque2s
 );
 	$arguments = array(
 		'/_xml' => $xmldata,
-		// '/_xsl' => file_get_contents("$prgdir/$torque2siard")
 		'/_xsl' => $static_torque2siard
 	);
 	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments, $parameters);

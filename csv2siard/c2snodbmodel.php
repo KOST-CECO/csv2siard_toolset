@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
-global $prg_option, $wdir, $prgdir, $torque_schema;
+global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
 
 // Create CSV file list
 	$file_arr = array();
@@ -87,7 +87,8 @@ global $prg_option, $wdir, $prgdir, $torque_schema;
 	$prg_option['DB_MODEL'] = "$dbmodel";
 	
 	// validate database description no_db_model.xml according to torque v4.0
-	if (!validateXML("$prgdir/$torque_schema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
+	file_put_contents("$prg_option[TMPDIR]/$torque_schema", $static_torque_schema);
+	if (!validateXML("$prg_option[TMPDIR]/$torque_schema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
 		exit(16);
 	}
 

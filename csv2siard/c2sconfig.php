@@ -19,7 +19,7 @@ global $prg_option, $prgname, $version, $disclaimer;
 
 // read and check command-line arguments ---------------------------------------
 function readCommandLine() {
-global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $prg_option;
+global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_schema, $prg_option;
 	if ($argc < 4) {
 		echo $usage; exit(1);
 	}
@@ -29,14 +29,16 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $prg_option;
 		$prg_option['DB_MODEL'] = 'NO_DB_MODEL';
 	}
 	else {
-		$database = str_replace('\\', '/', realpath($argv[1]));
-		if (!is_file($database)) {
+		$dbmodel = str_replace('\\', '/', realpath($argv[1]));
+		if (!is_file($dbmodel)) {
 			echo "Database description $argv[1] not found\n"; exit(1);
 		}
-		if (!validateXML("$prgdir/$torque_schema", $database, "'$argv[1]' is not a valid database schema according to Torque v4.0")) {
+		$temp = sys_get_temp_dir();
+		file_put_contents("$temp/$torque_schema", $static_torque_schema);
+		if (!validateXML("$temp/$torque_schema", $dbmodel, "'$argv[1]' is not a valid database schema according to Torque v4.0")) {
 			exit(16);
 		}
-		$prg_option['DB_MODEL'] = $database;
+		$prg_option['DB_MODEL'] = $dbmodel;
 	}
 	// check folder with csv files
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
