@@ -13,7 +13,7 @@ _v - value
 _a - attributes
 
 */
-
+// -----------------------------------------------------------------------------
 // XML to Array
 function xml2ary(&$string) {
 	$parser = xml_parser_create();
@@ -59,7 +59,7 @@ function _del_p(&$ary) {
 		elseif (is_array($ary[$k])) _del_p($ary[$k]);
 	}
 }
-
+// -----------------------------------------------------------------------------
 // Array to XML
 function ary2xml($cary, $d=0, $forcetag='') {
 	$res=array();
@@ -70,20 +70,31 @@ function ary2xml($cary, $d=0, $forcetag='') {
 			if ($forcetag) $tag=$forcetag;
 			$sp=str_repeat("\t", $d);
 			$res[]="$sp<$tag";
-			if (isset($r['_a'])) {foreach ($r['_a'] as $at=>$av) $res[]=" $at=\"$av\"";}
+			if (isset($r['_a'])) {foreach ($r['_a'] as $at=>$av) $res[]=" $at=\"".xml_encode($av)."\"";}
 			$res[]=">".((isset($r['_c'])) ? "\n" : '');
 			if (isset($r['_c'])) $res[]=ary2xml($r['_c'], $d+1);
-			elseif (isset($r['_v'])) $res[]=$r['_v'];
+			elseif (isset($r['_v'])) $res[]=xml_encode($r['_v']);
 			$res[]=(isset($r['_c']) ? $sp : '')."</$tag>\n";
 		}
 		
 	}
 	return implode('', $res);
 }
-
+// -----------------------------------------------------------------------------
 // Insert element into array
 function ins2ary(&$ary, $element, $pos) {
 	$ar1=array_slice($ary, 0, $pos); $ar1[]=$element;
 	$ary=array_merge($ar1, array_slice($ary, $pos));
 }
+// -----------------------------------------------------------------------------
+// encode string with xml entities: < &lt;  > &gt;  & &amp;  " &quot;  ' &apos;
+function xml_encode($buf) {
+	$buf = str_replace ("&", "&amp;", $buf);
+	$buf = str_replace ("'", "&apos;", $buf);
+	$buf = str_replace ('"', "&quot;", $buf);
+	$buf = str_replace ("<", "&lt;", $buf);
+	$buf = str_replace (">", "&gt;", $buf);
+	return($buf);
+}
 ?>
+

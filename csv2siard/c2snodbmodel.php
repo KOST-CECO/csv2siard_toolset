@@ -24,7 +24,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 						}
 						else {
 							$fl = ansi2ascii($file);
-							echo "CSV file name $fl does not conforme to SQL naming convention \n";
+							echo "CSV file name $fl does not conform to SQL naming convention \n";
 						}
 					}
 					else {
@@ -49,7 +49,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		$encoding_arr[$name] = strtoupper(exec($commandline));
 		if ($encoding_arr[$name] != $prg_option['CHARSET']) {
 			$fl = ansi2ascii($file);
-			echo "CSV file $fl does not conforme to $prg_option[CHARSET] encoding \n";
+			echo "CSV file $fl does not conform to $prg_option[CHARSET] encoding\n";
 		}
 	}
 	
@@ -78,7 +78,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 					$col = array();
 					$col['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
 					if (testDBMSNaming($col['name']) === false){
-						echo "\nColumn $colcnt does not conforme to SQL naming convention \n";
+						echo "\nColumn ". ($colcnt+1) ." does not conform to SQL naming convention \n";
 						$orgname = ($encoding_arr[$name] == 'UTF-8') ? utf8_decode($col['name']) : $col['name'];
 						$col['description'] = "Original column name: '$orgname'";
 						$col['name'] = "column$colcnt";
@@ -124,7 +124,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	$xmldata = $xmldata . "<database name=\"$dbname\" xmlns=\"http://db.apache.org/torque/4.0/templates/database\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd\">\n";
 	reset($csv_arr);
 	while (list($name, $columns) = each($csv_arr)) {
-		$xmldata = $xmldata . "\t<table name=\"$name\" description=\"$file_arr[$name]\">\n";
+		$xmldata = $xmldata . "\t<table name=\"$name\" description=\"".xml_encode($file_arr[$name])."\">\n";
 		reset($columns);
 		while (list($name, $attributes) = each($columns)) {
 			if ($attributes['type'] == 'VARCHAR') {
@@ -158,10 +158,10 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	unlink("$prg_option[TMPDIR]/$torque_schema");
 
 	// write console message
-	echo "\nNew XML database model written: $wdir/no_db_model.xml\n";
+	echo "\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n";
 	reset($file_arr);
 	while (list($key, $val) = each($file_arr)) {
-		$val = ansi2ascii(utf8_decode($val));
+		$val = ansi2ascii($val);
 		echo "  [$key] => $val\n";
 	}
 }

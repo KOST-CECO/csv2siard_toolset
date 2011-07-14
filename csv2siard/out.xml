@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="csvtest" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+	<table name="gv_minimal1" description="D:/KOST_local/Projekte/Transferprojekt/4_csv &amp; siÃ¤rd/csvtest/gv_minimal1.dat">
+		<option key="folder" value="table0"></option>
+		<option key="localfile" value="D:/KOST_local/Projekte/Transferprojekt/4_csv &amp;amp; siärd/csvtest/gv_minimal1.dat"></option>
+		<option key="rowcount" value="2"></option>
+		<column name="id" type="INTEGER"></column>
+		<column name="name" type="VARCHAR" size="24"></column>
+		<column name="column2" type="DECIMAL" description="Original column name: &apos;geschÃ¤ft&apos;"></column>
+		<column name="date" type="DATE"></column>
+		<column name="calc" type="FLOAT"></column>
+	</table>
+	<table name="gv_minimal2" description="D:/KOST_local/Projekte/Transferprojekt/4_csv &amp; siÃ¤rd/csvtest/gv_minimal2.dat">
+		<option key="folder" value="table1"></option>
+		<option key="localfile" value="D:/KOST_local/Projekte/Transferprojekt/4_csv &amp;amp; siärd/csvtest/gv_minimal2.dat"></option>
+		<option key="rowcount" value="3"></option>
+		<column name="id" type="INTEGER"></column>
+		<column name="name" type="VARCHAR" size="25"></column>
+		<column name="date" type="DATE"></column>
+	</table>
+</database>

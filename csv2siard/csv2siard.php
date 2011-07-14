@@ -143,7 +143,7 @@ createSIARDMetadata($dbmod);
 createSIARDFile();
 
 if ($prg_option['ERR'] == 0) {
-	echo "\nSIARD file created: $prg_option[SIARD_FILE]\n";
+	echo "\nSIARD file created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n";
 	echo "Conversion completed\n";
 }
 else {

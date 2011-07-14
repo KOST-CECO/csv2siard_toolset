@@ -82,7 +82,7 @@ global $prg_option, $prgdir;
 		}
 		closedir($dirhandle);
 	}
-	setTableOption($table, 'localfile', $csvfile);
+	setTableOption($table, 'localfile', xml_encode($csvfile));
 
 	if(!is_file($csvfile)) {
 		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = 2; return;
@@ -171,7 +171,6 @@ global $prg_option;
 // validate a SIARD XML file with xmllint
 function validateSIARDTable(&$table) {
 global $prgdir, $prg_option;
-//print_r($table);
 
 	$tablefolder = getTableOption($table, 'folder');
 	$tablefile = getTableOption($table, 'file');
@@ -203,7 +202,7 @@ global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard, $static_torque2s
 		'messageDigest'       => 'MD5',
 		'clientMachine'       => $_SERVER['COMPUTERNAME'],
 		'databaseProduct'     => $prg_option['DB_TYPE'],
-		'connection'          => 'file://'.$prg_option['CSV_FOLDER'],
+		'connection'          => 'file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER'])),
 		'databaseUser'        => $prg_option['SIARD_USER'],
 		'databaseSchema'      => $prg_option['SIARD_SCHEMA']
 );

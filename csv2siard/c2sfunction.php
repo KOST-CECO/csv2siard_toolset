@@ -25,16 +25,6 @@ function testDBMSNaming($buf) {
 	return(true);
 }
 // -----------------------------------------------------------------------------
-// encode string with xml entities: < &lt;  > &gt;  & &amp;  " &quot;  ' &apos; 
-function xml_encode($buf) {
-	$buf = str_replace ("&", "&amp;", $buf);
-	$buf = str_replace ("'", "&apos;", $buf);
-	$buf = str_replace ('"', "&quot;", $buf);
-	$buf = str_replace ("<", "&lt;", $buf);
-	$buf = str_replace (">", "&gt;", $buf);
-	return($buf);
-}
-// -----------------------------------------------------------------------------
 // Schema validation with xmllint libxml project http://xmlsoft.org/
 function validateXML($schema,$xml, $message) {
 global $prg_option, $prgdir;
