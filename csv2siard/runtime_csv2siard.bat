@@ -51,6 +51,8 @@ COPY GPL-2.0_COPYING.txt %RUNTIME%\bin
 COPY database-torque-4-0.xsd %RUNTIME%
 COPY gv-model-v8.xml %RUNTIME%
 
+COPY Anwendungshandbuch*.pdf %RUNTIME%
+
 COPY *.php %RUNTIME%\source
 COPY csv2siard.bcp %RUNTIME%\source
 

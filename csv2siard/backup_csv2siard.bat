@@ -31,3 +31,4 @@ COPY *.css %SOURCESAVE%\source_%_timestamp%\
 COPY *.bat %SOURCESAVE%\source_%_timestamp%\
 COPY *.ini %SOURCESAVE%\source_%_timestamp%\
 COPY *.prefs %SOURCESAVE%\source_%_timestamp%\
+COPY Anwendungshandbuch* %SOURCESAVE%\source_%_timestamp%\

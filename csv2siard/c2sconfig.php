@@ -191,6 +191,7 @@ global $prg_option;
 	$prg_option['CHARSET'] = strtoupper($prg_option['CHARSET']);
 	switch ($prg_option['CHARSET']) {
 		case "ASCII":
+		case "US-ASCII":
 		case "OEM":
 			$prg_option['CHARSET'] = "ASCII"; break;
 		case "ANSI":

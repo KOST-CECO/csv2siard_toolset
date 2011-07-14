@@ -82,6 +82,10 @@ global $prg_option, $prgdir;
 		}
 		closedir($dirhandle);
 	}
+	if(!isset($csvfile)) {
+		echo "CSV table $tablename not found\n"; $prg_option['ERR'] = 2; return;
+	}
+
 	setTableOption($table, 'localfile', xml_encode($csvfile));
 
 	if(!is_file($csvfile)) {
