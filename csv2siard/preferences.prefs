@@ -10,12 +10,3 @@ CHECK_FIELD_TYPE=FALSE
 CHECK_DATABASE_INTEGRITY=FALSE
 #TMPDIR=./temp
 #
-# Optional content settings (use UTF-8)
-DESCRIPTION=Gebäuderversicherungdaten Kanton Thurgau 2006               # Database description
-ARCHIVED_BY=Staatsarchiv Thurgau                                        # Database archived by
-CONTACT=Staatsarchiv Thurgau, Regierungsgebäude, CH-8510 Frauenfeld     # Archivist's contact details
-OWNER=Gebäuderversicherung Thurgau                                      # Data owner prior to archiving
-#TIMESPAN=2006 - 2007                                                    # Data creation time span
-DB_TYPE=GV-CSV                                                          # Type of Database or database product
-SIARD_USER=StATG                                                        # default user
-SIARD_SCHEMA=gv0                                                        #default schema

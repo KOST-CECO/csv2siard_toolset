@@ -10,20 +10,24 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torqueschema, $prg_option;
 	}
 	
 	// check database description XML file
-	$database = str_replace('\\', '/', realpath($argv[1]));
-	if (!is_file($database)) {
-		echo "Database description $argv[1] not found\n"; exit(-1);
+	if (strcasecmp($argv[1], 'NO_DB_MODEL') == 0) {
+		$prg_option['DB_MODEL'] = 'NO_DB_MODEL';
 	}
-	exec("$prgdir/xmllint.exe -noout -schema $prgdir/$torqueschema $database 2>$database.out", $result, $database_retval);
-	if ($database_retval) {
-		echo "'$argv[1]' is not a valid database schema according to Torque v4.0\n"; 
-		$result = file_get_contents("$database.out");
-		echo $result;
-		exit(-1);
+	else {
+		$database = str_replace('\\', '/', realpath($argv[1]));
+		if (!is_file($database)) {
+			echo "Database description $argv[1] not found\n"; exit(-1);
+		}
+		exec("$prgdir/xmllint.exe -noout -schema $prgdir/$torqueschema $database 2>$database.out", $result, $database_retval);
+		if ($database_retval) {
+			echo "'$argv[1]' is not a valid database schema according to Torque v4.0\n"; 
+			$result = file_get_contents("$database.out");
+			echo $result;
+			exit(-1);
+		}
+		unlink("$database.out");
+		$prg_option['DB_MODEL'] = $database;
 	}
-	unlink("$database.out");
-	$prg_option['DB_SCHEMA'] = $database;
-
 	// check folder with csv files
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
 	if (!is_dir($csvpath)) {
@@ -52,7 +56,10 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torqueschema, $prg_option;
 // read and check preferences --------------------------------------------------
 function readPreferences() {
 global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
-
+	// parameter settings
+	// $prg_option['DB_MODEL'];								// database description according to torque.v4 XML model or NO_DB_MODEL
+	// $prg_option['CSV_FOLDER'];							// path where to find the csv files
+	// $prg_option['SIARD_FILE'];							// SIARD file to be created
 	// set default preferences
 	$prg_option['DELIMITED'] = ';';						// CSV column separator
 	$prg_option['QUOTE'] = '"';								// Optional field Quotation
@@ -63,6 +70,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;
 	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
 	$prg_option['PI_COUNT'] = 20;							// progress indicator per line processed
+	$prg_option['MAX_ROWSIZE'] = 100000;			// maximal CSV row size
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description
 	$prg_option['ARCHIVED_BY'] = '';					// Database archived by

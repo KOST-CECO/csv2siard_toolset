@@ -31,6 +31,7 @@ include 'c2screate.php';
 include 'c2sconvert.php';
 include 'c2sfunction.php';
 include 'c2sxml.php';
+include 'c2snodbmodel.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -41,6 +42,7 @@ $version = '0.5';		// Read preference settings into metadata.xml
 $version = '0.6';		// CSV encoding ISO-8859-1 and UTF-8
 $version = '0.7';		// check CSV column names
 $version = '0.8';		// necessary exe and dll
+$version = '0.9';		// NO_DB_MODEL implementieren
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
@@ -58,7 +60,7 @@ $dbmod = array();												//nested array to hold the database model
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]
-    database :: database XML description according to torque.v4 schema
+    database :: database description according to torque.v4 XML model or NO_DB_MODEL
      csvpath :: path where to find the csv files
    siardfile :: SIARD file to be created
        prefs :: configuration file (default $prefs)
@@ -71,10 +73,16 @@ readCommandLine();
 readPreferences();
 checkTMP();
 checkProgramOptions();
+if ($prg_option['DB_MODEL'] == 'NO_DB_MODEL') {
+	// create database model from scratch
+	createDBModel();
+}
+
 loadDatabaseModell($dbmod);
 creatSIARDFolder($dbmod);
 
 // Print options
+	echo "Program options:\n";
 reset($prg_option);
 while (list($key, $val) = each($prg_option)) {
 	$val = ansi2ascii(utf8_decode($val));

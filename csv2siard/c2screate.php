@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 function loadDatabaseModell(&$dbmod) {
 global $prg_option;
 
-	$dbmod = xml2ary(file_get_contents($prg_option['DB_SCHEMA']));
+	$dbmod = xml2ary(file_get_contents($prg_option['DB_MODEL']));
 	return;
 }
 // -----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ global $prg_option;
 	reset($table);
 	$rowcount = 1;
 	$columcount = count($table['_c']['column']);
-	while (($buf = fgetcsv($csvhandle, 100000, $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
+	while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
 			echo "Incorrect CSV on line $rowcount in file $csvfile\n"; $prg_option['ERR'] = -1;
 		}

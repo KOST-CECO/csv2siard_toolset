@@ -242,4 +242,15 @@ function ansi2ascii($string) {
 	}
 	return ($string);
 }
+// ----------------------------------------------------------------------------
+// 1. Escape the pattern to make it regex-safe. Wildcards use only * and ?, so the rest of the text has to be converted to literals
+// 2. Once escaped, * becomes \* and ? becomes \?, so we have to convert \* and \? to their respective regex equivalents, .* and .?
+// 3. For replacement pattern use (.*) and (.?) for backreference ${1}
+// 4. Prepend ^ and append $ to specify the beginning and end of the pattern
+function Wildcard2Regex($pattern) {
+	$pattern = str_replace ('.', '\\.', $pattern);
+	$pattern = str_replace ('*', '(.*)', $pattern);
+	$pattern = str_replace ('?', '(.?)', $pattern);
+	return('^'.$pattern.'$');
+}
 ?>

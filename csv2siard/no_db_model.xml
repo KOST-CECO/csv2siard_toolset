@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="csvdata" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
+	<table name="GV_anlage">
+		<column name="id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="typ_code" type="VARCHAR"/>
+		<column name="typ_text" type="VARCHAR"/>
+	</table>
+	<table name="Kopie von gv_person">
+		<column name="id" type="VARCHAR"/>
+		<column name="person_id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="klasse_code" type="VARCHAR"/>
+		<column name="klasse_text" type="VARCHAR"/>
+		<column name="name" type="VARCHAR"/>
+		<column name="strasse" type="VARCHAR"/>
+		<column name="strasse_nr" type="VARCHAR"/>
+		<column name="wohnung_nr" type="VARCHAR"/>
+		<column name="land" type="VARCHAR"/>
+		<column name="plz" type="VARCHAR"/>
+		<column name="plz_zusatz" type="VARCHAR"/>
+		<column name="ort" type="VARCHAR"/>
+		<column name="ort_zusatz" type="VARCHAR"/>
+		<column name="gueltig_ab" type="VARCHAR"/>
+		<column name="gueltig_bis" type="VARCHAR"/>
+		<column name="rolle_code" type="VARCHAR"/>
+		<column name="rolle_text" type="VARCHAR"/>
+	</table>
+	<table name="gv_gebaeude">
+		<column name="id" type="VARCHAR"/>
+		<column name="grundstueck_id" type="VARCHAR"/>
+		<column name="police_nr" type="VARCHAR"/>
+		<column name="suchbegriff" type="VARCHAR"/>
+		<column name="status_code" type="VARCHAR"/>
+		<column name="status_text" type="VARCHAR"/>
+		<column name="zweck_code" type="VARCHAR"/>
+		<column name="zweck_text" type="VARCHAR"/>
+		<column name="baujahr" type="VARCHAR"/>
+		<column name="bauart_code" type="VARCHAR"/>
+		<column name="bauart_text" type="VARCHAR"/>
+		<column name="lage_code" type="VARCHAR"/>
+		<column name="lage_text" type="VARCHAR"/>
+		<column name="kanton" type="VARCHAR"/>
+		<column name="bezirk" type="VARCHAR"/>
+		<column name="gemeinde_bfs" type="VARCHAR"/>
+		<column name="gemeinde" type="VARCHAR"/>
+		<column name="strasse" type="VARCHAR"/>
+		<column name="strasse_nr" type="VARCHAR"/>
+		<column name="wohnung_nr" type="VARCHAR"/>
+		<column name="plz" type="VARCHAR"/>
+		<column name="plz_zusatz" type="VARCHAR"/>
+		<column name="ort" type="VARCHAR"/>
+		<column name="ort_zusatz" type="VARCHAR"/>
+	</table>
+	<table name="gv_minimal1">
+		<column name="name" type="VARCHAR"/>
+	</table>
+	<table name="gv_minimal2">
+		<column name="id" type="VARCHAR"/>
+		<column name="name" type="VARCHAR"/>
+	</table>
+	<table name="gv_person">
+		<column name="id" type="VARCHAR"/>
+		<column name="person_id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="klasse_code" type="VARCHAR"/>
+		<column name="klasse_text" type="VARCHAR"/>
+		<column name="name" type="VARCHAR"/>
+		<column name="strasse" type="VARCHAR"/>
+		<column name="strasse_nr" type="VARCHAR"/>
+		<column name="wohnung_nr" type="VARCHAR"/>
+		<column name="land" type="VARCHAR"/>
+		<column name="plz" type="VARCHAR"/>
+		<column name="plz_zusatz" type="VARCHAR"/>
+		<column name="ort" type="VARCHAR"/>
+		<column name="ort_zusatz" type="VARCHAR"/>
+		<column name="gueltig_ab" type="VARCHAR"/>
+		<column name="gueltig_bis" type="VARCHAR"/>
+		<column name="rolle_code" type="VARCHAR"/>
+		<column name="rolle_text" type="VARCHAR"/>
+	</table>
+	<table name="gv_position">
+		<column name="id" type="VARCHAR"/>
+		<column name="schaetzung_id" type="VARCHAR"/>
+		<column name="art_code" type="VARCHAR"/>
+		<column name="art_text" type="VARCHAR"/>
+		<column name="text" type="VARCHAR"/>
+		<column name="volumen" type="VARCHAR"/>
+		<column name="versicherungswert" type="VARCHAR"/>
+		<column name="laenge" type="VARCHAR"/>
+		<column name="breite" type="VARCHAR"/>
+		<column name="hoehe" type="VARCHAR"/>
+		<column name="abnutzung" type="VARCHAR"/>
+		<column name="erfasster_wert" type="VARCHAR"/>
+		<column name="bauart_code" type="VARCHAR"/>
+		<column name="bauart_text" type="VARCHAR"/>
+	</table>
+	<table name="gv_schaden">
+		<column name="id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="nummer" type="VARCHAR"/>
+		<column name="datum" type="VARCHAR"/>
+		<column name="datum_erledigung" type="VARCHAR"/>
+		<column name="art_code" type="VARCHAR"/>
+		<column name="art_text" type="VARCHAR"/>
+		<column name="ursache_code" type="VARCHAR"/>
+		<column name="ursache_text" type="VARCHAR"/>
+		<column name="ursache_zusatz" type="VARCHAR"/>
+		<column name="schadensumme" type="VARCHAR"/>
+		<column name="status_code" type="VARCHAR"/>
+		<column name="status_text" type="VARCHAR"/>
+		<column name="versicherungswert" type="VARCHAR"/>
+		<column name="vkf_code" type="VARCHAR"/>
+		<column name="vkf_text" type="VARCHAR"/>
+	</table>
+	<table name="gv_schaetzung">
+		<column name="id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="datum_ausfuehrung" type="VARCHAR"/>
+		<column name="grund_code" type="VARCHAR"/>
+		<column name="grund_text" type="VARCHAR"/>
+		<column name="wertvermehrung" type="VARCHAR"/>
+		<column name="wertvermehrung_kommentar" type="VARCHAR"/>
+		<column name="kommentar_zusatz" type="VARCHAR"/>
+		<column name="datum_erledigung" type="VARCHAR"/>
+		<column name="status_code" type="VARCHAR"/>
+		<column name="status_text" type="VARCHAR"/>
+		<column name="ereignis_code" type="VARCHAR"/>
+		<column name="ereignis_text" type="VARCHAR"/>
+		<column name="versicherungsart_code" type="VARCHAR"/>
+		<column name="versicherungsart_text" type="VARCHAR"/>
+		<column name="versicherungswert_aktuell" type="VARCHAR"/>
+		<column name="versicherungswert_schaetzung" type="VARCHAR"/>
+		<column name="basiswert" type="VARCHAR"/>
+		<column name="volumen" type="VARCHAR"/>
+	</table>
+	<table name="orginal_gv_person">
+		<column name="id" type="VARCHAR"/>
+		<column name="person_id" type="VARCHAR"/>
+		<column name="gebaeude_id" type="VARCHAR"/>
+		<column name="klasse_code" type="VARCHAR"/>
+		<column name="klasse_text" type="VARCHAR"/>
+		<column name="name" type="VARCHAR"/>
+		<column name="strasse" type="VARCHAR"/>
+		<column name="strasse_nr" type="VARCHAR"/>
+		<column name="wohnung_nr" type="VARCHAR"/>
+		<column name="land" type="VARCHAR"/>
+		<column name="plz" type="VARCHAR"/>
+		<column name="plz_zusatz" type="VARCHAR"/>
+		<column name="ort" type="VARCHAR"/>
+		<column name="ort_zusatz" type="VARCHAR"/>
+		<column name="gueltig_ab" type="VARCHAR"/>
+		<column name="gueltig_bis" type="VARCHAR"/>
+		<column name="rolle_code" type="VARCHAR"/>
+		<column name="rolle_text" type="VARCHAR"/>
+	</table>
+</database>
