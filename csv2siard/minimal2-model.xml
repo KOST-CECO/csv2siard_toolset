@@ -3,5 +3,6 @@
 	<table name="gv_minimal2">
 		<column name="id" type="DECIMAL" primaryKey="true" description="Personen-ID"/>
 		<column name="name" type="VARCHAR" size="1000" description="Personen-Suchbegriff"/>
+		<column name="date" type="DATE" description="Geburtsdatum"/>
 	</table>
 </database>

@@ -219,7 +219,7 @@ global $prgdir, $prg_option;
 	$zipfile = $zipfile.'.zip';
 	
 	// create ZIP file
-	$commandline = 'CALL "'.$prgdir.'/7z.exe" a -w'.' "'.$zipfile.'" '.' "'.$siarddir.'" ';
+	$commandline = 'CALL "'.$prgdir.'/7z.exe" a -mx0 -w'.' "'.$zipfile.'" '.' "'.$siarddir.'" ';
 	exec($commandline, $result, $retval);
 	if ($retval != 0) {
 		echo "Temporary ZIP file could not be created: $zipfile"; return(-1);

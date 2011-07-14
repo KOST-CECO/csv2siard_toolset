@@ -75,7 +75,7 @@ global $prg_option;
 			}
 			// check field type and convert to XML type *** TO BE DONE ***
 			// multiple columns or only one column
-			$column = $table['_c']['column'][$i-1];
+			$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
 			$b = $buf;
 			switch ($type) {

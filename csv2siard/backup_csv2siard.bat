@@ -20,14 +20,14 @@ REM ECHO timestamp: %_timestamp%
 
 REM backup ---------------------------------------------------------------------
 ECHO .
-ECHO Directory %SOURCESAVE%\csv2siard_%_timestamp% created
-MKDIR %SOURCESAVE%\mergeAIP_%_timestamp%
-COPY *.php %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.bcp %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.xml %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.xsd %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.xsl %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.css %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.bat %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.ini %SOURCESAVE%\mergeAIP_%_timestamp%\
-COPY *.prefs %SOURCESAVE%\mergeAIP_%_timestamp%\
+ECHO Directory %SOURCESAVE%\source_%_timestamp% created
+MKDIR %SOURCESAVE%\source_%_timestamp%
+COPY *.php %SOURCESAVE%\source_%_timestamp%\
+COPY *.bcp %SOURCESAVE%\source_%_timestamp%\
+COPY *.xml %SOURCESAVE%\source_%_timestamp%\
+COPY *.xsd %SOURCESAVE%\source_%_timestamp%\
+COPY *.xsl %SOURCESAVE%\source_%_timestamp%\
+COPY *.css %SOURCESAVE%\source_%_timestamp%\
+COPY *.bat %SOURCESAVE%\source_%_timestamp%\
+COPY *.ini %SOURCESAVE%\source_%_timestamp%\
+COPY *.prefs %SOURCESAVE%\source_%_timestamp%\

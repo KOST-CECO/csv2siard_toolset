@@ -321,31 +321,84 @@ function to_bool($var){
 	}
 }
 // ----------------------------------------------------------------------------
-/* Konvertiert gegliederte UTC-Angaben in Unix-Zeit, Parameter und ihre Werte-Bereiche:
- * - jahr [1970..2038]
- * - monat [1..12]
- * - tag [1..31]
- * - stunde [0..23]
- * - minute [0..59]
- * - sekunde [0..59]
+/* converts UTC-time to Unix/POSIX time stamp (similar to mktime):
+ * - year [1601..2038]
+ * - month [1..12]
+ * - day [1..31]
+ * - hour [0..23]
+ * - min [0..59]
+ * - sec [0..59]
  *
  * PHP 4: mktime(hour, minute, second, month, day, year)
  * negative timestamps were not supported under Windows, therefore the range of valid years was limited to 1970 through 2038
 */
-function unixTime( $stunde, $minute, $sekunde, $monat, $tag, $jahr ) {
-	$tage_bis_monatsanfang = /* ohne Schalttag */
+function unixTime( $hour, $min, $sec, $month, $day, $year ) {
+	$day_2_month = /* without leap years */
 			array(0,31,59,90,120,151,181,212,243,273,304,334);
 
-	$jahre=$jahr-1970;
-	$schaltjahre=floor( (($jahr-1)-1968)/4 - (($jahr-1)-1900)/100 + (($jahr-1)-1600)/400 );
+	if ($year < 1601 or $year > 2038) { return(false); } 
+	elseif ($month < 1 or $month > 12) { return(false); } 
+	elseif ($day < 1 or $day > 31) { return(false); } 
+	elseif ($hour < 0 or $hour > 23) { return(false); } 
+	elseif ($min < 0 or $min > 59) { return(false); } 
+	elseif ($sec < 0 or $sec > 59) { return(false); } 
 
-	$unix_zeit=$sekunde + 60*$minute + 60*60*$stunde +
-			($tage_bis_monatsanfang[$monat-1]+$tag-1)*60*60*24 +
-			($jahre*365+$schaltjahre)*60*60*24;
+	$years=$year-1970;
+	$leap_years=floor( (($year-1)-1968)/4 - (($year-1)-1900)/100 + (($year-1)-1600)/400 );
+
+	$timestamp=$sec + 60*$min + 60*60*$hour +
+			($day_2_month[$month-1]+$day-1)*60*60*24 +
+			($years*365+$leap_years)*60*60*24;
  
-	if ( ($monat>2) && ($jahr%4==0 && ($jahr%100!=0 || $jahr%400==0)) ) {
-		$unix_zeit+=60*60*24; /* +Schalttag wenn jahr Schaltjahr ist */
+	if ( ($month>2) && ($year%4==0 && ($year%100!=0 || $year%400==0)) ) {
+		$timestamp+=60*60*24; /* add leap day when year == leap year */
 	}
-	return($unix_zeit);
+	return($timestamp);
 }
+
+// -----------------------------------------------------------------------------
+/* Set the time structure tm_t fields for a unix timestamp 
+ * "tm_sec"   Seconds after the minute (0-61) 
+ * "tm_min"   Minutes after the hour (0-59) 
+ * "tm_hour"  Hour since midnight (0-23) 
+ * "tm_mday"  Day of the month (1-31) 
+ * "tm_mon"   Months since January (0-11) 
+ * "tm_year"  Years since 1900 
+ * "tm_wday"  Days since Sunday (0-6) 
+ * "tm_yday"  Days since January 1 (0-365)
+ * "tm_isdst" Daylight Saving Time flag (0)
+ */
+function gmtime($time) { 
+	$tp = array (
+		'tm_sec'   => 0, 
+		'tm_min'   => 0, 
+		'tm_hour'  => 0, 
+		'tm_mday'  => 1, 
+		'tm_mon'   => 0, 
+		'tm_year'  => 0, 
+		'tm_wday'  => 0, 
+		'tm_yday'  => 0, 
+		'tm_isdst' => 0 );
+		
+	$day_per_month = array(0,31,59,90,120,151,181,212,243,273,304,334);
+
+	$day = floor($time/(24*60*60)); 
+	$secs = $time % (24*60*60); 
+	$tp['tm_sec'] = $secs % 60; 
+	$mins = floor($secs / 60); 
+	$tp['tm_hour'] = floor($mins / 60); 
+	$tp['tm_min'] = $mins % 60; 
+	$tp['tm_wday'] = ($day + 4) % 7; 
+	$year = floor((($day * 4) + 2)/1461); 
+	$tp['tm_year'] = $year + 70; 
+	$leap = !($tp['tm_year'] & 3); 
+	$day -= floor((($year * 1461) + 1) / 4); 
+	$tp['tm_yday'] = $day; 
+	$day += ($day > 58 + $leap) ? (($leap) ? 1 : 2) : 0; 
+	$tp['tm_mon'] = floor((($day * 12) + 6)/367); 
+	$tp['tm_mday'] = $day + 1 -  floor((($tp['tm_mon'] * 367) + 5)/12); 
+	$tp['tm_isdst'] = 0;
+	
+	return($tp);
+} 
 ?>
