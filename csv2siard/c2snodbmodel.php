@@ -9,10 +9,19 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 	$reg = '#'.Wildcard2Regex($prg_option['FILE_MASK']).'#i';
 	if ( $dirhandle = opendir($prg_option['CSV_FOLDER'])) {
 		while (false !== ($file = readdir($dirhandle))) {
-			if (preg_match($reg, $file) > 0) {
+			if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
 				$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
 				if ($name != '') {
-					$file_arr[$name] = $prg_option['CSV_FOLDER'].'/'.$file;
+					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
+					// detect mime type with GNU file-5.03
+					$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-type -bm "'.$prgdir.'/magic.mgc" '.'"'.$csvfile.'"';
+					$mime_type = exec($commandline);
+					if ($mime_type == 'text/plain') {
+						$file_arr[$name] = $csvfile;
+					}
+					else {
+						echo "Incorrect CSV file: ($mime_type) $csvfile\n";
+					}
 				}
 			}
 		}
@@ -75,14 +84,9 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 	$prg_option['DB_MODEL'] = "$dbmodel";
 	
 	// validate database description no_db_model.xml according to torque v4.0
-	exec("$prgdir/xmllint.exe -noout -schema $prgdir/$torqueschema $dbmodel 2>$dbmodel.out", $result, $retval);
-	if ($retval) {
-		echo "'$dbmodel' is not a valid database schema according to Torque v4.0\n"; 
-		$result = file_get_contents("$dbmodel.out");
-		echo $result;
-		exit(-1);
+	if (!validateXML("$prgdir/$torqueschema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
+		exit($prg_option['ERR']);
 	}
-	unlink("$dbmodel.out");
 
 	// write console message
 	echo "New XML database model written: $wdir/no_db_model.xml\n";

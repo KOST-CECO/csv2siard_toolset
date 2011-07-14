@@ -115,7 +115,7 @@ if ($prg_option['ERR'] == 0) {
 	exit(0);
 }
 else {
-	echo "\nNo valid SIARD file created\n";
+	echo "\nNo SIARD file created\n";
 	@unlink($prg_option['SIARD_FILE']);
 	exit($prg_option['ERR']);
 }

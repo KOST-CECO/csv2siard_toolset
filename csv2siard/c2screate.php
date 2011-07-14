@@ -62,10 +62,9 @@ $folderstructur ="
 // -----------------------------------------------------------------------------
 // read a CSV file and write a SIARD table
 function creatSIARDTable(&$table) {
-global $prg_option;
+global $prg_option, $prgdir;
 
 	$tablename = $table['_a']['name'];
-	echo "Process table $tablename .";
 
 	// check for CSV file and open it for reading
 	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
@@ -74,6 +73,12 @@ global $prg_option;
 	if(!is_file($csvfile)) {
 		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = -1; return;
 	}
+	
+	// detect encoding with GNU file-5.03
+	$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-encoding -bm "'.$prgdir.'/magic.mgc" '.'"'.$csvfile.'"';
+	$encoding = exec($commandline);
+	echo "Process table (encoding: $encoding) $tablename .";
+	
 	$csvhandle = fopen($csvfile, "r");
 	if(!$csvhandle) {
 		echo "Could not read CSV file $csvfile\n"; $prg_option['ERR'] = -1; return;
@@ -91,16 +96,18 @@ global $prg_option;
 	// read and process CSV file
 	reset($table);
 	$rowcount = 1;
-	$columcount = count($table['_c']['column']);
+	$columcount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
+	
 	while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
-			echo "Incorrect CSV on line $rowcount in file $csvfile\n"; $prg_option['ERR'] = -1;
+			echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = -1;
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names
 		if ($rowcount == 1 and $prg_option['COLUMN_NAMES']) {
 			processCSVColumnNames($buffer, $csvfile, $table, $buf);
 		}
+		// write SIARD table
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount, $table);
 		}
@@ -153,13 +160,7 @@ global $prgdir, $prg_option;
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	
-	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardfile 2>$tablefolder.out", $result, $retval);
-	if ($retval) {
-		$result = file_get_contents("$tablefolder.out");
-		$result_array = explode("\n", $result, 2);
-		echo "$tablefolder.xml is not a valid XML file:\n$result_array[0]\n";
-	}
-	unlink("$tablefolder.out");
+	validateXML($siardschema, $siardfile, "'$tablefolder.xml' is not a valid XML file");
 }
 // -----------------------------------------------------------------------------
 // write SIARD XML metadata file
@@ -198,14 +199,7 @@ global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard;
 	file_put_contents($siardmetadata, $result);;
 	
 	//validate SIARD XML metadata file
-	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardmetadata 2>metadata.out", $result, $retval);
-	if ($retval) {
-		$result = file_get_contents("metadata.out");
-		$result_array = explode("\n", $result, 2);
-		echo "metadata.xml is not a valid XML file:\n$result_array[0]\n";
-		$prg_option['ERR'] = -1;
-	}
-	unlink("metadata.out");
+	validateXML($siardschema, $siardmetadata, "'metadata.xml' is not a valid XML file");
 }
 // -----------------------------------------------------------------------------
 // create SIARD ZIP file
@@ -219,7 +213,8 @@ global $prgdir, $prg_option;
 	$zipfile = $zipfile.'.zip';
 	
 	// create ZIP file
-	exec("$prgdir/7z.exe a -w $zipfile $siarddir", $result, $retval);
+	$commandline = 'CALL "'.$prgdir.'/7z.exe" a -w'.' "'.$zipfile.'" '.' "'.$siarddir.'" ';
+	exec($commandline, $result, $retval);
 	if ($retval != 0) {
 		echo "Temporary ZIP file could not be created: $zipfile"; return(-1);
 	}

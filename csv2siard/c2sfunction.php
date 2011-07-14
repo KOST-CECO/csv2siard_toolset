@@ -3,6 +3,26 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
+// validate with xmllint libxml project http://xmlsoft.org/
+function validateXML($schema,$xml, $message) {
+global $prg_option, $prgdir;
+	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -noout -schema '.
+									' "'.$schema.'" '.
+									' "'.$xml.'" '.
+									' 2> '.' "'.$xml.'.out"';
+	exec($commandline, $result, $retval);
+	if ($retval) {
+		$result = file_get_contents("$xml.out");
+		$result_array = explode("\n", $result, 2);
+		echo "$message\n$result_array[0]\n";
+		$prg_option['ERR'] = -1;
+		@unlink("$xml.out");
+		return(false);
+	}
+	@unlink("$xml.out");
+	return(true);
+}
+// -----------------------------------------------------------------------------
 // Return "/database/table/option@key from XML array"
 function getTableOption(&$table,$key) {
 	// no options

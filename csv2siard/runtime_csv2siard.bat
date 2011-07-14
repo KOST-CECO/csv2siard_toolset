@@ -33,6 +33,11 @@ COPY 7z.exe %RUNTIME%
 COPY 7z.dll %RUNTIME%
 REM COPY gdiplus.dll %RUNTIME%
 
+COPY file.exe %RUNTIME%
+COPY magic.mgc %RUNTIME%
+COPY magic1.dll %RUNTIME%
+COPY regex2.dll %RUNTIME%
+
 COPY _*.x* %RUNTIME%
 
 COPY preferences.prefs %RUNTIME%

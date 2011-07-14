@@ -18,14 +18,9 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torqueschema, $prg_option;
 		if (!is_file($database)) {
 			echo "Database description $argv[1] not found\n"; exit(-1);
 		}
-		exec("$prgdir/xmllint.exe -noout -schema $prgdir/$torqueschema $database 2>$database.out", $result, $database_retval);
-		if ($database_retval) {
-			echo "'$argv[1]' is not a valid database schema according to Torque v4.0\n"; 
-			$result = file_get_contents("$database.out");
-			echo $result;
-			exit(-1);
+		if (!validateXML("$prgdir/$torqueschema", $database, "'$argv[1]' is not a valid database schema according to Torque v4.0")) {
+			exit($prg_option['ERR']);
 		}
-		unlink("$database.out");
 		$prg_option['DB_MODEL'] = $database;
 	}
 	// check folder with csv files
@@ -123,6 +118,7 @@ global $prgdir, $prg_option;
 		echo "Some libraries are missing or corrupt\n"; exit(-1);
 	}
 // Programs missing
+	// xmllint libxml project http://xmlsoft.org/
 	elseif (@md5_file("$prgdir/xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
 		echo "Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
 	}
@@ -132,11 +128,25 @@ global $prgdir, $prg_option;
 	elseif (@md5_file("$prgdir/zlib1.dll") != 'f5b8b7054675d6aaf4ce3e727395f402'){
 		echo "Library zlib1.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(-1);
 	}
+	// 77-Zip 4.65  Copyright (c) 1999-2009 Igor Pavlov  2009-02-03
 	elseif (@md5_file("$prgdir/7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
 		echo "Program 7z.exe is missing, corrupt or wrong version (7z.exe version 4.65)\n"; exit(-1);
 	}
 	elseif (@md5_file("$prgdir/7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
 		echo "Library 7z.dll is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(-1);
+	}
+	// GNU file-5.03
+	elseif (@md5_file("$prgdir/file.exe") != '0d76b6d325bb9336c6c6a5c220f02c37'){
+		echo "file.exe is missing, corrupt or wrong version (GNU file-5.03)\n"; exit(-1);
+	}
+	elseif (@md5_file("$prgdir/magic.mgc") != '1dfd3dfbb62862a93112c02b26e53493'){
+		echo "magic.mgc is missing, corrupt or wrong version \n"; exit(-1);
+	}
+	elseif (@md5_file("$prgdir/magic1.dll") != '87307712a13f3282ceb7c5868312cd76'){
+		echo "magic1.dll is missing, corrupt or wrong version \n"; exit(-1);
+	}
+	elseif (@md5_file("$prgdir/regex2.dll") != '547c43567ab8c08eb30f6c6bacb479a3'){
+		echo "regex2.dll is missing, corrupt or wrong version \n"; exit(-1);
 	}
 }
 // check  TMP directory --------------------------------------------------------

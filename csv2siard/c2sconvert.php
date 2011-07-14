@@ -57,6 +57,9 @@ function writeSIARDFooter($siardhandle){
 // process a single CSV line and write a <row> into SIARD XML file
 function writeSIARDColumn($siardhandle, $buffer, $columcount, $table){
 global $prg_option;
+
+	$columcount = ($columcount > count($buffer)) ? count($buffer) : $columcount;
+
 	fwrite ($siardhandle, "<row>");
 	
 	for ($i=1; $i <= $columcount; $i++) {
