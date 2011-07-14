@@ -18,7 +18,7 @@ global $prg_option;
 				} else {
 					echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
 				}
-				$prg_option['ERR'] = -1;
+				$prg_option['ERR'] = 32;
 				return(false);
 			}
 			$fct++;
@@ -32,7 +32,7 @@ global $prg_option;
 		}
 	}
 	if ($fct != $ict) {
-		echo "\nTo many columns in CSV file $file"; $prg_option['ERR'] = -1; return(false);
+		echo "\nTo many columns in CSV file $file"; $prg_option['ERR'] = 27; return(false);
 	}
 	return(true);
 }

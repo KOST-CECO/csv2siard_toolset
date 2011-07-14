@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="_torque2siard.xsl"?>
-<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
+<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_gebaeude">
 		<option key="folder" value="table0"/>
 		<option key="file" value="N:/KOST/Projekte/Transferprojekt/4_CSV_2_SIARD/csvdata/gv_gebaeude.dat"/>

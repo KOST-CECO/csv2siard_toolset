@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
-global $prg_option, $wdir, $prgdir, $torqueschema;
+global $prg_option, $wdir, $prgdir, $torque_schema;
 
 // Create CSV file list
 	$file_arr = array();
@@ -29,7 +29,7 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 	closedir($dirhandle);
 	asort($file_arr);
 	if (count($file_arr) == 0) {
-		echo "No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"; exit(-1);
+		echo "No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"; exit(2);
 	}
 	
 	// Create column list for each file
@@ -39,7 +39,7 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 	while (list($name, $file) = each($file_arr)) {
 		$csvhandle = fopen($file, "r");
 		if(!$csvhandle) {
-			echo "Could not read CSV file $file\n"; exit(-1);
+			echo "Could not read CSV file $file\n"; exit(2);
 		}
 		// Read first line to detect columns
 		if (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
@@ -65,7 +65,7 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 	$dbname = basename($prg_option['CSV_FOLDER']);
 	
 	$xmldata = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n";
-	$xmldata = $xmldata . "<database name=\"$dbname\" xmlns=\"http://db.apache.org/torque/4.0/templates/database\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd\">\n";
+	$xmldata = $xmldata . "<database name=\"$dbname\" xmlns=\"http://db.apache.org/torque/4.0/templates/database\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd\">\n";
 	reset($csv_arr);
 	while (list($name, $columns) = each($csv_arr)) {
 		$xmldata = $xmldata . "\t<table name=\"$name\">\n";
@@ -80,12 +80,15 @@ global $prg_option, $wdir, $prgdir, $torqueschema;
 
 	// write database description no_db_model.xml
 	$dbmodel = "$wdir/no_db_model.xml";
-	file_put_contents("$dbmodel", utf8_encode($xmldata));
+	if (!file_put_contents("$dbmodel", utf8_encode($xmldata))) {
+		echo "Could not write database description $dbmodel\n"; $prg_option['ERR'] = 8; return;
+	}
+
 	$prg_option['DB_MODEL'] = "$dbmodel";
 	
 	// validate database description no_db_model.xml according to torque v4.0
-	if (!validateXML("$prgdir/$torqueschema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
-		exit($prg_option['ERR']);
+	if (!validateXML("$prgdir/$torque_schema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {
+		exit(16);
 	}
 
 	// write console message

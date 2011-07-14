@@ -68,10 +68,10 @@ global $prg_option, $prgdir;
 
 	// check for CSV file and open it for reading
 	$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
-	setTableOption($table, 'file', $csvfile);
+	setTableOption($table, 'localfile', $csvfile);
 
 	if(!is_file($csvfile)) {
-		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = -1; return;
+		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = 2; return;
 	}
 	
 	// detect encoding with GNU file-5.03
@@ -81,14 +81,14 @@ global $prg_option, $prgdir;
 	
 	$csvhandle = fopen($csvfile, "r");
 	if(!$csvhandle) {
-		echo "Could not read CSV file $csvfile\n"; $prg_option['ERR'] = -1; return;
+		echo "Could not read CSV file $csvfile\n"; $prg_option['ERR'] = 2; return;
 	}
-	// open SIARD file for writing
+	// open SIARD table XML file for writing
 	$tablefolder = getTableOption($table, 'folder');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardhandle = fopen($siardfile, "w");
 	if(!$siardhandle) {
-		echo "Could not open SIARD xml file $siardfile\n"; $prg_option['ERR'] = -1; return;
+		echo "Could not write SIARD table XML file $siardfile\n"; $prg_option['ERR'] = 8; return;
 	}
 	// write SIARD file XML header
 	writeSIARDHeader($siardhandle, $tablefolder);
@@ -100,7 +100,7 @@ global $prg_option, $prgdir;
 	
 	while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
 		if(count($buf) < $columcount) {
-			echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = -1;
+			echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
 		// first row contains column names
@@ -127,7 +127,7 @@ global $prg_option, $prgdir;
 	fclose($siardhandle);
 }
 // -----------------------------------------------------------------------------
-// write a SIARD Schema file
+// write a SIARD table schema file
 function creatSIARDSchema(&$table) {
 global $prg_option;
 
@@ -136,7 +136,7 @@ global $prg_option;
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	$siardhandle = fopen($siardschema, "w");
 	if(!$siardhandle) {
-		echo "Could not open SIARD schema file $siardfile\n"; $prg_option['ERR'] = -1; return;
+		echo "Could not write SIARD table schema file $siardfile\n"; $prg_option['ERR'] = 8; return;
 	}
 	
 	// write SIARD schema header
@@ -155,23 +155,24 @@ global $prg_option;
 // validate a SIARD XML file with xmllint
 function validateSIARDTable(&$table) {
 global $prgdir, $prg_option;
+//print_r($table);
 
 	$tablefolder = getTableOption($table, 'folder');
+	$tablefile = getTableOption($table, 'file');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	
-	validateXML($siardschema, $siardfile, "'$tablefolder.xml' is not a valid XML file");
+	validateXML($siardschema, $siardfile, "'$tablefile' cannot be converted to a valid XML file");
 }
 // -----------------------------------------------------------------------------
-// write SIARD XML metadata file
+// write SIARD metadata XML file
 function createSIARDMetadata(&$dbmod) {
-global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard;
+global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard, $static_torque2siard;
 
 	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/header/metadata.xsd";
 	$xmldata = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n" . ary2xml($dbmod);
-	//file_put_contents($siardmetadata, $xmldata);
 	
 	//convert torque.v4 XML datamodel to SIARD XML metadata file
 	$xh = xslt_create();
@@ -192,11 +193,15 @@ global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard;
 );
 	$arguments = array(
 		'/_xml' => $xmldata,
-		'/_xsl' => file_get_contents("$prgdir/$torque2siard")
+		// '/_xsl' => file_get_contents("$prgdir/$torque2siard")
+		'/_xsl' => $static_torque2siard
 	);
 	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments, $parameters);
 	xslt_free($xh);
-	file_put_contents($siardmetadata, $result);;
+	if (!file_put_contents($siardmetadata, $result)) {
+		echo "Could not write SIARD metadata XML file $siardmetadata\n"; $prg_option['ERR'] = 8; return;
+	}
+
 	
 	//validate SIARD XML metadata file
 	validateXML($siardschema, $siardmetadata, "'metadata.xml' is not a valid XML file");

@@ -3,9 +3,11 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
-// validate with xmllint libxml project http://xmlsoft.org/
+// Schema validation with xmllint libxml project http://xmlsoft.org/
 function validateXML($schema,$xml, $message) {
 global $prg_option, $prgdir;
+	if ($prg_option['ERR'] != 0) { return false; }
+
 	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -noout -schema '.
 									' "'.$schema.'" '.
 									' "'.$xml.'" '.
@@ -15,7 +17,7 @@ global $prg_option, $prgdir;
 		$result = file_get_contents("$xml.out");
 		$result_array = explode("\n", $result, 2);
 		echo "$message\n$result_array[0]\n";
-		$prg_option['ERR'] = -1;
+		$prg_option['ERR'] = 64;
 		@unlink("$xml.out");
 		return(false);
 	}

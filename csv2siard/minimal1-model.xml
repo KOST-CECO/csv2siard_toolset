@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database _database-torque-4-0.xsd">
+<database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_minimal1">
 		<column name="name" type="VARCHAR" size="1000" description="Personen-Suchbegriff"/>
 	</table>

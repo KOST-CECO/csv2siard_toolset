@@ -32,6 +32,7 @@ include 'c2sconvert.php';
 include 'c2sfunction.php';
 include 'c2sxml.php';
 include 'c2snodbmodel.php';
+include 'c2schema.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -43,6 +44,7 @@ $version = '0.6';		// CSV encoding ISO-8859-1 and UTF-8
 $version = '0.7';		// check CSV column names
 $version = '0.8';		// necessary exe and dll
 $version = '0.9';		// NO_DB_MODEL implementieren
+$version = '1.0';		// XSL and XSD include in program source
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
@@ -50,13 +52,28 @@ $prgname = strtolower(basename($argv[0], '.exe'));	// ProgrammName
 $prgname = basename($prgname, '.php');							// ProgrammName
 $prgdir  = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
 
-$prg_option['ERR'] = 0;															// Programm optionen
-$torqueschema   = '_database-torque-4-0.xsd';				// torque.v4 XML database schema
-$siard_schema   = '_metadata.xsd';			// XML schema defines the structure of the metadata.xml in SIARD
-$siard2html     = '_metadata.xsl';			// XS transformation: SIARD metadata.xml to xhtml (no function)
-$torque2siard   = '_torque2siard.xsl';	//convert torque.v4 XML datamodel to SIARD XML metadata file
-$prefs          = 'preferences.prefs';	// Preference file
-$dbmod = array();												//nested array to hold the database model
+$prg_option['ERR'] = 0;										// Programm optionen
+$torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema
+$siard_schema   = '_metadata-1.0.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
+$siard2html     = '_metadata-1.0.xsl';		// XS transformation: SIARD metadata.xml to xhtml (no function)
+$torque2siard   = '_torque2siard.xsl';		//convert torque.v4 XML datamodel to SIARD XML metadata file
+$prefs          = 'preferences.prefs';		// Preference file
+$dbmod = array();													//nested array to hold the database model
+
+// Error code meaning
+//ERR 1: Misssing or false preferences
+//ERR 2: CSV file not found
+//ERR 2: Could not read CSV file
+//ERR 2: No CSV files found with specified file mask
+//ERR 4: Incorrect CSV on line N
+//ERR 4: To many columns in CSV file
+//ERR 8: Could not write SIARD table XML file
+//ERR 8: Could not write SIARD table schema file
+//ERR 8: Could not write SIARD metadata XML file
+//ERR 16: Not a valid database schema according to Torque v4.0
+//ERR 16: Could not write database description no_db_model.xml
+//ERR 32: Column in database model is missing or not confirm with CSV file
+//ERR 64: XML Schema Validation failed
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]
@@ -67,27 +84,35 @@ $usage ="
 
      version :: $version
 ";
+
+$disclaimer = "
+$prgname v $version, Copyright (C) 2011 Martin Kaiser (KOST-CECO)
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under certain conditions; see GPL-2.0_COPYING.txt for details.
+";
+
 // MAIN ------------------------------------------------------------------------
 checkUtils();
+
 readCommandLine();
+
 readPreferences();
+
 checkTMP();
+
 checkProgramOptions();
+
+printDisclaimer();
+
 if ($prg_option['DB_MODEL'] == 'NO_DB_MODEL') {
 	// create database model from scratch
 	createDBModel();
+	echo "\n";
 }
 
 loadDatabaseModell($dbmod);
-creatSIARDFolder($dbmod);
 
-// Print options
-	echo "Program options:\n";
-reset($prg_option);
-while (list($key, $val) = each($prg_option)) {
-	$val = ansi2ascii(utf8_decode($val));
-	echo "  [$key] => $val\n";
-}
+creatSIARDFolder($dbmod);
 
 $dbt = &$dbmod['database']['_c']['table'];
 // only one table
@@ -112,11 +137,23 @@ createSIARDFile();
 
 if ($prg_option['ERR'] == 0) {
 	echo "\nSIARD file created: $prg_option[SIARD_FILE]\n";
-	exit(0);
+	echo "Conversion completed\n";
 }
 else {
 	echo "\nNo SIARD file created\n";
+	echo "Conversion aborted\n";
 	@unlink($prg_option['SIARD_FILE']);
-	exit($prg_option['ERR']);
 }
+
+// clean up tmp-directory, remove PHP program-files
+$tmpdir = sys_get_temp_dir();
+$handle = opendir($tmpdir);
+while (false !== ($file = readdir($handle))) {
+	if (preg_match('/^php.+\.tmp$/', $file)) {
+		//@unlink("$tmpdir/$file");
+	}
+}
+closedir($handle);
+
+exit($prg_option['ERR']);
 ?>

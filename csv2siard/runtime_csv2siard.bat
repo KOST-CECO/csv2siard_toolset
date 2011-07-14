@@ -38,10 +38,14 @@ COPY magic.mgc %RUNTIME%
 COPY magic1.dll %RUNTIME%
 COPY regex2.dll %RUNTIME%
 
-COPY _*.x* %RUNTIME%
+COPY _*.xsd %RUNTIME%
+COPY _*.xsl %RUNTIME%
+COPY database-torque-4-0.xsd %RUNTIME%
 
 COPY preferences.prefs %RUNTIME%
 COPY gv-model-v8.xml %RUNTIME%
+
+COPY GPL-2.0_COPYING.txt %RUNTIME%
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%
