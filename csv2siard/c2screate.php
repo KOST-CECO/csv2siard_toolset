@@ -81,6 +81,8 @@ function processDatabaseModell(&$dbm) {
 			validateSIARDTable($dbm[$dbname][$tablename], $tablename);
 		}
 	}
+	reset($dbm);
+	createSIARDMetadata($dbm);
 }
 // -----------------------------------------------------------------------------
 // read a CSV file and write a SIARD table
@@ -181,5 +183,24 @@ global $prgdir, $prg_option;
 		echo "$tablefolder.xml is not a valid XML file:\n$result_array[0]\n";
 	}
 	unlink("$tablefolder.out");
+}
+// -----------------------------------------------------------------------------
+// write  SIARD XML metadata file
+function createSIARDMetadata(&$dbm) {
+global $prgdir, $prg_option;
+
+	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
+	$siardschema = "$prg_option[SIARD_DIR]/header/metadata.xsd";
+	$xmldump = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n" . array2xml($dbm);
+	file_put_contents($siardmetadata, $xmldump);
+	return;
+	
+	exec("$prgdir/xmllint.exe -noout -schema $siardschema $siardheader 2>metadata.out", $result, $retval);
+	if ($retval) {
+		$result = file_get_contents("metadata.out");
+		$result_array = explode("\n", $result, 2);
+		echo "metadata.xml is not a valid XML file:\n$result_array[0]\n";
+	}
+	unlink("metadata.out");
 }
 ?>

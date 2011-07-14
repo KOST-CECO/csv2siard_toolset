@@ -106,4 +106,18 @@ function writeSchemacontent($siardhandle, &$table){
 	}
 	return;
 }
+// -----------------------------------------------------------------------------
+// convert array to xml string
+function array2xml(&$xmlary){
+	$xml = '';
+	if (is_array($xmlary)) {
+		while (list($name, $ary) = each($xmlary)) {
+			$xml = $xml . "<$name>" . array2xml($ary) . "</$name>\n";
+		}
+	}
+	else {
+		$xml = $xmlary;
+	}
+	return($xml);
+}
 ?>
