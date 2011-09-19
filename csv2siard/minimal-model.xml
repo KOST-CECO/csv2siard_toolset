@@ -3,7 +3,7 @@
 	<table name="gv_minimal1" description="N:/KOST/Projekte/Transferprojekt/4_csv &amp; siärd/csvtest/gv_minimal1.dat">
 		<column name="id" type="INTEGER"/>
 		<column name="name" type="VARCHAR" size="24"/>
-		<column name="column2" type="DECIMAL" description="Original column name: 'geschäft'"/>
+		<column name="price" type="DECIMAL" description="Original column name: 'geschäft'"/>
 		<column name="date" type="DATE"/>
 		<column name="calc" type="FLOAT"/>
 	</table>

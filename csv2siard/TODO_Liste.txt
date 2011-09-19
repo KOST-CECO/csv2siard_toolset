@@ -1,23 +1,27 @@
 csv2siard TODO Liste
---------------------
+++++++++++++++++++++
 
 - Leerzeichen in Feldnamen ersetzen
 
-- SUB (dec 026 hex 0xA1) als Dateiende: (Dateiendezeichen (EOF, End of File) für Textdateien unter CP/M mangels bytegenauer Dateilängen, war anfänglich, obwohl unnötig, auch unter DOS üblich.)
+- SUB (dec 026 hex 0xA1) als Dateiende: Dateiendezeichen (EOF, End of File) 
+  für Textdateien unter CP/M mangels bytegenauer Dateilängen, war anfänglich, obwohl unnötig, auch unter DOS üblich
 
-- Binärdaten richtig übernehmen (insb. BLOB)
+- SIARD Signatur Anforderungen erfüllen
+
+- Checksumme über SIARD Datei berechnen
 
 - DATE Konvertierung/Validierung besser lösen
+
+
+Optional
+++++++++
+- Binärdaten richtig übernehmen (base64 codiert)
 
 - Schema Validator in Programm integrieren (statt xmllint.exe)
 
 - ZIP Datei Erzeugen in Programm integrieren (statt 7z.exe)
 
-- Datenbank Constraints (Zwangsbedingungen) überprüfen
-
-- SIARD Signatur Anforderungen erfüllen
-
-- Checksumme über SIARD Datei berechnen
+- Datenbank Constraints überprüfen
 
 - PHP zu C++ Konvertierung mit HipHop
 

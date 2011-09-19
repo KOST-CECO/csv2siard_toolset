@@ -1,9 +1,10 @@
 [Config]
 Relative path=1
-Compilator.FileName=N:\KOST\Projekte\Transferprojekt\4_csv 2 siard\compile_csv2siard.bat
-Compilator.DefaultDir=N:\KOST\Projekte\Transferprojekt\4_csv 2 siard
+Compilator.FileName=N:\KOST\Projekte\Transferprojekt\4_csv2siard\compile_csv2siard.bat
+Compilator.Log=N:\KOST\Projekte\Transferprojekt\4_csv2siard\compile_csv2siard.log
+Compilator.DefaultDir=N:\KOST\Projekte\Transferprojekt\4_csv2siard\
 Compilator.SaveAll=1
-Compilator.Capture=1
+Compilator.Capture=0
 Compilator.HideOutput=0
 DefaultDir=N:\KOST\Projekte\Transferprojekt\4_csv2siard
 DefaultCPIndex=0
@@ -16,9 +17,9 @@ csv2siard
 		csv2siard.bcp
 		compile_csv2siard.bat
 		runtime_csv2siard.bat
-		backup_csv2siard.bat
 		run.bat
 		preferences.prefs
+		php.ini
 	+source
 		csv2siard.php
 		c2sconfig.php
@@ -30,14 +31,10 @@ csv2siard
 		c2schema.php
 		c2stimedate.php
 [Open project files]
-0=Neu1.txt
-1=H:\gegl-0.0\plug-ins\Makefile
+0=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=H:\gegl-0.0\plug-ins\Makefile
-[Neu1.txt]
+Selected=csv2siard.php
+[csv2siard.php]
 TopLine=1
 Caret=1,1
-[H:\gegl-0.0\plug-ins\Makefile]
-TopLine=1
-Caret=11,9

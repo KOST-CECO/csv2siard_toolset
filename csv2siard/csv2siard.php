@@ -51,6 +51,7 @@ $version = '1.2';		// check column type for NO_DB_MODEL
 $version = '1.3';		// correct field type setting
 $version = '1.4';		// fix in NO_DB_MODEL and MS-Excel flavour
 $version = '1.5';		// DBMS Naming restriction with NO_DB_MODEL
+$version = '1.6';		// 
 
 // global settings -------------------------------------------------------------
 $wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis

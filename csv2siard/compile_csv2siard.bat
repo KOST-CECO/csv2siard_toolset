@@ -1,9 +1,6 @@
 @ECHO OFF
 SETLOCAL
 
-REM backup ---------------------------------------------------------------------
-CALL backup_csv2siard.bat
-
 REM settings -------------------------------------------------------------------
 SET JAVA_HOME=C:\Software\jdk1.6.0_01
 SET UNIX_HOME=C:\Software\PCUnixUtils
@@ -18,6 +15,12 @@ DEL main.php
 @ECHO ON
 DEL /Q test.siard
 CALL csv2siard.exe
+
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 DEL /Q test.siard
+
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
+
+if "%errorlevel%"=="0" (
+	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Documents and Settings\u1942\applications\siard suite\bin\SiardEdit.jar"
+)
