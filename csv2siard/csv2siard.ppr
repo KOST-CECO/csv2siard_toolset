@@ -20,7 +20,7 @@ csv2siard
 		run.bat
 		preferences.prefs
 		php.ini
-	+source
+	-source
 		csv2siard.php
 		c2sconfig.php
 		c2sxml.php
@@ -30,11 +30,25 @@ csv2siard
 		c2snodbmodel.php
 		c2schema.php
 		c2stimedate.php
+	+datamodel
+		gv-model-v8.xml
+		minimal-model.xml
+		minimal1-model.xml
+		minimal2-model.xml
+		table1-model.xml
+		table2-model.xml
+		test-model.xml
+		database-torque-4-0.xsd
+		metadata.xsd
 [Open project files]
-0=csv2siard.php
+0=..\9_Testdaten\csvtest\gv_minimal1.dat
+1=compile_csv2siard.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=csv2siard.php
-[csv2siard.php]
+Selected=..\9_Testdaten\csvtest\gv_minimal1.dat
+[..\9_Testdaten\csvtest\gv_minimal1.dat]
 TopLine=1
-Caret=1,1
+Caret=16,3
+[compile_csv2siard.bat]
+TopLine=1
+Caret=131,25

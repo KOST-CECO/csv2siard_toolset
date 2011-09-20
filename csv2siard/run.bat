@@ -35,4 +35,7 @@ del /q test.siard
 REM csv2siard.exe NO_DB_MODEL  ../9_Testdaten/csvdata_TG test.siard
 del /q test.siard
 
+csv2siard.exe NO_DB_MODEL  ../9_Testdaten/test_StAZH test.siard
+del /q test.siard
+
 echo --------- %time%

@@ -79,6 +79,8 @@ global $prg_option;
 			$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
 			$buf = trim($buf);
+			// file with EOF = SUB (dec 026 hex 0xA1)
+			$buf = rtrim($buf, "\x1A");
 			$b = $buf;
 			switch ($type) {
 				case "TINYINT":

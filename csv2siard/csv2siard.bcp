@@ -19,3 +19,4 @@ embed c2stimedate.php
 embed php.ini
 
 extension php_xslt.dll
+extension php_mime_magic.dll

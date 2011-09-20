@@ -42,6 +42,7 @@ COPY 7z.dll %RUNTIME%\bin
 
 COPY file.exe %RUNTIME%\bin
 COPY magic.mgc %RUNTIME%\bin
+COPY magic.mime %RUNTIME%\bin
 COPY magic1.dll %RUNTIME%\bin
 COPY regex2.dll %RUNTIME%\bin
 

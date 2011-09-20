@@ -1,12 +1,11 @@
 csv2siard TODO Liste
 ++++++++++++++++++++
 
-- Leerzeichen in Feldnamen ersetzen
-
 - SUB (dec 026 hex 0xA1) als Dateiende: Dateiendezeichen (EOF, End of File) 
   für Textdateien unter CP/M mangels bytegenauer Dateilängen, war anfänglich, obwohl unnötig, auch unter DOS üblich
 
-- SIARD Signatur Anforderungen erfüllen
+- DROID SIARD Signatur Anforderungen erfüllen: 
+  xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" an der richtigen Stelle
 
 - Checksumme über SIARD Datei berechnen
 

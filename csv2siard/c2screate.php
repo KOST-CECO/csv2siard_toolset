@@ -117,7 +117,11 @@ global $prg_option, $prgdir;
 	$columcount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
 	
 	while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
-		if(count($buf) < $columcount) {
+		// file with EOF = SUB (dec 026 hex 0xA1)
+		if(count($buf) == 1 and ord($buf[0]) == 26) {
+			break;
+		}
+		elseif(count($buf) < $columcount) {
 			if ($prg_option['CHECK_COLUMN']) {
 				echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
 			}
@@ -177,7 +181,7 @@ function validateSIARDTable(&$table) {
 global $prgdir, $prg_option;
 
 	$tablefolder = getTableOption($table, 'folder');
-	$tablefile = getTableOption($table, 'file');
+	$tablefile = getTableOption($table, 'localfile');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	
