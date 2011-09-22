@@ -12,15 +12,19 @@ GREP -v "dl(" csv2siard.php > main.php
 BAMCOMPILE.EXE csv2siard.bcp
 DEL main.php
 
+REM check syntax ---------------------------------------------------------------
+CALL csv2siard.exe
+IF %ERRORLEVEL% GTR 1 (
+	EXIT /B
+)
+REM test function --------------------------------------------------------------
 @ECHO ON
 DEL /Q test.siard
-CALL csv2siard.exe
-
 CALL csv2siard.exe table2-model.xml csvdata test.siard
+
 DEL /Q test.siard
-
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
-
-if "%errorlevel%"=="0" (
+@ECHO OFF
+if %ERRORLEVEL% == 0 (
 	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Documents and Settings\u1942\applications\siard suite\bin\SiardEdit.jar"
 )

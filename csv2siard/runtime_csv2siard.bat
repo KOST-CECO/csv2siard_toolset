@@ -13,14 +13,7 @@ SET RUNTIME=.\csv2siard_v.%VERSION%
 
 REM copy -----------------------------------------------------------------------
 ECHO .
-DEL /Q %RUNTIME%\bin\*
-DEL /Q %RUNTIME%\source\*
-DEL /Q %RUNTIME%\*
-DEL /Q %RUNTIME%.zip
-RMDIR %RUNTIME%\bin
-RMDIR %RUNTIME%\source
-RMDIR %RUNTIME%\csvdata
-RMDIR %RUNTIME%
+RMDIR /S /Q %RUNTIME%
 
 MKDIR %RUNTIME%
 MKDIR %RUNTIME%\bin
@@ -42,7 +35,7 @@ COPY 7z.dll %RUNTIME%\bin
 
 COPY file.exe %RUNTIME%\bin
 COPY magic.mgc %RUNTIME%\bin
-COPY magic.mime %RUNTIME%\bin
+REM COPY magic.mime %RUNTIME%\bin
 COPY magic1.dll %RUNTIME%\bin
 COPY regex2.dll %RUNTIME%\bin
 
@@ -67,6 +60,8 @@ SET PATH=
 @ECHO ON
 CALL csv2siard.exe
 CALL csv2siard.exe ..\..\table2-model.xml ..\..\csvdata ..\..\test.siard
+DEL /Q ..\..\test.siard
+CALL csv2siard.exe no_db_model ..\..\csvdata ..\..\test.siard
 
 @ECHO OFF
 REM zip ------------------------------------------------------------------------

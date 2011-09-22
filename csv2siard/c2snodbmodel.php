@@ -13,19 +13,9 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 			if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
 				$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
 				if ($name != '') {
-					// detect mime type with GNU file-5.03
+					// detect mime-type with GNU file-5.03
 					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
-					$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-type -bm "'.$prgdir.'/magic.mgc" '.'"'.$csvfile.'"';
-					$mime_type = exec($commandline);
-					// detect text/plain with EOF (SUB dec 026 hex 0xA1)
-					if ($mime_type == 'application/octet-stream' ) {
-						$fp = fopen($csvfile,'rb');
-						fseek($fp, -1, SEEK_END);
-						if (ord(fgetc($fp)) == 26) {
-							$mime_type = mime_content_type($csvfile);
-						}
-						fclose($fp);
-					}
+					$mime_type = detectMimeType($csvfile);
 					if ($mime_type == 'text/plain' ) {
 						// check DBMS name conformity
 						if (testDBMSNaming($name) === true){

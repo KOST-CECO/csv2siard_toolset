@@ -26,7 +26,7 @@ error_reporting(E_ALL);
 // kompilieren mit bamcompile.exe -c -e:php_xslt.dll  programm.php
 // Achtung dlls in der kompilierten Version nicht mit 'dl' laden
 dl('php_xslt.dll');
-dl('php_mime_magic.dll');
+// dl('php_mime_magic.dll');
 include 'c2sconfig.php';
 include 'c2screate.php';
 include 'c2sconvert.php';

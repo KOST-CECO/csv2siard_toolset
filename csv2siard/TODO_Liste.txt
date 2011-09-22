@@ -4,6 +4,8 @@ csv2siard TODO Liste
 - SUB (dec 026 hex 0xA1) als Dateiende: Dateiendezeichen (EOF, End of File) 
   für Textdateien unter CP/M mangels bytegenauer Dateilängen, war anfänglich, obwohl unnötig, auch unter DOS üblich
 
+- <producerApplication> z.B. „SiardFromDb 1.26 Program to store database content in a .siard file”. 
+
 - DROID SIARD Signatur Anforderungen erfüllen: 
   xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" an der richtigen Stelle
 

@@ -3,6 +3,42 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
+// detect mime-type and mime-encoding with GNU file-5.03
+// return type or encoding according to $type [TYPE or ENCODING, default is TYPE]
+function detectMimeType($file, $type = 'TYPE') {
+global $prg_option, $prgdir;
+$type = ($type == 'TYPE') ? '--mime-type' : '--mime-encoding';
+
+	$cmdline = 'CALL "'.$prgdir.'/file.exe" '.$type.' -bm "'.$prgdir.'/magic.mgc" '.'"'.$file.'"';
+	$mime_type = exec($cmdline);
+	
+	// may be the file ends with EOF = SUB (dec 026 hex 0xA1)
+	if ($mime_type == 'application/octet-stream' or $mime_type == 'binary') {
+		$fp = fopen($file,'rb');
+		fseek($fp, -1, SEEK_END);
+		// copy file without SUB into tmpfile
+		if (ord(fgetc($fp)) == 26) {
+			$tmpfile = tempnam($prg_option['TMPDIR'] , 'sub');
+			$tfp = fopen($tmpfile,'wb');
+			rewind($fp);
+			while (!feof($fp)) {
+				$content = fread($fp, 20);
+				$content = (feof($fp)) ? rtrim($content, "\x1A") : $content;
+				fwrite($tfp, $content);
+			}
+			fclose($tfp);
+			fclose($fp);
+			// get mime-type of tmpfile with GNU file-5.03
+			$cmdline = 'CALL "'.$prgdir.'/file.exe" '.$type.' -bm "'.$prgdir.'/magic.mgc" '.'"'.$tmpfile.'"';
+			$mime_type = exec($cmdline);
+			unlink($tmpfile);
+			return($mime_type);
+		}
+		fclose($fp);
+	}
+	return($mime_type);
+}
+// -----------------------------------------------------------------------------
 // US-ASCII or digit, first character must be a letter, case insensitive, max 30 character
 function testDBMSNaming($buf) {
 	$ascii = str_split('012345679ABCDEFGHIJKLMNOPQRSTUVWXYZ_');

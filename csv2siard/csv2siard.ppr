@@ -20,7 +20,7 @@ csv2siard
 		run.bat
 		preferences.prefs
 		php.ini
-	-source
+	+source
 		csv2siard.php
 		c2sconfig.php
 		c2sxml.php
@@ -41,14 +41,18 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=..\9_Testdaten\csvtest\gv_minimal1.dat
-1=compile_csv2siard.bat
+0=c2screate.php
+1=c2snodbmodel.php
+2=c2sfunction.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=..\9_Testdaten\csvtest\gv_minimal1.dat
-[..\9_Testdaten\csvtest\gv_minimal1.dat]
+Selected=c2sfunction.php
+[c2screate.php]
+TopLine=76
+Caret=45,99
+[c2snodbmodel.php]
 TopLine=1
-Caret=16,3
-[compile_csv2siard.bat]
+Caret=26,22
+[c2sfunction.php]
 TopLine=1
-Caret=131,25
+Caret=83,7
