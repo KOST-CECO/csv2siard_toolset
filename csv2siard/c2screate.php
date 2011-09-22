@@ -192,7 +192,7 @@ global $prgdir, $prg_option;
 // -----------------------------------------------------------------------------
 // write SIARD metadata XML file
 function createSIARDMetadata(&$dbmod) {
-global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard, $static_torque2siard;
+global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $static_torque2siard;
 
 	//write torque.v4 XML datamodel
 	$siardmetadata = "$prg_option[SIARD_DIR]/header/metadata.xml";
@@ -207,7 +207,7 @@ global $_SERVER, $prgdir, $prgname, $prg_option, $torque2siard, $static_torque2s
 		'archiverContact'     => $prg_option['CONTACT'],
 		'dataOwner'           => $prg_option['OWNER'],
 		'dataOriginTimespan'  => $prg_option['TIMESPAN'],
-		'producerApplication' => $prgname,
+		'producerApplication' => "$prgname $version - Convert multiple CSV files to siard file",
 		'archivalDate'        => date("Y-m-d"),
 		'messageDigest'       => 'MD5',
 		'clientMachine'       => $_SERVER['COMPUTERNAME'],

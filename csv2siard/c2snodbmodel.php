@@ -15,7 +15,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 				if ($name != '') {
 					// detect mime-type with GNU file-5.03
 					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
-					$mime_type = detectMimeType($csvfile);
+					$mime_type = detectMimeType($csvfile, 'TYPE');
 					if ($mime_type == 'text/plain' ) {
 						// check DBMS name conformity
 						if (testDBMSNaming($name) === true){
@@ -44,8 +44,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	reset($file_arr);
 	while (list($name, $file) = each($file_arr)) {
 		// detect encoding with GNU file-5.03
-		$commandline = 'CALL "'.$prgdir.'/file.exe" --mime-encoding -bm "'.$prgdir.'/magic.mgc" '.'"'.$file.'"';
-		$encoding_arr[$name] = strtoupper(exec($commandline));
+		$encoding_arr[$name] = strtoupper(detectMimeType($file, 'ENCODING'));
 		if ($encoding_arr[$name] != $prg_option['CHARSET']) {
 			$fl = ansi2ascii($file);
 			echo "CSV file $fl does not conform to $prg_option[CHARSET] encoding\n";
