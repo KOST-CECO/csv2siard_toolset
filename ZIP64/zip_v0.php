@@ -1,6 +1,6 @@
 <?
 // Report all PHP errors
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 // Global variables
 
@@ -87,10 +87,10 @@ function packDate($ts) {
      write fnd ->get_End_of_entral_directory_record() to file.zip
 */
 // STATIC class variables (not supportet in PHP 4)
-$_entries_size = array(); // Filename and size of Central_file_header
-$_payload_size = array(); // Filename and size of Local_file_header + actual file size
+$_entries_size = array(); // Filename -> size of Central_file_header
+$_payload_size = array(); // Filename -> size of Local_file_header + actual file size
 
-class directoryEntry {
+class directoryEntry{
 	var $struct;	// Structure holding Local File Header
 	
 	function directoryEntry($filename) {
@@ -199,57 +199,21 @@ class directoryEnd extends directoryEntry {
 }
 
 // MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Global
-$ziparr = array();
 
-function addFolder($folder) {
-global $fp, $ziparr;
+$fp = fopen("1data.zip" , 'wb');
 
-	// loop through folder
-	$dh = opendir($folder);
-	while (($file = readdir($dh)) !== false) {
-		if ($file != "." && $file != "..") {
-			if (is_dir("$folder/$file")) {
-				addFolder("$folder/$file");
-			}
-			else {
-				addFile("$folder/$file");
-			}
-		}
-	}
-	closedir($dh);
+	$fn2 = new directoryEntry("1data/test1.dat");
+	fwrite($fp, $fn2->get_Local_file_header());
+	fwrite($fp, file_get_contents("1data/test1.dat"));
 	
-	// Write folder to ZIP file
-	echo "addFolder: $folder\n";
-	$fn = new directoryEntry($folder);
-	fwrite($fp, $fn->get_Local_file_header());
-	$ziparr[] = $fn;
-	
+	$fn1 = new directoryEntry("1data/");
+	fwrite($fp, $fn1->get_Local_file_header());
 
-}
+	fwrite($fp, $fn2->get_Central_directory_entry());
+	fwrite($fp, $fn1->get_Central_directory_entry());
 
-function addFile($file) {
-global $fp, $ziparr;
-echo "addFile:   $file\n";
-	$fn = new directoryEntry($file);
-	fwrite($fp, $fn->get_Local_file_header());
-	$ziparr[] = $fn;
-	fwrite($fp, file_get_contents($file));
-}
-
-// -----------------------------------------------------------------------------
-if (!@is_dir($argv[1])) { 
-	echo "no directory spezifide, usage: zip.exe <directory>\n"; exit(-1);
-}
-$fp = fopen("$argv[1].zip" , 'wb');
-addFolder($argv[1]);
-
-reset($ziparr);
-foreach ($ziparr as $zr) {
-	fwrite($fp, $zr->get_Central_directory_entry());
-}
-$fnd = new directoryEnd();
-fwrite($fp, $fnd->get_End_of_entral_directory_record());
+	$fnd = new directoryEnd();
+	fwrite($fp, $fnd->get_End_of_entral_directory_record());
 
 fclose($fp);
 ?>
