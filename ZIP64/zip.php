@@ -1,10 +1,9 @@
 <?
 // Report all PHP errors
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
-// Global or static variables (not supportet in PHP 4)
-$_entries_size = array(); // Filename and size of Central_file_header
-$_payload_size = array(); // Filename and size of Local_file_header + actual file size
+// Global variables
+
 
 /* MS-DOS related filesystems store file attributes (archive, directory, hidden, read-only, system and volume) in one byte
    http://en.wikipedia.org/wiki/File_Allocation_Table#Directory_table
@@ -69,7 +68,24 @@ function packDate($ts) {
 	return sprintf('%c%c', $m[0], $m[1]);
 }
 
-//------------------------------------------------------------------------------
+/* A directoryEntry object represents a ZIP Local file header for a specific file as well as an entry for that file in the ZIP Central directory.
+   An object of the derived class directoryEnd represents the End of central directory.
+   Size and Offset in ZIP file are kept in two STATIC class variables.
+   The getter function to the classes returns the binary header or directory entry as string which can be written in the newly created ZIP file.
+   Pseudo usage: 
+     fn1 = new directoryEntry(filename1)
+     write fn1->get_Local_file_header() to file.zip
+     write filename1 to file.zip
+     fn2 = new directoryEntry(filename2)
+     write fn2->get_Local_file_header() to file.zip
+     write filename2 to file.zip
+            . . .
+     write fn1->get_Central_directory_entry() to file.zip
+     write fn2->get_Central_directory_entry() to file.zip
+            . . .
+     fnd = new directoryEnd()
+     write fnd ->get_End_of_entral_directory_record() to file.zip
+*/
 // STATIC class variables (not supportet in PHP 4)
 $_entries_size = array(); // Filename and size of Central_file_header
 $_payload_size = array(); // Filename and size of Local_file_header + actual file size
@@ -152,7 +168,7 @@ class directoryEntry {
 	}
 }
 
-class directoryEnd {
+class directoryEnd extends directoryEntry {
 	var $struct;	// Structure holding Local File Header
 	
 	function directoryEnd() {
@@ -182,21 +198,22 @@ class directoryEnd {
 	}
 }
 
-// MAIN ------------------------------------------------------------------------
+// MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $fname = "test2.dat";
-$dirEntry = new directoryEntry($fname);
 
 $fp = fopen("out.zip" , 'wb');
-	fwrite($fp, $dirEntry->get_Local_file_header());
-	fwrite($fp, file_get_contents($fname));
-	fwrite($fp, $dirEntry->get_Central_directory_entry());
 
-	$dirEnd = new directoryEnd($fname);
-	fwrite($fp, $dirEnd->get_End_of_entral_directory_record());
+	$fn1 = new directoryEntry($fname);
+	fwrite($fp, $fn1->get_Local_file_header());
+	fwrite($fp, file_get_contents($fname));
+	
+	fwrite($fp, $fn1->get_Central_directory_entry());
+
+	$fnd = new directoryEnd();
+	fwrite($fp, $fnd->get_End_of_entral_directory_record());
+
 fclose($fp);
 
-print_r($_entries_size);
-print_r($_payload_size);
-system("hexdump.exe out.zip");
-system("hexdump.exe out.zip > out.zip.hex");
+// system("hexdump.exe out.zip");
+// system("hexdump.exe out.zip > out.zip.hex");
 ?>
