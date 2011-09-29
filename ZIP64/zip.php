@@ -94,6 +94,7 @@ class directoryEntry {
 	var $struct;	// Structure holding Local File Header
 	
 	function directoryEntry($filename) {
+	global $_entries_size, $_payload_size;
 		$this->struct['Central_file_header_signature'] = pack("V", 0x02014b50);
 		$this->struct['Local_file_header_signature']   = pack("V", 0x04034b50);
 		$this->struct['Version_made_by']               = pack("v", 19);
@@ -114,7 +115,7 @@ class directoryEntry {
 		$this->struct['Disk_number_start']             = pack("v", 0);
 		$this->struct['Internal_file_attributes']      = pack("v", 0);
 		$this->struct['External_file_attributes']      = pack("V", packAttribute($filename));
-		$this->struct['Relative_offset_of_local_header'] = pack("V", 0);
+		$this->struct['Relative_offset_of_local_header'] = pack("V", array_sum($_payload_size));
 		$this->struct['Filename']                      = $filename;
 		$this->struct['Extra_field']                   = '';
 		$this->struct['File_comment']                  = '';
@@ -220,8 +221,8 @@ global $fp, $ziparr;
 	closedir($dh);
 	
 	// Write folder to ZIP file
-	echo "addFolder: $folder\n";
-	$fn = new directoryEntry($folder);
+	echo "addFolder: $folder/\n";
+	$fn = new directoryEntry("$folder/");
 	fwrite($fp, $fn->get_Local_file_header());
 	$ziparr[] = $fn;
 	
@@ -252,4 +253,6 @@ $fnd = new directoryEnd();
 fwrite($fp, $fnd->get_End_of_entral_directory_record());
 
 fclose($fp);
+print_r($_entries_size);
+print_r($_payload_size);
 ?>

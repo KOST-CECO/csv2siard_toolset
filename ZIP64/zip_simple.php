@@ -202,15 +202,15 @@ class directoryEnd extends directoryEntry {
 
 $fp = fopen("1data.zip" , 'wb');
 
-	$fn2 = new directoryEntry("1data/test1.dat");
-	fwrite($fp, $fn2->get_Local_file_header());
+	$fn1 = new directoryEntry("1data/test1.dat");
+	fwrite($fp, $fn1->get_Local_file_header());
 	fwrite($fp, file_get_contents("1data/test1.dat"));
 	
-	$fn1 = new directoryEntry("1data/");
-	fwrite($fp, $fn1->get_Local_file_header());
+	$fn2 = new directoryEntry("1data/");
+	fwrite($fp, $fn2->get_Local_file_header());
 
-	fwrite($fp, $fn2->get_Central_directory_entry());
 	fwrite($fp, $fn1->get_Central_directory_entry());
+	fwrite($fp, $fn2->get_Central_directory_entry());
 
 	$fnd = new directoryEnd();
 	fwrite($fp, $fnd->get_End_of_entral_directory_record());
