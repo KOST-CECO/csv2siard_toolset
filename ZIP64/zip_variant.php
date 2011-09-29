@@ -201,10 +201,10 @@ class directoryEnd extends directoryEntry {
 
 // MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Global
-$central_dir = '';
+$ziparr = array();
 
 function addFolder($folder) {
-global $fp, $central_dir;
+global $fp, $ziparr;
 
 	// loop through folder
 	$dh = opendir($folder);
@@ -224,16 +224,16 @@ global $fp, $central_dir;
 	echo "addFolder: $folder/\n";
 	$fn = new directoryEntry("$folder/");
 	fwrite($fp, $fn->get_Local_file_header());
-	$central_dir = $central_dir . $fn->get_Central_directory_entry();
+	$ziparr[] = $fn;
 }
 
 function addFile($file) {
-global $fp, $central_dir;
+global $fp, $ziparr;
 echo "addFile:   $file\n";
 	$fn = new directoryEntry($file);
 	fwrite($fp, $fn->get_Local_file_header());
+	$ziparr[] = $fn;
 	fwrite($fp, file_get_contents($file));
-	$central_dir = $central_dir . $fn->get_Central_directory_entry();
 }
 
 // -----------------------------------------------------------------------------
@@ -247,8 +247,10 @@ $startfolder = rtrim($startfolder, '/');
 $fp = fopen("$startfolder.zip" , 'wb');
 addFolder($startfolder);
 
-fwrite($fp, $central_dir);
-
+reset($ziparr);
+foreach ($ziparr as $zr) {
+	fwrite($fp, $zr->get_Central_directory_entry());
+}
 $fnd = new directoryEnd();
 fwrite($fp, $fnd->get_End_of_entral_directory_record());
 

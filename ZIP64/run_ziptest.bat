@@ -1,8 +1,16 @@
 @ECHO OFF
 SETLOCAL
 
-SET TESTZIP=1data.zip
-SET REFZIP=1dataWinZip.zip
+IF [%1]==[] (
+	ECHO usage: %0"zipfile"
+	EXIT /B
+)
+IF NOT EXIST %1 (
+	ECHO zipfile "%1" is missing
+	EXIT /B
+)
+
+SET TESTZIP=%1
 
 REM ----------------------------------------------------------------------------
 SET ORA_HOME=C:\APPS\ORACLE\ORA92\bin
@@ -15,33 +23,20 @@ ECHO +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ECHO ZIP +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 %ORA_HOME%\zip.exe -T -v %TESTZIP%
-%ORA_HOME%\zip.exe -T -v %REFZIP%
 
 @ECHO OFF
 ECHO +7Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 %UNIX_HOME%\7z.exe t %TESTZIP%
-%UNIX_HOME%\7z.exe t %REFZIP%
 
 @ECHO OFF
 ECHO UNZIP +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 %UNIX_HOME%\unzip.exe -t %TESTZIP%
-%UNIX_HOME%\unzip.exe -t %REFZIP%
 
 @ECHO OFF
 ECHO DotNet UNZIP ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 "%DOTNETZIP%\unzip.exe" -t %TESTZIP%
-"%DOTNETZIP%\unzip.exe" -t %REFZIP%
 
 %UNIX_HOME%\hexdump.exe %TESTZIP% > %TESTZIP%.hex
-%UNIX_HOME%\hexdump.exe %REFZIP% > %REFZIP%.hex
-
-@ECHO OFF
-%UNIX_HOME%\tr.exe " " "\n" < %TESTZIP%.hex > %TESTZIP%.hexline
-%UNIX_HOME%\tr.exe " " "\n" < %REFZIP%.hex > %REFZIP%.hexline
-%UNIX_HOME%\diff.exe %REFZIP%.hexline %TESTZIP%.hexline > %TESTZIP%.diff
-
-RM %TESTZIP%.hexline
-RM %REFZIP%.hexline
