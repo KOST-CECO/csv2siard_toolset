@@ -1,0 +1,14 @@
+; Bamcompile example project file
+
+mainfile DLL_test.php
+outfile DLL_test.exe
+
+compress
+;windowed
+;dontencode
+
+embed DLL_test.php
+embed php.ini
+
+extension php_w32api.dll
+
