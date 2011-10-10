@@ -1,0 +1,24 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=1
+Compilator.HideOutput=0
+DefaultDir=N:\KOST\Projekte\Transferprojekt\6_phpZIP64
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=1
+FileFormat=0
+[Project tree]
+phpZIP64
+	+batch
+		run.bat
+		run_ziptest.bat
+		run_7z-zip_test.bat
+	+source
+		zip.php
+		zip_simple.php
+		crc32.php
+		crc32_test.php
+[Open project files]
+[Selected Project Files]
+Main=zip.php

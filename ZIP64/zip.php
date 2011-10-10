@@ -93,7 +93,7 @@ class DirectoryEntry {
 	var $struct;	// Structure holding Local File Header
 	
 	function DirectoryEntry($filename) {
-	global $_entries_size, $_payload_size, $_prgdir;
+	global $_entries_size, $_payload_size;
 		$this->struct['Central_file_header_signature'] = pack("V", 0x02014b50);
 		$this->struct['Local_file_header_signature']   = pack("V", 0x04034b50);
 		$this->struct['Version_made_by']               = pack("v", 19);
@@ -105,11 +105,7 @@ class DirectoryEntry {
 		if (is_dir($filename)) { 
 			$this->struct['CRC-32']                      = pack("V", 0); }
 		else {
-			$cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
-			exec($cmdline, $result, $retval);
-			list($crc32) = split(' ', $result[0]);
-			list($crc32) = sscanf($crc32, "%x");
-			$this->struct['CRC-32']                      = pack("V", $crc32);
+			$this->struct['CRC-32']                      = pack("V", crc32_exe($filename));
 			//$this->struct['CRC-32']                      = pack("V", crc32_file($filename));
 			//$this->struct['CRC-32']                      = pack("V", crc32(file_get_contents($filename)));
 		}
@@ -209,6 +205,18 @@ class DirectoryEnd extends DirectoryEntry {
 // Global
 $_prgdir = dirname(realpath($argv[0]));				//Program directory
 $_central_dir = ''; // Holds consecutive central_directory entries
+
+// -----------------------------------------------------------------------------
+function crc32_exe($filename) {
+global $_prgdir;
+  echo '>crc32 ';
+  $cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
+  exec($cmdline, $result, $retval);
+  list($crc32) = split(' ', $result[0]);
+  list($crc32) = sscanf($crc32, "%x");
+	return($crc32);
+}
+
 // -----------------------------------------------------------------------------
 function addFolder($fp, $folder) {
 global $_central_dir;
@@ -226,7 +234,7 @@ global $_central_dir;
 	}
 	closedir($dh);
 	// Write folder to ZIP file
-	echo "  addFolder: $folder/\n";
+	echo "\n  addFolder: $folder/ ";
 	$fn = new DirectoryEntry("$folder/");
 	fwrite($fp, $fn->getLocalFileHeader());
 	$_central_dir = $_central_dir . $fn->getCentralDirectoryEntry();
@@ -234,7 +242,7 @@ global $_central_dir;
 // -----------------------------------------------------------------------------
 function addFile($fp, $file) {
 global $_central_dir;
-echo "  addFile:   $file\n";
+  echo "\n  addFile:   $file ";
 	$fn = new DirectoryEntry($file);
 	fwrite($fp, $fn->getLocalFileHeader());
 	writePayload($fp, $file);
@@ -243,10 +251,11 @@ echo "  addFile:   $file\n";
 // -----------------------------------------------------------------------------
 // Read and write payload file with max. block size (8192) into zip file
 function writePayload($fp, $file) {
+  echo '>stuff ';
 	$fh = fopen($file, 'rb');
 	$buffer = '';
 	while (!feof($fh)) {
-		$buffer = fread($fh, 8192);
+		$buffer = fread($fh, 128000);
 		fwrite($fp, $buffer);
 	}
 	fclose($fh);

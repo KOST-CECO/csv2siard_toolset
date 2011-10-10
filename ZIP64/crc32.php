@@ -38,7 +38,7 @@ function crc32_file ($filename)
 	}
 	
 	$remainder = 0xffffffff;
-	while ($data = fread($f,8192))
+	while ($data = fread($f,64000))
 	{
 		$len = strlen($data);
 		for ($i = 0; $i < $len; $i++)
