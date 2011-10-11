@@ -71,9 +71,14 @@ function crc32_exe($filename) {
 	echo '>crc32 ';
 	$cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
 	exec($cmdline, $result, $retval);
+//print_r($result);
 	list($crc32) = split(' ', $result[0]);
-	list($crc32) = sscanf($crc32, "%x");
-	return($crc32);
+	$crc = hexdec($crc32);
+	// convert to long signed: From -2'147'483'648 to 2'147'483'647 or from -(2^31) to 2^31-1
+	if ($crc > 2147483647) {
+		$crc -= 4294967296;
+	}
+	return($crc);
 }
 
 /* A ZipFile object represents the entiry ZIP file, 
@@ -102,11 +107,13 @@ $instance_flag = false;		// Flag indicating that an ZIP object is created
 // -----------------------------------------------------------------------------
 class ZipFile {
 	var $central_dir = ''; 				// Holds consecutive central_directory entries
+	var $zipfile = '';						// ZIP file name
 	var $fp_zipfile = null;				// ZIP file pointer
 	
 	function ZipFile($zipfile) {
 	global $instance_flag;
-		$this->fp_zipfile = fopen($zipfile , 'wb');
+		$this->zipfile = $zipfile;
+		$this->fp_zipfile = fopen($this->zipfile , 'wb');
 		if ($instance_flag === false) { $instance_flag = true; }
 		else { die("Only one instance of class ZipFile at the same time"); }
 	}
@@ -147,6 +154,13 @@ class ZipFile {
 			fwrite($this->fp_zipfile, $buffer);
 		}
 		fclose($fh);
+	}
+	// Close ZIP file to generate MD5 over allready written part
+	function getMD5overPayload() {
+		fclose($this->fp_zipfile);
+		$md5 = strtoupper(md5_file($this->zipfile));
+		$this->fp_zipfile = fopen($this->zipfile, 'ab');
+		return($md5);
 	}
 }
 
@@ -263,38 +277,4 @@ class DirectoryEnd extends ZipFile {
 		return($end);
 	}
 }
-
-// MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Global
-$_prgdir = dirname(realpath($argv[0]));				//Program directory
-
-
-// -----------------------------------------------------------------------------
-function walkDir($name) {
-global $ZIP;
-	if (is_dir($name)) {
-		$dh = opendir($name);
-		while (($file = readdir($dh)) !== false) {
-			if ($file != "." && $file != "..") {
-				walkDir("$name/$file");
-			}
-		}
-		closedir($dh);
-	}
-	$ZIP->addZipFile($name);
-}
-
-// -----------------------------------------------------------------------------
-if (!@is_dir($argv[1])) { 
-	echo "no directory spezifide, usage: zip.exe <directory>\n"; exit(-1);
-}
-$startfolder = str_replace('\\', '/', $argv[1]);
-$startfolder = str_replace('//', '/', $startfolder);
-$startfolder = rtrim($startfolder, '/');
-
-$ZIP = new ZipFile("$startfolder.zip");
-walkDir($startfolder);
-$ZIP->closeZipFile();
-
-exit(0);
 ?>

@@ -13,21 +13,26 @@ phpZIP64
 	+batch
 		run.bat
 		run_ziptest.bat
-		run_7z-zip_test.bat
+		run_speedtest.bat
 	+source
 		zip.php
-		zip_simple.php
 		crc32.php
 		crc32_test.php
+		siard_zip.php
+		file_zip.php
 [Open project files]
 0=zip.php
-1=crc32.php
+1=file_zip.php
+2=siard_zip.php
 [Selected Project Files]
 Main=zip.php
-Selected=zip.php
+Selected=siard_zip.php
 [zip.php]
-TopLine=76
-Caret=14,82
-[crc32.php]
+TopLine=93
+Caret=1,120
+[file_zip.php]
 TopLine=1
-Caret=27,3
+Caret=19,4
+[siard_zip.php]
+TopLine=1
+Caret=1,10
