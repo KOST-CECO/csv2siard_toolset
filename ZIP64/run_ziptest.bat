@@ -19,7 +19,7 @@ SET DOTNETZIP=N:\KOST\Dokumentation\11 Technotes\ZIP\DotNetZipUtils-v1.8
 SET PATH=%UNIX_HOME%;%ORA_HOME%;%DOTNETZIP%;%PATH%
 
 @ECHO OFF
-ECHO +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ECHO .
 ECHO ZIP +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 %ORA_HOME%\zip.exe -T -v %TESTZIP%

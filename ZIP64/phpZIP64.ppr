@@ -20,5 +20,14 @@ phpZIP64
 		crc32.php
 		crc32_test.php
 [Open project files]
+0=zip.php
+1=crc32.php
 [Selected Project Files]
 Main=zip.php
+Selected=zip.php
+[zip.php]
+TopLine=76
+Caret=14,82
+[crc32.php]
+TopLine=1
+Caret=27,3

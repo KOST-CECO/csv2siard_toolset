@@ -1,7 +1,5 @@
 <?php
 /*
-if you are looking for a fast function to hash a file, take a look at
-http://www.php.net/manual/en/function.hash-file.php
 this is crc32 file checker based on a CRC32 guide
 it have performance at ~ 625 KB/s on my 2.2GHz Turion
 far slower than hash_file('crc32b','filename.ext')

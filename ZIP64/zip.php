@@ -1,7 +1,6 @@
 <?
 // Report all PHP errors
 error_reporting(E_ALL);
-
 //include 'crc32.php';
 
 /* MS-DOS related filesystems store file attributes (archive, directory, hidden, read-only, system and volume) in one byte
@@ -26,7 +25,6 @@ function packAttribute($filename) {
 	$dosAttribute =( $_4<<4)+($_3<<3)+($_2<<2)+($_1<<1)+$_0;
 	return $dosAttribute;
 }
-
 /* Thanks to Marcin Szychowski 08-Oct-2009 01:59 
    MS-DOS related filesystems, along with ZIP files, store date and time in four bytes (time: 2 bytes, date: 2 bytes), as described in Wikipedia:
    http://en.wikipedia.org/wiki/File_Allocation_Table#Directory_table 
@@ -67,33 +65,97 @@ function packDate($ts) {
 	return sprintf('%c%c', $m[0], $m[1]);
 }
 
-/* A DirectoryEntry object represents a ZIP Local file header for a specific file as well as an entry for that file in the ZIP Central directory.
+// crc32 file checker using binary crc32sum.exe
+function crc32_exe($filename) {
+	global $_prgdir;
+	echo '>crc32 ';
+	$cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
+	exec($cmdline, $result, $retval);
+	list($crc32) = split(' ', $result[0]);
+	list($crc32) = sscanf($crc32, "%x");
+	return($crc32);
+}
+
+/* A ZipFile object represents the entiry ZIP file, 
+      method addZipFile() adds Files and Folders, 
+      closeZipFile() finalizes the ZIP file.
+   The DirectoryEntry object represents a ZIP Local file header for a specific file 
+   as well as an entry for that file in the ZIP Central directory.
    An object of the derived class DirectoryEnd represents the End of central directory.
    Size and Offset in ZIP file are kept in two STATIC class variables.
-   The getter function to the classes returns the binary header or directory entry as string which can be written in the newly created ZIP file.
-   Pseudo usage: 
-     fn1 = new DirectoryEntry(filename1)
-     write fn1->getLocalFileHeader() to file.zip
-     write filename1 to file.zip
-     fn2 = new DirectoryEntry(filename2)
-     write fn2->getLocalFileHeader() to file.zip
-     write filename2 to file.zip
-            . . .
-     write fn1->getCentralDirectoryEntry() to file.zip
-     write fn2->getCentralDirectoryEntry() to file.zip
-            . . .
-     fnd = new DirectoryEnd()
-     write fnd->getEndofCentralDirectoryRecord() to file.zip
+   The getter function to the classes returns the binary header or directory entry 
+   as string which can be written in the newly created ZIP file.
+   
+   Usage: 
+     $zip = new ZipFile("123.zip");   // create zip file 123.zip
+     $zip->addZipFile("test/file-1"); // add file-1 to 123.zip
+     $zip->addZipFile("test/file-2"); // add file-2 to 123.zip
+     $zip->addZipFile("test");        // add folder test to 123.zip
+*    $zip->closeZipFile();            // finalize and close 123.zip
 */
-// STATIC class variables (not supportet in PHP 4)
-$_entries_size = array(); // Filename and size of Central_file_header
-$_payload_size = array(); // Filename and size of Local_file_header + actual file size
 
-class DirectoryEntry {
+
+// STATIC class variables (not supportet in PHP 4)
+$entries_size = array();	// Filename and size of Central_file_header
+$payload_size = array();	// Filename and size of Local_file_header + actual file size
+$instance_flag = false;		// Flag indicating that an ZIP object is created
+// -----------------------------------------------------------------------------
+class ZipFile {
+	var $central_dir = ''; 				// Holds consecutive central_directory entries
+	var $fp_zipfile = null;				// ZIP file pointer
+	
+	function ZipFile($zipfile) {
+	global $instance_flag;
+		$this->fp_zipfile = fopen($zipfile , 'wb');
+		if ($instance_flag === false) { $instance_flag = true; }
+		else { die("Only one instance of class ZipFile at the same time"); }
+	}
+	
+	function addZipFile($file) {
+		if (is_dir($file)) {
+			// Write folder to ZIP file
+			echo "\n  addFolder: $file/ ";
+			$fn = new DirectoryEntry("$file/");
+			fwrite($this->fp_zipfile, $fn->getLocalFileHeader());
+		} 
+		else {
+			// Write file to ZIP file
+			echo "\n  addFile:   $file ";
+			$fn = new DirectoryEntry($file);
+			fwrite($this->fp_zipfile, $fn->getLocalFileHeader());
+			$this->writePayload($file);
+		}
+		$this->central_dir = $this->central_dir . $fn->getCentralDirectoryEntry();
+	}
+	
+	function closeZipFile() {
+	global $instance_flag;
+		fwrite($this->fp_zipfile, $this->central_dir);
+		$fnd = new DirectoryEnd();
+		fwrite($this->fp_zipfile, $fnd->getEndofCentralDirectoryRecord());
+		fclose($this->fp_zipfile);
+		$instance_flag = false;
+	}
+	
+	// Read file from disk and append on ZIP file
+	function writePayload($file) {
+		echo '>stuff ';
+		$fh = fopen($file, 'rb');
+		$buffer = '';
+		while (!feof($fh)) {
+			$buffer = fread($fh, 128000);
+			fwrite($this->fp_zipfile, $buffer);
+		}
+		fclose($fh);
+	}
+}
+
+// -----------------------------------------------------------------------------
+class DirectoryEntry extends ZipFile{
 	var $struct;	// Structure holding Local File Header
 	
 	function DirectoryEntry($filename) {
-	global $_entries_size, $_payload_size;
+	global $payload_size;
 		$this->struct['Central_file_header_signature'] = pack("V", 0x02014b50);
 		$this->struct['Local_file_header_signature']   = pack("V", 0x04034b50);
 		$this->struct['Version_made_by']               = pack("v", 19);
@@ -117,14 +179,14 @@ class DirectoryEntry {
 		$this->struct['Disk_number_start']             = pack("v", 0);
 		$this->struct['Internal_file_attributes']      = pack("v", 0);
 		$this->struct['External_file_attributes']      = pack("V", packAttribute($filename));
-		$this->struct['Relative_offset_of_local_header'] = pack("V", array_sum($_payload_size));
+		$this->struct['Relative_offset_of_local_header'] = pack("V", array_sum($payload_size));
 		$this->struct['Filename']                      = $filename;
 		$this->struct['Extra_field']                   = '';
 		$this->struct['File_comment']                  = '';
 	}
 	
 	function getLocalFileHeader() {
-	global $_payload_size;
+	global $payload_size;
 		$header = $this->struct['Local_file_header_signature'].
 							$this->struct['Version_needed_to_extract'].
 							$this->struct['General_purpose_bit_flag'] .
@@ -139,12 +201,12 @@ class DirectoryEntry {
 							$this->struct['Filename'].
 							$this->struct['Extra_field'];
 		$filename = $this->struct['Filename'];
-		$_payload_size[$filename] = strlen($header) + filesize($filename);
+		$payload_size[$filename] = strlen($header) + filesize($filename);
 		return($header);
 	}
 	
 	function getCentralDirectoryEntry() {
-	global $_entries_size;
+	global $entries_size;
 		$entry  = $this->struct['Central_file_header_signature'].
 							$this->struct['Version_made_by'].
 							$this->struct['Version_needed_to_extract'].
@@ -166,23 +228,24 @@ class DirectoryEntry {
 							$this->struct['Extra_field'].
 							$this->struct['File_comment'];
 		$filename = $this->struct['Filename'];
-		$_entries_size[$filename] = strlen($entry);
+		$entries_size[$filename] = strlen($entry);
 		return($entry);
 	}
 }
 
-class DirectoryEnd extends DirectoryEntry {
+// -----------------------------------------------------------------------------
+class DirectoryEnd extends ZipFile {
 	var $struct;	// Structure holding Local File Header
 	
 	function DirectoryEnd() {
-	global $_entries_size, $_payload_size;
+	global $entries_size, $payload_size;
 		$this->struct['End of_central_dir_signature']  = pack("V", 0x06054b50);
 		$this->struct['Number_of_this_disk']                              = pack("v", 0);
 		$this->struct['Disk_where_central_directory_starts']              = pack("v", 0);
-		$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($_entries_size));
-		$this->struct['Total_number_of_central_directory_records']        = pack("v", count($_entries_size));
-		$this->struct['Size_of_central_directory']                        = pack("V", array_sum($_entries_size));
-		$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack("V", array_sum($_payload_size));
+		$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($entries_size));
+		$this->struct['Total_number_of_central_directory_records']        = pack("v", count($entries_size));
+		$this->struct['Size_of_central_directory']                        = pack("V", array_sum($entries_size));
+		$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack("V", array_sum($payload_size));
 		$this->struct['zipfile_comment_length']        = pack("v", 0);
 		$this->struct['zipfile_comment']               = '';
 	}
@@ -204,61 +267,21 @@ class DirectoryEnd extends DirectoryEntry {
 // MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Global
 $_prgdir = dirname(realpath($argv[0]));				//Program directory
-$_central_dir = ''; // Holds consecutive central_directory entries
+
 
 // -----------------------------------------------------------------------------
-function crc32_exe($filename) {
-global $_prgdir;
-  echo '>crc32 ';
-  $cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
-  exec($cmdline, $result, $retval);
-  list($crc32) = split(' ', $result[0]);
-  list($crc32) = sscanf($crc32, "%x");
-	return($crc32);
-}
-
-// -----------------------------------------------------------------------------
-function addFolder($fp, $folder) {
-global $_central_dir;
-	// loop through folder
-	$dh = opendir($folder);
-	while (($file = readdir($dh)) !== false) {
-		if ($file != "." && $file != "..") {
-			if (is_dir("$folder/$file")) {
-				addFolder($fp, "$folder/$file");
-			}
-			else {
-				addFile($fp, "$folder/$file");
+function walkDir($name) {
+global $ZIP;
+	if (is_dir($name)) {
+		$dh = opendir($name);
+		while (($file = readdir($dh)) !== false) {
+			if ($file != "." && $file != "..") {
+				walkDir("$name/$file");
 			}
 		}
+		closedir($dh);
 	}
-	closedir($dh);
-	// Write folder to ZIP file
-	echo "\n  addFolder: $folder/ ";
-	$fn = new DirectoryEntry("$folder/");
-	fwrite($fp, $fn->getLocalFileHeader());
-	$_central_dir = $_central_dir . $fn->getCentralDirectoryEntry();
-}
-// -----------------------------------------------------------------------------
-function addFile($fp, $file) {
-global $_central_dir;
-  echo "\n  addFile:   $file ";
-	$fn = new DirectoryEntry($file);
-	fwrite($fp, $fn->getLocalFileHeader());
-	writePayload($fp, $file);
-	$_central_dir = $_central_dir . $fn->getCentralDirectoryEntry();
-}
-// -----------------------------------------------------------------------------
-// Read and write payload file with max. block size (8192) into zip file
-function writePayload($fp, $file) {
-  echo '>stuff ';
-	$fh = fopen($file, 'rb');
-	$buffer = '';
-	while (!feof($fh)) {
-		$buffer = fread($fh, 128000);
-		fwrite($fp, $buffer);
-	}
-	fclose($fh);
+	$ZIP->addZipFile($name);
 }
 
 // -----------------------------------------------------------------------------
@@ -269,14 +292,9 @@ $startfolder = str_replace('\\', '/', $argv[1]);
 $startfolder = str_replace('//', '/', $startfolder);
 $startfolder = rtrim($startfolder, '/');
 
-$fp = fopen("$startfolder.zip" , 'wb');
-addFolder($fp, $startfolder);
+$ZIP = new ZipFile("$startfolder.zip");
+walkDir($startfolder);
+$ZIP->closeZipFile();
 
-fwrite($fp, $_central_dir);
-
-$fnd = new DirectoryEnd();
-fwrite($fp, $fnd->getEndofCentralDirectoryRecord());
-
-fclose($fp);
 exit(0);
 ?>
