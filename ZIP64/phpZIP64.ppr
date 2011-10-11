@@ -16,23 +16,15 @@ phpZIP64
 		run_speedtest.bat
 	+source
 		zip.php
-		crc32.php
-		crc32_test.php
 		siard_zip.php
 		file_zip.php
+		crc32.php
+		crc32_test.php
 [Open project files]
-0=zip.php
-1=file_zip.php
-2=siard_zip.php
+0=siard_zip.php
 [Selected Project Files]
 Main=zip.php
 Selected=siard_zip.php
-[zip.php]
-TopLine=93
-Caret=1,120
-[file_zip.php]
-TopLine=1
-Caret=19,4
 [siard_zip.php]
 TopLine=1
-Caret=1,10
+Caret=30,40

@@ -39,4 +39,4 @@ ECHO DotNet UNZIP ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 "%DOTNETZIP%\unzip.exe" -t %TESTZIP%
 
-%UNIX_HOME%\hexdump.exe %TESTZIP% > %TESTZIP%.hex
+REM %UNIX_HOME%\hexdump.exe %TESTZIP% > %TESTZIP%.hex
