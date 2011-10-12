@@ -226,7 +226,6 @@ global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $stati
 		echo "Could not write SIARD metadata XML file $siardmetadata\n"; $prg_option['ERR'] = 8; return;
 	}
 
-	
 	//validate SIARD XML metadata file
 	validateXML($siardschema, $siardmetadata, "'metadata.xml' is not a valid XML file");
 }
