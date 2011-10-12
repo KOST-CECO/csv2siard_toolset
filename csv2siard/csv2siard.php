@@ -35,6 +35,7 @@ include 'c2sxml.php';
 include 'c2snodbmodel.php';
 include 'c2schema.php';
 include 'c2stimedate.php';
+include 'zip.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -52,13 +53,13 @@ $version = '1.2';		// check column type for NO_DB_MODEL
 $version = '1.3';		// correct field type setting
 $version = '1.4';		// fix in NO_DB_MODEL and MS-Excel flavour
 $version = '1.5';		// DBMS Naming restriction with NO_DB_MODEL
-$version = '1.6';		// 
+$version = '1.6';		// SIARD Datei mit MD5 Hash & SUB an Dateiende möglich
 
 // global settings -------------------------------------------------------------
-$wdir = '.'; $wdir = realpath($wdir);								// Arbeitsverzeichnis
-$prgname = strtolower(basename($argv[0], '.exe'));	// ProgrammName
-$prgname = basename($prgname, '.php');							// ProgrammName
-$prgdir  = dirname(realpath(dirname($argv[0]).'/'.$prgname.'.exe'));		//Programmverzeichnis
+$wdir = getcwd();																		// Arbeitsverzeichnis
+$prgname = strtolower(basename($argv[0], '.exe'));	// Programm Name
+$prgname = basename($prgname, '.php');							// Programm Name
+$prgdir  = dirname(realpath($argv[0]));							//Programmverzeichnis
 
 $prg_option['ERR'] = 0;										// Programm optionen
 $torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema
@@ -97,7 +98,8 @@ $usage ="
 $disclaimer = "
 $prgname v $version, Copyright (C) 2011 Martin Kaiser (KOST-CECO)
 This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it under certain conditions; see GPL-2.0_COPYING.txt for details.
+This is free software, and you are welcome to redistribute it under certain conditions; 
+see GPL-2.0_COPYING.txt for details.
 ";
 
 // MAIN ------------------------------------------------------------------------

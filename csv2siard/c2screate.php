@@ -97,7 +97,7 @@ global $prg_option, $prgdir;
 	if ($encoding == 'binary') {
 		$encoding = detectSUB($csvfile, 'ENCODING');
 	}
-	echo "Process table (encoding: $encoding) $tablename .";
+	echo "Process table (encoding: $encoding) $tablename ";
 	
 	$csvhandle = fopen($csvfile, "r");
 	if(!$csvhandle) {
@@ -137,7 +137,7 @@ global $prg_option, $prgdir;
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount, $rowcount, $table);
 		}
-		if (fmod($rowcount, $prg_option['PI_COUNT']) == 0) { echo '.'; }
+		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(249); }
 		$rowcount++;
 	}
 
@@ -229,10 +229,26 @@ global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $stati
 	//validate SIARD XML metadata file
 	validateXML($siardschema, $siardmetadata, "'metadata.xml' is not a valid XML file");
 }
+
+// -----------------------------------------------------------------------------
+// Walk through folder and add file to $ZIP file
+function walkSIARDDir($ZIP, $name) {
+	if (is_dir($name)) {
+		$dh = opendir($name);
+		while (($file = readdir($dh)) !== false) {
+			if ($file != "." && $file != "..") {
+				walkSIARDDir(&$ZIP, "$name/$file");
+			}
+		}
+		closedir($dh);
+	}
+	$ZIP->addZipFile($name);
+}
+
 // -----------------------------------------------------------------------------
 // create SIARD ZIP file
 function createSIARDFile( ) {
-global $prgdir, $prg_option;
+global $wdir, $prgdir, $prg_option;
 
 	//write torque.v4 XML datamodel
 	$siarddir = "$prg_option[SIARD_DIR]/*";
@@ -240,12 +256,28 @@ global $prgdir, $prg_option;
 	@unlink($zipfile);
 	$zipfile = $zipfile.'.zip';
 	
-	// create ZIP file
-	$commandline = 'CALL "'.$prgdir.'/7z.exe" a -mx0 -w'.' "'.$zipfile.'" '.' "'.$siarddir.'" ';
-	exec($commandline, $result, $retval);
-	if ($retval != 0) {
-		echo "Temporary ZIP file could not be created: $zipfile"; return(-1);
-	}
+	// create ZIP file with MD5 Hash
+	echo "ZIP SIARD file ";
+	chdir($prg_option['SIARD_DIR']);
+	$ZIP = new ZipFile($zipfile);
+
+	// Folder content in ZIP Datei einfügen
+	walkSIARDDir(&$ZIP, "content");
+
+	// MD5 berechnen
+	$md5 = $ZIP->getMD5overPayload();
+	$metadata = file_get_contents("header/metadata.xml");
+	$metadata_md5 = preg_replace ('/\<messageDigest\>MD5.*\<\/messageDigest\>/','<messageDigest>MD5'.$md5.'</messageDigest>', $metadata);
+	file_put_contents("header/metadata.xml", $metadata_md5);
+
+	// Folder header in ZIP Datei einfügen
+	$ZIP->addZipFile("header");
+	$ZIP->addZipFile("header/metadata.xsd");
+	// $ZIP->addZipFile("header/metadata.xsl");
+	$ZIP->addZipFile("header/metadata.xml");
+	$ZIP->closeZipFile();
+	chdir($wdir);
+
 	// rename ZIP file to SIARD file
 	rrmdir($prg_option['SIARD_DIR']);
 	rename($zipfile, $prg_option['SIARD_FILE']);

@@ -8,11 +8,13 @@ global $prg_option, $prgname, $version, $disclaimer;
 
 	echo $disclaimer;
 	
-	echo "\nPreferences:\n";
-	reset($prg_option);
-	while (list($key, $val) = each($prg_option)) {
-		$val = ansi2ascii(utf8_decode($val));
-		echo "  [$key] => $val\n";
+	if ($prg_option['VERBOSITY']) {
+		echo "\nPreferences:\n";
+		reset($prg_option);
+		while (list($key, $val) = each($prg_option)) {
+			$val = ansi2ascii(utf8_decode($val));
+			echo "  [$key] => $val\n";
+		}
 	}
 	echo "\n";
 }
@@ -85,6 +87,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
 	$prg_option['PI_COUNT'] = 100;						// progress indicator per line processed
 	$prg_option['MAX_ROWSIZE'] = 100000;			// maximal CSV row size
+	$prg_option['VERBOSITY'] = false;					// Display additional messages
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description
 	$prg_option['ARCHIVED_BY'] = '';					// Database archived by
@@ -147,12 +150,9 @@ global $prgdir, $prg_option;
 	elseif (@md5_file("$prgdir/zlib1.dll") != 'f5b8b7054675d6aaf4ce3e727395f402'){
 		echo "Library zlib1.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(1);
 	}
-	// 77-Zip 4.65  Copyright (c) 1999-2009 Igor Pavlov  2009-02-03
-	elseif (@md5_file("$prgdir/7z.exe") != '93c7b7a3e3051bbb9630e41425cfdb3c'){
-		echo "Program 7z.exe is missing, corrupt or wrong version (7z.exe version 4.65)\n"; exit(1);
-	}
-	elseif (@md5_file("$prgdir/7z.dll") != 'ca41d56630191e61565a343c59695ca1'){
-		echo "Library 7z.dll is missing, corrupt or wrong version (7z.dll version 4.65)\n"; exit(1);
+	// crc32sum
+	elseif (@md5_file("$prgdir/crc32sum.exe") != '05d274347d80016c5ad0aa19d6911fef'){
+		echo "crc32sum.exe is missing, corrupt or wrong version V#(1.00) 24-Jul-04\n"; exit(1);
 	}
 	// GNU file-5.03
 	elseif (@md5_file("$prgdir/file.exe") != '0d76b6d325bb9336c6c6a5c220f02c37'){

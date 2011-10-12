@@ -1,6 +1,10 @@
 @ECHO OFF
 SETLOCAL
 
+REM settings -------------------------------------------------------------------
+SET UNIX_HOME=C:\Software\PCUnixUtils
+SET PATH=%UNIX_HOME%;%PATH%
+
 csv2siard.exe | grep version |  cut -d " " -f 8 >version.tmp
 COPY $setversion$ + version.tmp $tmp$.bat > nul
 CALL $tmp$.bat
@@ -13,7 +17,7 @@ SET RUNTIME=.\csv2siard_v.%VERSION%
 
 REM copy -----------------------------------------------------------------------
 ECHO .
-RMDIR /S /Q %RUNTIME%
+REM RMDIR /S /Q %RUNTIME%
 
 MKDIR %RUNTIME%
 MKDIR %RUNTIME%\bin
@@ -30,8 +34,7 @@ COPY zlib1.dll %RUNTIME%\bin
 COPY sablot.dll %RUNTIME%\bin
 COPY expat.dll %RUNTIME%\bin
 
-COPY 7z.exe %RUNTIME%\bin
-COPY 7z.dll %RUNTIME%\bin
+COPY crc32sum.exe %RUNTIME%\bin
 
 COPY file.exe %RUNTIME%\bin
 COPY magic.mgc %RUNTIME%\bin
@@ -66,6 +69,8 @@ CALL csv2siard.exe no_db_model ..\..\csvdata ..\..\test.siard
 @ECHO OFF
 REM zip ------------------------------------------------------------------------
 CD ..
-bin\7z.exe a -mx9 %RUNTIME%.zip *
+%UNIX_HOME%\7z.exe a -mx9 %RUNTIME%.zip *
 COPY %RUNTIME%.zip ..\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
+CD ..
+RMDIR /S /Q %RUNTIME%

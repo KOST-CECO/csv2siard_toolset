@@ -2,10 +2,8 @@
 SETLOCAL
 
 REM settings -------------------------------------------------------------------
-SET JAVA_HOME=C:\Software\jdk1.6.0_01
 SET UNIX_HOME=C:\Software\PCUnixUtils
-SET PERL_HOME=C:\Software\Perl
-SET PATH=%UNIX_HOME%;%JAVA_HOME%\2_arcun;%PERL_HOME%\2_arcun;%PATH%
+SET PATH=%UNIX_HOME%;%PATH%
 
 REM compile --------------------------------------------------------------------
 GREP -v "dl(" csv2siard.php > main.php
@@ -26,5 +24,5 @@ DEL /Q test.siard
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
 @ECHO OFF
 if %ERRORLEVEL% == 0 (
-	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Documents and Settings\u1942\applications\siard suite\bin\SiardEdit.jar"
+	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.26\bin\SiardEdit.jar"
 )

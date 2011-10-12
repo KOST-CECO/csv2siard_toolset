@@ -63,7 +63,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		$rowcount = 0;
 		$colarr = array();
 		while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
-			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo '.'; }
+			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(249); }
 			// truncate last field when empty
 			if (trim($buf[count($buf)-1]) == '') {
 				array_pop($buf);

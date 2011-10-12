@@ -30,6 +30,7 @@ csv2siard
 		c2snodbmodel.php
 		c2schema.php
 		c2stimedate.php
+		zip.php
 	+datamodel
 		gv-model-v8.xml
 		minimal-model.xml
@@ -41,10 +42,5 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=c2sfunction.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=c2sfunction.php
-[c2sfunction.php]
-TopLine=1
-Caret=1,1

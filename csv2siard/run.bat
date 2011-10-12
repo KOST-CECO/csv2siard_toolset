@@ -1,6 +1,12 @@
 @ECHO OFF
 DEL /Q test.siard
 echo --------- %time%
+REM php.exe csv2siard.php NO_DB_MODEL csvdata test.siard
+REM csv2siard.exe gv-model-v8.xml ../9_Testdaten/csvdata_TG test.siard
+csv2siard.exe NO_DB_MODEL ../9_Testdaten/csvdata_TG test.siard
+echo --------- %time%
+CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.26\bin\SiardEdit.jar"
+exit /b
 
 REM php.exe csv2siard.exe gv-model-v8.xml csvdata test.siard
 
