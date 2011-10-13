@@ -42,22 +42,10 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=c2sfunction.php
-1=c2screate.php
-2=c2sconvert.php
-3=Neu1.php
+0=Neu1.txt
 [Selected Project Files]
 Main=csv2siard.php
-Selected=Neu1.php
-[c2sfunction.php]
-TopLine=69
-Caret=1,87
-[c2screate.php]
-TopLine=168
-Caret=51,186
-[c2sconvert.php]
-TopLine=173
-Caret=28,206
-[Neu1.php]
+Selected=Neu1.txt
+[Neu1.txt]
 TopLine=1
-Caret=18,27
+Caret=1,1
