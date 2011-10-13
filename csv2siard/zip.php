@@ -68,7 +68,7 @@ function packDate($ts) {
 // crc32 file checker using binary crc32sum.exe
 function crc32_exe($filename) {
 global $prgdir, $prg_option;
-	echo ($prg_option['VERBOSITY']) ? '>crc32 ' : chr(249);
+	echo ($prg_option['VERBOSITY']) ? '>crc32 ' : chr(46);
 	$cmdline = 'CALL "'.$prgdir.'/crc32sum.exe" "'.$filename.'" ';
 	exec($cmdline, $result, $retval);
 //print_r($result);
@@ -146,7 +146,7 @@ class ZipFile {
 	// Read file from disk and append on ZIP file
 	function writePayload($file) {
 	global $prg_option;
-		echo ($prg_option['VERBOSITY']) ? '>stuff ' : chr(249);
+		echo ($prg_option['VERBOSITY']) ? '>stuff ' : chr(46);
 		$fh = fopen($file, 'rb');
 		$buffer = '';
 		while (!feof($fh)) {

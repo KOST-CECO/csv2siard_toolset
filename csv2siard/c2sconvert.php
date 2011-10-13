@@ -63,6 +63,21 @@ global $prg_option;
 	fwrite ($siardhandle, "<row>");
 	
 	for ($i=1; $i <= $columcount; $i++) {
+		// multiple columns or only one column
+		$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
+
+		// check for required constraint
+		$required = false;
+		if (array_key_exists('_a', $column)) {
+			$required = (array_key_exists('required', $column['_a'])) ? $column['_a']['required'] : false;
+		}
+		else {
+			$required = (array_key_exists('required', $column)) ? $column['required'] : false;
+		}
+		if ($required == 'true' and trim($buffer[$i-1] == '')) {
+			echo "\nRestriction 'field required' is violated in row $rowcount, column $i"; $prg_option['ERR'] = 32;
+		}
+
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
 			// convert to XML characterset utf-8
@@ -74,9 +89,7 @@ global $prg_option;
 				case "UTF-8":
 					break;
 			}
-			// check field type and convert to XML type *** TO BE DONE ***
-			// multiple columns or only one column
-			$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
+			// check field type (type constraint) and convert to XML type
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
 			$buf = trim($buf);
 			// file with EOF = SUB (dec 026 hex 0xA1)
@@ -146,6 +159,7 @@ global $prg_option;
 				default:
 					break;
 			}
+			
 			// write a <column> into SIARD XML file
 			$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
 			fwrite ($siardhandle, $buf);
@@ -163,8 +177,16 @@ function writeSIARDFooter($siardhandle){
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // write header for SIARD schema file
-function writeSchemaHeader($siardhandle, $tablefolder) {
+function writeSchemaHeader($siardhandle, $tablefolder, &$table) {
 global $prg_option;
+
+	$rct = (getTableOption($table, 'rowcount'));
+	if ($rct >0) {
+		$occurrence = "minOccurs=\"$rct\" maxOccurs=\"$rct\"";
+	}
+	else {
+		$occurrence = "minOccurs=\"0\" maxOccurs=\"unbounded\"";
+	}
 
 	fwrite ($siardhandle, "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n");
 	fwrite ($siardhandle, "
@@ -176,7 +198,7 @@ global $prg_option;
 		<xs:element name=\"table\">
 			<xs:complexType>
 				<xs:sequence>
-					<xs:element name=\"row\" type=\"rowType\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>
+					<xs:element name=\"row\" type=\"rowType\" $occurrence/>
 				</xs:sequence>
 			</xs:complexType>
 		</xs:element>
@@ -189,10 +211,12 @@ global $prg_option;
 // write content SIARD schema file
 function writeSchemaContent($siardhandle, &$table){
 	$colcount = 1;
+
 	foreach ($table['_c']['column'] as $column) {
 		if (is_array($column)) {
 			// multiple columns or only one column
 			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			// write field type
 			switch ($type) {
 				case "TINYINT":
 				case "SMALLINT":
@@ -231,7 +255,22 @@ function writeSchemaContent($siardhandle, &$table){
 				default:
 					$xstype = 'string'; break;
 			}
-			fwrite ($siardhandle, "<xs:element name=\"c$colcount\" type=\"xs:$xstype\" minOccurs=\"0\"/>\n");
+			// write if necessary required constraint
+			$required = false;
+			if (array_key_exists('_a', $column)) {
+				$required = (array_key_exists('required', $column['_a'])) ? $column['_a']['required'] : false;
+			}
+			else {
+				$required = (array_key_exists('required', $column)) ? $column['required'] : false;
+			}
+			if ($required == 'true') {
+				// field required
+				fwrite ($siardhandle, "<xs:element name=\"c$colcount\" type=\"xs:$xstype\"/>\n");
+			}
+			else {
+				// field not required
+				fwrite ($siardhandle, "<xs:element name=\"c$colcount\" type=\"xs:$xstype\" minOccurs=\"0\"/>\n");
+			}
 			$colcount++;
 		}
 	}

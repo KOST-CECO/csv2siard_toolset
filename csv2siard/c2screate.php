@@ -137,7 +137,7 @@ global $prg_option, $prgdir;
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount, $rowcount, $table);
 		}
-		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(249); }
+		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
 		$rowcount++;
 	}
 
@@ -166,7 +166,7 @@ global $prg_option;
 	}
 	
 	// write SIARD schema header
-	writeSchemaHeader($siardhandle, $tablefolder);
+	writeSchemaHeader($siardhandle, $tablefolder, $table);
 
 	// write SIARD schema content
 	writeSchemaContent($siardhandle, $table);

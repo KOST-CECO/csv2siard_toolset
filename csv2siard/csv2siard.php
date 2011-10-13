@@ -83,6 +83,7 @@ $dbmod = array();													//nested array to hold the database model
 //ERR 16: Could not write database description no_db_model.xml
 //ERR 32: Column in database model is missing or not confirm with CSV file
 //ERR 32: Column type convertion failed
+//ERR 32: Required restriction violated
 //ERR 64: SIARD XML Schema Validation failed
 
 $usage ="
