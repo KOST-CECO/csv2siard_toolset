@@ -42,5 +42,14 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
+0=c2schema.php
+1=run.bat
 [Selected Project Files]
 Main=csv2siard.php
+Selected=c2schema.php
+[c2schema.php]
+TopLine=3012
+Caret=1,3039
+[run.bat]
+TopLine=1
+Caret=57,4

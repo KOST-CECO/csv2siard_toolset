@@ -19,6 +19,7 @@ REM test function --------------------------------------------------------------
 @ECHO ON
 DEL /Q test.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
+unzip -t test.siard
 
 DEL /Q test.siard
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard

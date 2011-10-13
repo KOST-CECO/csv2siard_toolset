@@ -3026,7 +3026,21 @@ $static_torque2siard = '<?xml version="1.0"?>
 			</xsl:element>
 			
 			<xsl:element name="nullable">
-				<xsl:text>true</xsl:text>
+				<xsl:choose>
+					<xsl:when test="@required">
+						<xsl:choose>
+							<xsl:when test="@required=\'true\'">
+								<xsl:text>false</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:text>true</xsl:text>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>true</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:element>
 			
 			<xsl:if test="@description">

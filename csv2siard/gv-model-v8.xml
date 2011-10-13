@@ -3,7 +3,7 @@
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_gebaeude" description="Umfasst die Basisdaten zu versicherten und fremdversicherten Gebäuden sowie zu abgebrochenen Gebäuden mit einem Schadenfall in der Beobachtungsperiode">
 		<option key="file" value="gv_gebaeude.dat"/>
-		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutiger Schlüssel für das Gebäude"/>
+		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutiger Schlüssel für das Gebäude" required="true"/>
 		<column name="grundstueck_id" type="VARCHAR" size="20" description="Grundstücknummer"/>
 		<column name="police_nr" type="VARCHAR" size="20" description="Nummer der Gebäude Police"/>
 		<column name="suchbegriff" type="VARCHAR" size="100" description="Grundstück-Suchbegriff"/>
@@ -30,7 +30,7 @@
 	</table>
 	<table name="gv_person" description="Enthält für alle exportierten Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwalter auftreten">
 		<option key="file" value="gv_person.dat"/>
-		<column name="id" type="VARCHAR" size="16" description="Personen-ID"/>
+		<column name="id" type="VARCHAR" size="16" description="Personen-ID" required="true"/>
 		<column name="person_id" type="VARCHAR" size="16" description="Eindeutige Personen-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
 		<column name="klasse_code" type="VARCHAR" size="10" description="Personentyp als Code"/>
@@ -54,7 +54,7 @@
 	</table>
 	<table name="gv_anlage" description="Enthält Angaben zu Brandschutzanlagen, die in den exportierten Gebäuden installiert sind">
 		<option key="file" value="gv_anlage.dat"/>
-		<column name="id" type="VARCHAR" size="16" description="Eindeutige Anlage-ID"/>
+		<column name="id" type="VARCHAR" size="16" description="Eindeutige Anlage-ID" required="true"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
 		<column name="typ_code" type="VARCHAR" size="10" description="Anlagetyp codiert"/>
 		<column name="typ_text" type="VARCHAR" size="255" description="Anlagetyp im Klartext"/>
@@ -64,7 +64,7 @@
 	</table>
 	<table name="gv_schaden" description="Enthält alle Schadensmeldungen für die exportierten Gebäude (ein Datensatz pro Schadensfall)">
 		<option key="file" value="gv_schaden.dat"/>
-		<column name="id" type="VARCHAR" size="16" description="Eindeutige Schaden-ID"/>
+		<column name="id" type="VARCHAR" size="16" description="Eindeutige Schaden-ID" required="true"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
 		<column name="nummer" type="VARCHAR" size="20" description="Nummer der Bauzeitversicherung"/>
 		<column name="datum" type="VARCHAR" size="10" description="Schadendatum"/>
@@ -86,7 +86,7 @@
 	</table>
 	<table name="gv_schaetzung" description="Enthält für alle exportierten Gebäude die aktuelle Schätzung (ein Datensatz pro Gebäude)">
 		<option key="file" value="gv_schaetzung.dat"/>
-		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutige ID für die Schätzung"/>
+		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutige ID für die Schätzung" required="true"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
 		<column name="datum_ausfuehrung" type="VARCHAR" size="10" description="Schätzungsdatum"/>
 		<column name="grund_code" type="VARCHAR" size="10" description="Schätzungsgrund codiert"/>
@@ -111,7 +111,7 @@
 	</table>
 	<table name="gv_position" description="Enthält die einzelnen Schätzungspositionen, aus denen sich jede Schätzung in gv_schaetzung zusammensetzt">
 		<option key="file" value="gv_position.dat"/>
-		<column name="id" type="VARCHAR" size="16" description="Eindeutige ID der Schätzposition"/>
+		<column name="id" type="VARCHAR" size="16" description="Eindeutige ID der Schätzposition" required="true"/>
 		<column name="schaetzung_id" type="VARCHAR" size="16" description="ID für die Referenz zur Schätzung"/>
 		<column name="art_code" type="VARCHAR" size="10" description="Positionsart codiert"/>
 		<column name="art_text" type="VARCHAR" size="255" description="Positionsart "/>
