@@ -66,7 +66,7 @@ function validateXML($schema,$xml, $message) {
 global $prg_option, $prgdir;
 	if ($prg_option['ERR'] != 0) { return false; }
 
-	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -noout -schema '.
+	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -stream -noout -schema '.
 									' "'.$schema.'" '.
 									' "'.$xml.'" '.
 									' 2> '.' "'.$xml.'.out"';
@@ -151,7 +151,7 @@ function setTableOption(&$table,$key, $value) {
 	}
 }
 // -----------------------------------------------------------------------------
-// Ersatz für PHP5 Funktion 'str_split'
+// Ersatz fnr PHP5 Funktion 'str_split'
 // array str_split ( string $string [, int $split_length = 1 ] )
 if(!function_exists('str_split')) {
   function str_split($string, $split_length = 1) {
@@ -161,7 +161,7 @@ if(!function_exists('str_split')) {
   }
 }
 // -----------------------------------------------------------------------------
-// Ersatz für PHP5 Funktion 'mkdir'
+// Ersatz fnr PHP5 Funktion 'mkdir'
 // bool mkdirPHP4 ( string $pathname , int $mode = 0777 , bool $recursive = true )
 function mkdirPHP4($pathname, $mode, $recursive) {
 	if ($recursive === false) {
@@ -177,7 +177,7 @@ function mkdirPHP4($pathname, $mode, $recursive) {
 	return(false);
 }
 // -----------------------------------------------------------------------------
-// Ersatz für PHP5 Funktion 'sys_get_temp_dir'
+// Ersatz fnr PHP5 Funktion 'sys_get_temp_dir'
 if ( !function_exists('sys_get_temp_dir')) {
 	function sys_get_temp_dir() {
 		if( $temp=getenv('TMP') )			return $temp;
@@ -192,7 +192,7 @@ if ( !function_exists('sys_get_temp_dir')) {
 	}
 }
 // -----------------------------------------------------------------------------
-// Ersatz für PHP5 Funktion 'file_put_contents'
+// Ersatz fnr PHP5 Funktion 'file_put_contents'
 if (!function_exists('file_put_contents')) {
 	function file_put_contents($fname, $data) {
 		$f = @fopen($fname, 'w');
@@ -206,7 +206,7 @@ if (!function_exists('file_put_contents')) {
 	}
 }
 // ----------------------------------------------------------------------------
-// Ersatz für PHP5 Funktion List files and directories inside the specified path
+// Ersatz fnr PHP5 Funktion List files and directories inside the specified path
 // array scandir ( string directory [, int sorting_order [, resource context]] )
 // returns an array of files and directories from the directory
 function scandirPHP4($dir) {
@@ -236,7 +236,7 @@ function rrmdir($dir) {
 	}
 }
 // ----------------------------------------------------------------------------
-// Voici donc une fonction PHP qui permet de convertir les fichiers codés en
+// Voici donc une fonction PHP qui permet de convertir les fichiers codTs en
 // ANSI vers de l'ASCII Par Nicolas Debras
 function ascii2ansi($string) {
 	$asciiarray[] = 142; $ansiarray[] = 196;

@@ -187,7 +187,7 @@ global $prgdir, $prg_option;
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	
-	validateXML($siardschema, $siardfile, "'$tablefile' cannot be converted to a valid XML file");
+	validateXML($siardschema, $siardfile, "'$tablefile' - convertion to XML file failed");
 }
 // -----------------------------------------------------------------------------
 // write SIARD metadata XML file
