@@ -94,9 +94,6 @@ global $prg_option, $prgdir;
 	
 	// detect encoding with GNU file-5.03
 	$encoding = detectMimeType($csvfile, 'ENCODING');
-	if ($encoding == 'binary') {
-		$encoding = detectSUB($csvfile, 'ENCODING');
-	}
 	echo "Process table (encoding: $encoding) $tablename ";
 	
 	$csvhandle = fopen($csvfile, "r");

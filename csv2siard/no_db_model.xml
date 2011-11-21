@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="csvdata" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
-	<table name="gv_anlage" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_anlage.dat">
+	<table name="gv_anlage" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_anlage.dat">
 		<column name="id" type="VARCHAR" size="8"/>
 		<column name="gebaeude_id" type="VARCHAR" size="8"/>
 		<column name="typ_code" type="VARCHAR" size="2"/>
 		<column name="typ_text" type="VARCHAR" size="11"/>
 	</table>
-	<table name="gv_gebaeude" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_gebaeude.dat">
+	<table name="gv_gebaeude" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_gebaeude.dat">
 		<column name="id" type="VARCHAR" size="8"/>
 		<column name="grundstueck_id" type="INTEGER"/>
 		<column name="police_nr" type="VARCHAR" size="8"/>
@@ -32,7 +32,7 @@
 		<column name="ort" type="VARCHAR"/>
 		<column name="ort_zusatz" type="INTEGER"/>
 	</table>
-	<table name="gv_person" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_person.dat">
+	<table name="gv_person" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_person.dat">
 		<column name="id" type="INTEGER"/>
 		<column name="person_id" type="INTEGER"/>
 		<column name="gebaeude_id" type="VARCHAR" size="8"/>
@@ -52,7 +52,7 @@
 		<column name="rolle_code" type="VARCHAR" size="1"/>
 		<column name="rolle_text" type="VARCHAR" size="11"/>
 	</table>
-	<table name="gv_position" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_position.dat">
+	<table name="gv_position" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_position.dat">
 		<column name="id" type="VARCHAR" size="8"/>
 		<column name="schaetzung_id" type="VARCHAR" size="17"/>
 		<column name="art_code" type="VARCHAR" size="1"/>
@@ -68,7 +68,7 @@
 		<column name="bauart_code" type="VARCHAR" size="2"/>
 		<column name="bauart_text" type="VARCHAR" size="9"/>
 	</table>
-	<table name="gv_schaden" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_schaden.dat">
+	<table name="gv_schaden" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_schaden.dat">
 		<column name="id" type="INTEGER"/>
 		<column name="gebaeude_id" type="VARCHAR" size="8"/>
 		<column name="nummer" type="INTEGER"/>
@@ -86,7 +86,7 @@
 		<column name="vkf_code" type="VARCHAR" size="1"/>
 		<column name="vkf_text" type="VARCHAR" size="1"/>
 	</table>
-	<table name="gv_schaetzung" description="N:/KOST/Projekte/Transferprojekt/4_csv2siard/csvdata/gv_schaetzung.dat">
+	<table name="gv_schaetzung" description="E:/KOST_local/Tools/csv2siard/_workbench/csvdata/gv_schaetzung.dat">
 		<column name="id" type="VARCHAR" size="16"/>
 		<column name="gebaeude_id" type="VARCHAR" size="8"/>
 		<column name="datum_ausfuehrung" type="INTEGER"/>
