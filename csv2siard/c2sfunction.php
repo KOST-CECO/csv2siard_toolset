@@ -41,7 +41,7 @@ $type = ($type == 'TYPE') ? '--mime-type' : '--mime-encoding';
 // -----------------------------------------------------------------------------
 // US-ASCII or digit, first character must be a letter, case insensitive, max 30 character
 function testDBMSNaming($buf) {
-	$ascii = str_split('012345679ABCDEFGHIJKLMNOPQRSTUVWXYZ_');
+	$ascii = str_split('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_');
 	
 	// max 30 character
 	if (strlen($buf) > 30) {
