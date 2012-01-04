@@ -158,8 +158,12 @@ if(function_exists("strptime") == false)
 } // END of if(function_exists("strptime") == false) 
 
 // -----------------------------------------------------------------------------
-// Returns array with [type] of date and [date] in XML format
-// empty [date] means convertion failor
+/* Returns array with [type] of date and [date] in XML format
+     [type] => MySQL
+     [date] => 2003-12-31T00:00:00
+     [utc] => 1072828800
+   empty [date] means convertion failor 
+*/
 function convert2XMLdate($str) {
 $retval = array();
 

@@ -2,12 +2,12 @@
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
 <database name="table2" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_person">
-		<column name="id" type="BIGINT" primaryKey="true" description="Personen-ID"/>
+		<column name="id" type="BIGINT" description="Personen-ID"/>
 		<column name="person_id" type="BIGINT" description="Eindeutige Personen-ID"/>
 		<column name="gebaeude_id" type="VARCHAR" description="ID für die Referenz zum Gebäude"/>
 		<column name="klasse_code" type="VARCHAR" size="10" description="Personentyp als Code"/>
 		<column name="klasse_text" type="VARCHAR" size="1000" description="NAT: natürliche Person - JUR: juristische (nicht natürliche) Person"/>
-		<column name="name" type="VARCHAR" size="1000" description="Personen-Suchbegriff"/>
+		<column name="name" type="VARCHAR" size="100" description="Personen-Suchbegriff"/>
 		<column name="strasse" type="VARCHAR" size="1000" description="Strasse oder Flurbezeichnung"/>
 		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35‘ oder “87, 89)"/>
 		<column name="wohnung_nr" type="VARCHAR" size="20" description="Wohnungsnummer"/>
@@ -20,12 +20,9 @@
 		<column name="gueltig_bis" type="VARCHAR" size="10" description="Gültig-bis-Datum. Wenn Beziehung noch gültig ist, wird kein Datum (leer) geliefert."/>
 		<column name="rolle_code" type="VARCHAR" size="1000" description="Rolle als Code"/>
 		<column name="rolle_text" type="VARCHAR" size="1000" description="Rolle im Klartext"/>
-		<foreign-key foreignTable="gv_gebaeude" name="person_gebaeude">
-			<reference local="gebaeude_id" foreign="id"/>
-		</foreign-key>
 	</table>
 	<table name="gv_position">
-		<column name="id" type="VARCHAR" primaryKey="true" description="Eindeutige ID der Schätzposition"/>
+		<column name="id" type="VARCHAR" description="Eindeutige ID der Schätzposition"/>
 		<column name="schaetzung_id" type="VARCHAR" description="ID für die Referenz zur Schätzung"/>
 		<column name="art_code" type="VARCHAR" size="10" description="Positionsart codiert"/>
 		<column name="art_text" type="VARCHAR" size="1000" description="Positionsart "/>
@@ -39,8 +36,5 @@
 		<column name="erfasster_wert" type="INTEGER" description="Dieser interne Wert enthält den durch den Benutzer erfassten Wert pro Schätzposition"/>
 		<column name="bauart_code" type="VARCHAR" size="10" description="Bauart Code"/>
 		<column name="bauart_text" type="VARCHAR" size="1000" description="Bauart"/>
-		<foreign-key foreignTable="gv_schaetzung" name="position_schaetzung">
-			<reference local="schaetzung_id" foreign="id"/>
-		</foreign-key>
 	</table>
 </database>

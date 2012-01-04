@@ -120,20 +120,27 @@ global $prg_option;
 					}
 					break;
 				case "DATE":
-				case "TIMESTAMP":
 				$td = convert2XMLdate($buf);
 					if ($td['date'] == '') {
-						echo "\nDate/time type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nDate convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
-						$buf = $td['date'].'.000000000Z';
+						$buf = substr($td['date'], 0, 10).'Z';
 					}
-					break;
+					break;				
 				case "TIME":
 					$td = convert2XMLdate($buf);
 					if ($td['date'] == '') {
-						echo "\nDate/time type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nTime convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
 						$buf = substr($td['date'], 11);
+					}
+					break;
+				case "TIMESTAMP":
+				$td = convert2XMLdate($buf);
+					if ($td['date'] == '') {
+						echo "\nTimestamp convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					} else {
+						$buf = $td['date'].'.000000000Z';
 					}
 					break;
 				case "CHAR":
@@ -143,14 +150,28 @@ global $prg_option;
 					$buf = xml_encode($buf);
 					break;
 				case "BIT":
-				case "BINARY":
+					$buf = bin2hex($buf);
 					break;
+				case "BINARY":
 				case "VARBINARY":
 				case "LONGVARBINARY":
-				case "BLOB":
-					$buf = base64_encode($buf);
+				case "BLOB":			 
+					$bbuf = base64_decode($buf);
+					if ($bbuf == FALSE) {
+						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						$bbuf = $buf;
+					}
+					$buf = bin2hex($bbuf);
 					break;
-				case "DATALINK":
+				case "NULL":
+				case "OTHER":
+				case "JAVA_OBJECT":
+				case "DISTINCT":
+				case "STRUCT":
+				case "ARRAY":
+					echo "Data type '$type' not supported in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					break;
+				case "REF":
 					break;
 				case "BOOLEANINT":
 				case "BOOLEANCHAR":
@@ -231,10 +252,11 @@ function writeSchemaContent($siardhandle, &$table){
 				case "DECIMAL":
 					$xstype = 'decimal'; break;
 				case "DATE":
-				case "TIMESTAMP":
-					$xstype = 'dateTime'; break;
+					$xstype = 'date'; break;
 				case "TIME":
 					$xstype = 'time'; break;
+				case "TIMESTAMP":
+					$xstype = 'dateTime'; break;
 				case "CHAR":
 				case "VARCHAR":
 				case "LONGVARCHAR":
@@ -242,12 +264,11 @@ function writeSchemaContent($siardhandle, &$table){
 					$xstype = 'string'; break;
 				case "BIT":
 				case "BINARY":
-					$xstype = 'byte'; break;
 				case "VARBINARY":
 				case "LONGVARBINARY":
 				case "BLOB":
-					$xstype = 'base64Binary'; break;
-				case "DATALINK":
+					$xstype = 'hexBinary'; break;
+				case "REF":
 					$xstype = 'anyURI'; break;
 				case "BOOLEANINT":
 				case "BOOLEANCHAR":
