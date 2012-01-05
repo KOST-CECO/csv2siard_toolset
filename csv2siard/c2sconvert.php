@@ -89,8 +89,15 @@ global $prg_option;
 				case "UTF-8":
 					break;
 			}
-			// check field type (type constraint) and convert to XML type
-			$type = (array_key_exists('_a', $column)) ? $column['_a']['type'] : $column['type'];
+			// check field type (type constraint) and convert to XML type (default size 255)
+			if (array_key_exists('_a', $column)) {
+				$type = $column['_a']['type'];
+				$size = (array_key_exists('size', $column['_a'])) ? $column['_a']['size'] : 255;
+			}
+			else {
+				$type = $column['type'];
+				$size = (array_key_exists('size', $column)) ? $column['size'] : 255;
+			}
 			$buf = trim($buf);
 			// file with EOF = SUB (dec 026 hex 0xA1)
 			$buf = rtrim($buf, "\x1A");
@@ -100,8 +107,11 @@ global $prg_option;
 				case "SMALLINT":
 				case "INTEGER":
 				case "BIGINT":
-					if (!ctype_digit($buf)) {
+					if (!ctype_digit(ltrim($buf, '-'))) {
 						echo "\nInteger type convertion failed in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
+					}
+					if (ltrim($buf, '-') > 2147483647) {
+						echo "\nValue too large for signed integer in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
 					}
 					break;
 				case "FLOAT":
@@ -147,6 +157,7 @@ global $prg_option;
 				case "VARCHAR":
 				case "LONGVARCHAR":
 				case "CLOB":
+					echo "$buf ($size)\n";
 					$buf = xml_encode($buf);
 					break;
 				case "BIT":
@@ -155,7 +166,7 @@ global $prg_option;
 				case "BINARY":
 				case "VARBINARY":
 				case "LONGVARBINARY":
-				case "BLOB":			 
+				case "BLOB":
 					$bbuf = base64_decode($buf);
 					if ($bbuf == FALSE) {
 						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;

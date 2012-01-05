@@ -2999,15 +2999,24 @@ $static_torque2siard = '<?xml version="1.0"?>
 					<!-- BINARY VARBINARY LONGVARBINARY -->
 					<xsl:when test="@type=\'BINARY\' or @type=\'VARBINARY\' or @type=\'LONGVARBINARY\'">
 						<xsl:text>BIT VARYING</xsl:text>
-						<xsl:if test="@size">
-							<xsl:text>(</xsl:text>
-							<xsl:value-of select="@size"/>
-							<xsl:text>)</xsl:text>
-						</xsl:if>
+							<xsl:choose>
+								<xsl:when test="@size">
+									<xsl:text>(</xsl:text>
+									<xsl:value-of select="@size"/>
+									<xsl:text>)</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>(255)</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
 					</xsl:when>
 					<!-- BOOLEANINT BOOLEANCHAR -->
 					<xsl:when test="@type=\'BOOLEANINT\' or @type=\'BOOLEANCHAR\'">
 						<xsl:text>BOOLEAN</xsl:text>
+					</xsl:when>
+					<!-- BLOB -->
+					<xsl:when test="@type=\'BLOB\'">
+						<xsl:text>BINARY LARGE OBJECT</xsl:text>
 					</xsl:when>
 					<!-- REF -->
 					<xsl:when test="@type=\'REF\'">

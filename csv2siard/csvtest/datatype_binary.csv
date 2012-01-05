@@ -1,3 +1,3 @@
 bit;binary;varbinary;longvarbinary;blob;clob;booleanint;booleanchar
-A  B  C  D;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;This is an encoded string;1;false
-ABCD;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;This is an encoded string;1;false
+A	B	C;R0lGODlhDAAKAJEAAP///3N1B1FRUQAAACwAAAAADAAKAAACGpSPB8ttDcELNE5Ac5ACVww+ESOOnLkkqlEAADs=;R0lGODlhDAAKAJEAAP///3N1B1FRUQAAACwAAAAADAAKAAACGpSPB8ttDcELNE5Ac5ACVww+ESOOnLkkqlEAADs=;R0lGODlhDAAKAJEAAP///3N1B1FRUQAAACwAAAAADAAKAAACGpSPB8ttDcELNE5Ac5ACVww+ESOOnLkkqlEAADs=;R0lGODlhDAAKAJEAAP///3N1B1FRUQAAACwAAAAADAAKAAACGpSPB8ttDcELNE5Ac5ACVww+ESOOnLkkqlEAADs=;This is an encoded string;1;false
+ABC;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==;This is an encoded string;0;true

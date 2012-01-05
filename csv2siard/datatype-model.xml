@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
-<?xml-stylesheet type="text/xsl" href="model2array.xsl"?>
-<database name="test" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+<database name="datatypetest" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+
 	<table name="datatype_string">
-		<column name="char" type="CHAR"/>
+		<column name="char_1" type="CHAR"/>
+		<column name="char_2" type="CHAR" size="2"/>
 		<column name="varchar_1" type="VARCHAR"/>
-		<column name="varchar_2" type="VARCHAR" size="200"/>
+		<column name="varchar_2" type="VARCHAR" size="10"/>
 		<column name="longvarchar" type="LONGVARCHAR"/>
 		<column name="clob" type="CLOB"/>
 		<column name="ref" type="REF"/>
 	</table>
+	
 	<table name="datatype_date">
 		<column name="date" type="DATE"/>
 		<column name="time" type="TIME"/>
 		<column name="timestamp" type="TIMESTAMP"/>
 	</table>
-	<table name="datatype_numeric">
+
+	<table name="datatype_int">
 		<column name="tinyint" type="TINYINT"/>
 		<column name="smallint" type="SMALLINT"/>
 		<column name="integer" type="INTEGER"/>
-		<column name="bigint" type="BIGINT"/>
-		<column name="float_1" type="FLOAT"/>
-		<column name="float_2" type="FLOAT" size="7" scale="4"/>
-		<column name="real" type="REAL"/>
+		<column name="bigint" type="NUMERIC"/>
+<!-- 		<column name="bigint" type="BIGINT"/> -->
+	</table>
+
+	<table name="datatype_numeric">
 		<column name="numeric" type="NUMERIC"/>
 		<column name="decimal_1" type="DECIMAL"/>
 		<column name="decimal_2" type="DECIMAL" size="5" scale="2" />
-		<column name="double" type="DOUBLE"/>
 	</table>
-<!--
+	
+	<table name="datatype_real">
+		<column name="float_1" type="FLOAT"/>
+		<column name="float_2" type="FLOAT" size="7" scale="4"/>
+		<column name="real" type="REAL"/>
+    <column name="double" type="DOUBLE"/>
+	</table>
+<!-- -->
 	<table name="datatype_binary">
 		<column name="bit" type="BIT"/>
 		<column name="binary" type="BINARY"/>
@@ -39,5 +48,4 @@
 		<column name="booleanint" type="BOOLEANINT"/>
 		<column name="booleanchar" type="BOOLEANCHAR"/>
 	</table>
- -->
 </database>

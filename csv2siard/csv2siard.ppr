@@ -41,15 +41,28 @@ csv2siard
 		test-model.xml
 		database-torque-4-0.xsd
 		metadata.xsd
+		datatype-model.xml
 [Open project files]
-0=preferences.prefs
-1=run.bat
+0=datatype-model.xml
+1=c2sconvert.php
+2=c2schema.php
+3=csvtest\datatype_string.csv
+4=c2screate.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=run.bat
-[preferences.prefs]
+Selected=c2sconvert.php
+[datatype-model.xml]
+TopLine=2
+Caret=1,27
+[c2sconvert.php]
+TopLine=73
+Caret=83,92
+[c2schema.php]
+TopLine=2980
+Caret=1,3012
+[csvtest\datatype_string.csv]
 TopLine=1
-Caret=16,13
-[run.bat]
-TopLine=1
-Caret=1,4
+Caret=220,4
+[c2screate.php]
+TopLine=96
+Caret=1,116
