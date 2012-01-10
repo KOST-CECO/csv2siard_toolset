@@ -119,16 +119,11 @@ global $prg_option;
 				case "FLOAT":
 				case "REAL":
 				case "DOUBLE":
-					$buf = strtr ($buf, ',', '.');
-					if (!is_numeric ($buf)) {
-						echo "\nDouble type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
-					}
-					break;
 				case "NUMERIC":
 				case "DECIMAL":
 					$buf = strtr ($buf, ',', '.');
 					if (!is_numeric ($buf)) {
-						echo "\nDecimal type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nNumeric type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					if (!is_null($size)) {
 						if (strlen(str_replace('.', '', $buf)) > $size) {

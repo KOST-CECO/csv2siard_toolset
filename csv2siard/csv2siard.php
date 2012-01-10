@@ -55,6 +55,7 @@ $version = '1.4';		// fix in NO_DB_MODEL and MS-Excel flavour
 $version = '1.5';		// DBMS Naming restriction with NO_DB_MODEL
 $version = '1.6';		// SIARD Datei mit MD5 Hash & SUB an Dateiende möglich
 $version = '1.6.1';	// detectSUB fix
+$version = '1.6.2';	// binary field processing implemented
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
