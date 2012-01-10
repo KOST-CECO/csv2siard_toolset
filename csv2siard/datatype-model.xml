@@ -28,7 +28,7 @@
 	<table name="datatype_numeric">
 		<column name="numeric" type="NUMERIC"/>
 		<column name="decimal_1" type="DECIMAL"/>
-		<column name="decimal_2" type="DECIMAL" size="5" scale="2" />
+		<column name="decimal_2" type="DECIMAL" size="9" scale="4" />
 	</table>
 	
 	<table name="datatype_real">

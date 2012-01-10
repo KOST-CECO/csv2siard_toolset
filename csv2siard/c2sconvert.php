@@ -93,10 +93,12 @@ global $prg_option;
 			if (array_key_exists('_a', $column)) {
 				$type = $column['_a']['type'];
 				$size = (array_key_exists('size', $column['_a'])) ? $column['_a']['size'] : NULL;
+				$scale = (array_key_exists('scale', $column['_a'])) ? $column['_a']['scale'] : NULL;
 			}
 			else {
 				$type = $column['type'];
 				$size = (array_key_exists('size', $column)) ? $column['size'] : NULL;
+				$scale = (array_key_exists('scale', $column)) ? $column['scale'] : NULL;
 			}
 			$buf = trim($buf);
 			// file with EOF = SUB (dec 026 hex 0xA1)
@@ -128,6 +130,17 @@ global $prg_option;
 					if (!is_numeric ($buf)) {
 						echo "\nDecimal type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
+					if (!is_null($size)) {
+						if (strlen(str_replace('.', '', $buf)) > $size) {
+							echo "\nField exceeds defined precision: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						}
+						if (!is_null($scale)) {
+							$pbuf = explode('.', $buf);
+							if (count($pbuf) > 1 and strlen($pbuf[1]) > $scale) {
+								echo "\nField exceeds defined scale: $scale in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+							}
+						}
+					}
 					break;
 				case "DATE":
 				$td = convert2XMLdate($buf);
@@ -136,7 +149,7 @@ global $prg_option;
 					} else {
 						$buf = substr($td['date'], 0, 10).'Z';
 					}
-					break;				
+					break;
 				case "TIME":
 					$td = convert2XMLdate($buf);
 					if ($td['date'] == '') {
