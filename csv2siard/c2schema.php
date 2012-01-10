@@ -3006,13 +3006,13 @@ $static_torque2siard = '<?xml version="1.0"?>
 									<xsl:text>)</xsl:text>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:text>(255)</xsl:text>
+									<xsl:text>(4080)</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
 					</xsl:when>
 					<!-- BIT -->
 					<xsl:when test="@type=\'BIT\'">
-						<xsl:text>BIT VARYING</xsl:text>
+						<xsl:text>BIT</xsl:text>
 							<xsl:choose>
 								<xsl:when test="@size">
 									<xsl:text>(</xsl:text>

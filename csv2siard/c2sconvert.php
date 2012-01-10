@@ -92,11 +92,11 @@ global $prg_option;
 			// check field type (type constraint) and convert to XML type (default size 255)
 			if (array_key_exists('_a', $column)) {
 				$type = $column['_a']['type'];
-				$size = (array_key_exists('size', $column['_a'])) ? $column['_a']['size'] : 255;
+				$size = (array_key_exists('size', $column['_a'])) ? $column['_a']['size'] : NULL;
 			}
 			else {
 				$type = $column['type'];
-				$size = (array_key_exists('size', $column)) ? $column['size'] : 255;
+				$size = (array_key_exists('size', $column)) ? $column['size'] : NULL;
 			}
 			$buf = trim($buf);
 			// file with EOF = SUB (dec 026 hex 0xA1)
@@ -158,27 +158,40 @@ global $prg_option;
 				case "LONGVARCHAR":
 				case "CLOB":
 					$buf = xml_encode($buf);
+					$size = (is_null($size)) ? 255 : $size; // default size
 					if (strlen($buf) > $size) {
-						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					break;
 				case "BIT":
+					$size = (is_null($size)) ? 8 : $size; // default size
 					if (strlen($buf) > $size) {
-						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
+					if ($size > 8) {
+						echo "\nFieldsize $size exceeds max bit size 8 in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					}
+					$buf = bindec($buf); 
+					$buf = chr($buf);
 					$buf = bin2hex($buf);
 					break;
 				case "BINARY":
+					$size = (is_null($size)) ? 4080 : $size; // default size
+					if ((strlen($buf)*8) > $size) {
+						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					}
+					$buf = bin2hex($buf);
+					break;
 				case "VARBINARY":
 				case "LONGVARBINARY":
 				case "BLOB":
-					//echo "$buf ($size)\n";
+					$size = (is_null($size)) ? 4080 : $size; // default size
 					$bbuf = base64_decode($buf);
 					if ($bbuf == FALSE) {
 						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 						$bbuf = $buf;
-					} elseif (strlen($bbuf) > $size) {
-						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					} elseif ((strlen($bbuf)*8) > $size) {
+						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($bbuf);
 					break;

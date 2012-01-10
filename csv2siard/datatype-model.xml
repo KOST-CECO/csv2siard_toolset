@@ -39,10 +39,10 @@
 	</table>
 <!-- -->
 	<table name="datatype_binary">
-		<column name="bit" type="BIT" size="5"/>
-		<column name="binary" type="BINARY" size="100"/>
-		<column name="varbinary" type="VARBINARY" size="100"/>
-		<column name="longvarbinary" type="LONGVARBINARY" size="100"/>
+		<column name="bit" type="BIT" size="8"/>
+		<column name="binary" type="BINARY" size="40"/>
+		<column name="varbinary" type="VARBINARY" size="1000"/>
+		<column name="longvarbinary" type="LONGVARBINARY"/>
 		<column name="blob" type="BLOB"/>
 		<column name="clob" type="CLOB"/>
 		<column name="booleanint" type="BOOLEANINT"/>
