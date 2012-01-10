@@ -3010,6 +3010,20 @@ $static_torque2siard = '<?xml version="1.0"?>
 								</xsl:otherwise>
 							</xsl:choose>
 					</xsl:when>
+					<!-- BIT -->
+					<xsl:when test="@type=\'BIT\'">
+						<xsl:text>BIT VARYING</xsl:text>
+							<xsl:choose>
+								<xsl:when test="@size">
+									<xsl:text>(</xsl:text>
+									<xsl:value-of select="@size"/>
+									<xsl:text>)</xsl:text>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:text>(8)</xsl:text>
+								</xsl:otherwise>
+							</xsl:choose>
+					</xsl:when>
 					<!-- BOOLEANINT BOOLEANCHAR -->
 					<xsl:when test="@type=\'BOOLEANINT\' or @type=\'BOOLEANCHAR\'">
 						<xsl:text>BOOLEAN</xsl:text>

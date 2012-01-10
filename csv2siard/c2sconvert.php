@@ -157,20 +157,28 @@ global $prg_option;
 				case "VARCHAR":
 				case "LONGVARCHAR":
 				case "CLOB":
-					echo "$buf ($size)\n";
 					$buf = xml_encode($buf);
+					if (strlen($buf) > $size) {
+						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					}
 					break;
 				case "BIT":
+					if (strlen($buf) > $size) {
+						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					}
 					$buf = bin2hex($buf);
 					break;
 				case "BINARY":
 				case "VARBINARY":
 				case "LONGVARBINARY":
 				case "BLOB":
+					//echo "$buf ($size)\n";
 					$bbuf = base64_decode($buf);
 					if ($bbuf == FALSE) {
 						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 						$bbuf = $buf;
+					} elseif (strlen($bbuf) > $size) {
+						echo "\nFieldsize exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($bbuf);
 					break;

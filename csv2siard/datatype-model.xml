@@ -3,9 +3,9 @@
 
 	<table name="datatype_string">
 		<column name="char_1" type="CHAR"/>
-		<column name="char_2" type="CHAR" size="2"/>
+		<column name="char_2" type="CHAR" size="3"/>
 		<column name="varchar_1" type="VARCHAR"/>
-		<column name="varchar_2" type="VARCHAR" size="10"/>
+		<column name="varchar_2" type="VARCHAR" size="70"/>
 		<column name="longvarchar" type="LONGVARCHAR"/>
 		<column name="clob" type="CLOB"/>
 		<column name="ref" type="REF"/>
@@ -39,10 +39,10 @@
 	</table>
 <!-- -->
 	<table name="datatype_binary">
-		<column name="bit" type="BIT"/>
-		<column name="binary" type="BINARY"/>
-		<column name="varbinary" type="VARBINARY"/>
-		<column name="longvarbinary" type="LONGVARBINARY"/>
+		<column name="bit" type="BIT" size="5"/>
+		<column name="binary" type="BINARY" size="100"/>
+		<column name="varbinary" type="VARBINARY" size="100"/>
+		<column name="longvarbinary" type="LONGVARBINARY" size="100"/>
 		<column name="blob" type="BLOB"/>
 		<column name="clob" type="CLOB"/>
 		<column name="booleanint" type="BOOLEANINT"/>
