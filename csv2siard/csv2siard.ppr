@@ -43,18 +43,26 @@ csv2siard
 		metadata.xsd
 		datatype-model.xml
 [Open project files]
-0=datatype-model.xml
-1=csvtest\datatype_binary.csv
-2=c2sconvert.php
+0=Neu1.txt
+1=run.bat
+2=c2snodbmodel.php
+3=c2sconvert.php
+4=c2screate.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=datatype-model.xml
-[datatype-model.xml]
-TopLine=14
-Caret=40,42
-[csvtest\datatype_binary.csv]
+Selected=c2screate.php
+[Neu1.txt]
 TopLine=1
-Caret=11,2
+Caret=1,1
+[run.bat]
+TopLine=1
+Caret=24,5
+[c2snodbmodel.php]
+TopLine=58
+Caret=1,66
 [c2sconvert.php]
-TopLine=157
-Caret=1,180
+TopLine=139
+Caret=1,166
+[c2screate.php]
+TopLine=98
+Caret=1,119

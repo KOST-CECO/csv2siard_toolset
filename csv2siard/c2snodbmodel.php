@@ -98,8 +98,14 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 						$colarr[$colcnt]['type'] = 'INTEGER';;
 						$colarr[$colcnt]['size'] = 0;
 					}
-					if (strlen($b) > $colarr[$colcnt]['size']) {
-						$colarr[$colcnt]['size'] = strlen($b);
+					// Different stringlength in case of ISO-8859 or UTF-8
+					if ($prg_option['CHARSET'] == 'ISO-8859-1') {
+						$slb = strlen(xml_encode(utf8_encode($b)));
+					} else {
+						$slb = strlen(xml_encode($b));
+					}
+					if ($slb > $colarr[$colcnt]['size']) {
+						$colarr[$colcnt]['size'] = $slb;
 					}
 					$bt = guessDataType($b);
 					if ($order_of_datatype[$bt] > $order_of_datatype[$colarr[$colcnt]['type']]) {
@@ -172,8 +178,12 @@ function guessDataType($buf) {
 		return('VARCHAR');
 	}
 	// == INTEGER
-	if (ctype_digit($buf)) {
-		return('INTEGER');
+	if (ctype_digit(ltrim($buf, '-'))) {
+		if ($buf > 2147483647) {
+			return('DECIMAL');
+		} else {
+			return('INTEGER');
+		}
 	}
 	// == DECIMAL
 	$b = strtr ($buf, ',', '.');

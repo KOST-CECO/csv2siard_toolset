@@ -80,15 +80,6 @@ global $prg_option;
 
 		if (trim($buffer[$i-1]) != '') {
 			$buf = $buffer[$i-1];
-			// convert to XML characterset utf-8
-			switch ($prg_option['CHARSET']) {
-				case "ASCII":
-					$buf = utf8_encode(ascii2ansi($buf)); break;
-				case "ISO-8859-1":
-					$buf = utf8_encode($buf); break;
-				case "UTF-8":
-					break;
-			}
 			// check field type (type constraint) and convert to XML type (default size 255)
 			if (array_key_exists('_a', $column)) {
 				$type = $column['_a']['type'];
@@ -165,6 +156,14 @@ global $prg_option;
 				case "VARCHAR":
 				case "LONGVARCHAR":
 				case "CLOB":
+					// convert string to XML characterset utf-8
+					if ($prg_option['CHARSET'] == 'ASCII') {
+						$buf = utf8_encode(ascii2ansi($buf));
+					}
+					elseif ($prg_option['CHARSET'] == 'ISO-8859-1') {
+						$buf = utf8_encode($buf);
+					}
+					// xml encode
 					$buf = xml_encode($buf);
 					$size = (is_null($size)) ? 255 : $size; // default size
 					if (strlen($buf) > $size) {

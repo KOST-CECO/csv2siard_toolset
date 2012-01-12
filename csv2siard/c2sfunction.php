@@ -66,7 +66,7 @@ function validateXML($schema,$xml, $message) {
 global $prg_option, $prgdir;
 	if ($prg_option['ERR'] != 0) { return false; }
 
-	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -stream -noout -schema '.
+	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -sax1 -noout -schema '.
 									' "'.$schema.'" '.
 									' "'.$xml.'" '.
 									' 2> '.' "'.$xml.'.out"';
