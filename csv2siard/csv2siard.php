@@ -56,6 +56,7 @@ $version = '1.5';		// DBMS Naming restriction with NO_DB_MODEL
 $version = '1.6';		// SIARD Datei mit MD5 Hash & SUB an Dateiende möglich
 $version = '1.6.1';	// detectSUB fix
 $version = '1.6.2';	// binary field processing implemented
+$version = '1.6.3';	// enhanced xmllint output
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

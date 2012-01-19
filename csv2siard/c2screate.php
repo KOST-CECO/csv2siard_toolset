@@ -276,7 +276,10 @@ global $wdir, $prgdir, $prg_option;
 	chdir($wdir);
 
 	// rename ZIP file to SIARD file
-	rrmdir($prg_option['SIARD_DIR']);
+	if ($prg_option['ERR'] != 64) {
+		// keep XML files in case of XML convertion error
+		rrmdir($prg_option['SIARD_DIR']);
+	}
 	rename($zipfile, $prg_option['SIARD_FILE']);
 }
 ?>

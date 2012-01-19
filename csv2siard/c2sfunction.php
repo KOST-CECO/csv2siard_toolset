@@ -72,11 +72,17 @@ global $prg_option, $prgdir;
 									' 2> '.' "'.$xml.'.out"';
 	exec($commandline, $result, $retval);
 	if ($retval) {
-		$result = file_get_contents("$xml.out");
-		$result_array = explode("\n", $result, 2);
-		echo "$message\n$result_array[0]\n";
-		$prg_option['ERR'] = 64;
+		//print max 3 xmllint output lines
+		$resultcnt = 1;
+		$resultfile = @fopen("$xml.out", "r");
+		while (!feof($resultfile)) {
+			$resultline = fgets($resultfile);
+			echo $resultline;
+			if ($resultcnt++ >= 3) break;
+		}
+		fclose($resultfile);
 		@unlink("$xml.out");
+		$prg_option['ERR'] = 64;
 		return(false);
 	}
 	@unlink("$xml.out");
