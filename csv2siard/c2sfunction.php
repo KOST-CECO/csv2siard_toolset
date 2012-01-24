@@ -66,12 +66,27 @@ function validateXML($schema,$xml, $message) {
 global $prg_option, $prgdir;
 	if ($prg_option['ERR'] != 0) { return false; }
 
-	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -sax1 -noout -schema '.
+	$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -noout -schema '.
 									' "'.$schema.'" '.
 									' "'.$xml.'" '.
 									' 2> '.' "'.$xml.'.out"';
 	exec($commandline, $result, $retval);
+	
+	// test for out of memory error and try with option "xmllint.exe -stream"
 	if ($retval) {
+		$test_it = file_get_contents("$xml.out", 30);
+		if (stristr($test_it, 'out of memory')) {
+			@unlink("$xml.out");
+				$commandline =  'CALL "'.$prgdir.'\\xmllint.exe"'.' -stream -noout -schema '.
+											' "'.$schema.'" '.
+											' "'.$xml.'" '.
+											' 2> '.' "'.$xml.'.out"';
+			exec($commandline, $result, $retval);
+		}
+	}
+
+	if ($retval) {
+		echo "$message\n";
 		//print max 3 xmllint output lines
 		$resultcnt = 1;
 		$resultfile = @fopen("$xml.out", "r");

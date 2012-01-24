@@ -43,39 +43,5 @@ csv2siard
 		metadata.xsd
 		datatype-model.xml
 [Open project files]
-0=csv2siard.php
-1=c2screate.php
-2=c2sfunction.php
-3=\\adb.intra.admin.ch\userhome$\BAR-01\U80789367\Config\data\siard suite\tmp6302484927071786491.bin
-4=Unicode.txt
-5=ANSI.txt
-6=UTF-8.txt
-7=x.txt
 [Selected Project Files]
 Main=csv2siard.php
-Selected=UTF-8.txt
-[csv2siard.php]
-TopLine=26
-Caret=47,59
-[c2screate.php]
-TopLine=244
-Caret=52,280
-[c2sfunction.php]
-TopLine=186
-Caret=22,221
-BookMark0=1,85
-[\\adb.intra.admin.ch\userhome$\BAR-01\U80789367\Config\data\siard suite\tmp6302484927071786491.bin]
-TopLine=1
-Caret=1,1
-[Unicode.txt]
-TopLine=1
-Caret=1,1
-[ANSI.txt]
-TopLine=1
-Caret=1,1
-[UTF-8.txt]
-TopLine=1
-Caret=1,1
-[x.txt]
-TopLine=1
-Caret=1,1
