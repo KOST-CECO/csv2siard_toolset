@@ -43,5 +43,18 @@ csv2siard
 		metadata.xsd
 		datatype-model.xml
 [Open project files]
+0=Neu1.txt
+1=Neu2.txt
+2=run.bat
 [Selected Project Files]
 Main=csv2siard.php
+Selected=Neu2.txt
+[Neu1.txt]
+TopLine=1
+Caret=1,1
+[Neu2.txt]
+TopLine=1
+Caret=78,1
+[run.bat]
+TopLine=1
+Caret=53,2

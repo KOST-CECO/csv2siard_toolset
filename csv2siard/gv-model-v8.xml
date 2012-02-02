@@ -21,7 +21,7 @@
 		<column name="gemeinde_bfs" type="VARCHAR" size="20" description="BfS -Gemeindenummer"/>
 		<column name="gemeinde" type="VARCHAR" size="255" description="Gemeindename"/>
 		<column name="strasse" type="VARCHAR" size="255" description="Strasse oder Flurbezeichnung"/>
-		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35 oder “87, 89)"/>
+		<column name="strasse_nr" type="VARCHAR" size="255" description="Hausnummer (möglich ist auch 33/35 oder “87, 89)"/>
 		<column name="wohnung_nr" type="VARCHAR" size="20" description="Wohnungsnummer"/>
 		<column name="plz" type="VARCHAR" size="6" description="4-stellige Plz"/>
 		<column name="plz_zusatz" type="VARCHAR" size="20" description="Ziffer 5+6 der 6-stelligen Plz, meist leer"/>
@@ -37,7 +37,7 @@
 		<column name="klasse_text" type="VARCHAR" size="255" description="NAT: natürliche Person - JUR: juristische (nicht natürliche) Person"/>
 		<column name="name" type="VARCHAR" size="255" description="Personen-Suchbegriff"/>
 		<column name="strasse" type="VARCHAR" size="255" description="Strasse oder Flurbezeichnung"/>
-		<column name="strasse_nr" type="VARCHAR" size="20" description="Hausnummer (möglich ist auch 33/35‘ oder “87, 89)"/>
+		<column name="strasse_nr" type="VARCHAR" size="255" description="Hausnummer (möglich ist auch 33/35‘ oder “87, 89)"/>
 		<column name="wohnung_nr" type="VARCHAR" size="20" description="Wohnungsnummer"/>
 		<column name="land" type="VARCHAR" size="255" description="Land"/>
 		<column name="plz" type="VARCHAR" size="6" description="Postleitzahl"/>

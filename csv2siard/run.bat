@@ -1,7 +1,10 @@
 @ECHO OFF
-DEL /Q test.siard
+DEL /Q test.siard gvtg.siard gvtg(vertraulich).siard
 echo --------- %time%
-php.exe csv2siard.php datatype-model.xml csvtest test.siard csvtest/csvtest.prefs
+REM csv2siard.exe NO_DB_MODEL P:\KOST\Pilotloesungen\Gebaeudeversicherung\9_Testdaten\csvdata_TG(vertraulich) gvtg(vertraulich).siard
+csv2siard.exe gv-model-v8.xml P:\KOST\Pilotloesungen\Gebaeudeversicherung\9_Testdaten\csvdata_TG(vertraulich) gvtg(vertraulich).siard
+REM csv2siard.exe gv-model-v8.xml csvdata gvtg.siard
+REM php.exe csv2siard.php datatype-model.xml csvtest test.siard csvtest/csvtest.prefs
 REM php.exe csv2siard.php NO_DB_MODEL csvtest test.siard csvtest/csvtest.prefs
 
 REM php.exe csv2siard.php NO_DB_MODEL csvtest test.siard
