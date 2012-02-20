@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Heinz Gnehm (Schweizerisches Bundesarchiv / Fachstelle ARELDA) -->
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
 	<table name="gv_gebaeude" description="Umfasst die Basisdaten zu versicherten und fremdversicherten Gebäuden sowie zu abgebrochenen Gebäuden mit einem Schadenfall in der Beobachtungsperiode">
@@ -44,8 +45,8 @@
 		<column name="plz_zusatz" type="VARCHAR" size="20" description="Postleitzahl Zusatzziffern"/>
 		<column name="ort" type="VARCHAR" size="255" description="Ort"/>
 		<column name="ort_zusatz" type="VARCHAR" size="20" description="Ortsergänzung. Verwendet meist für Postfach."/>
-		<column name="gueltig_ab" type="VARCHAR" size="10" description="Handänderungs- oder technisches Gültig-ab-Datum"/>
-		<column name="gueltig_bis" type="VARCHAR" size="10" description="Gültig-bis-Datum. Wenn Beziehung noch gültig ist, wird kein Datum (leer) geliefert"/>
+		<column name="gueltig_ab" type="DATE" description="Handänderungs- oder technisches Gültig-ab-Datum"/>
+		<column name="gueltig_bis" type="DATE" description="Gültig-bis-Datum. Wenn Beziehung noch gültig ist, wird kein Datum (leer) geliefert"/>
 		<column name="rolle_code" type="VARCHAR" size="255" description="Rolle als Code"/>
 		<column name="rolle_text" type="VARCHAR" size="255" description="Rolle im Klartext"/>
 		<foreign-key foreignTable="gv_gebaeude" name="fk_person_gebaeude">
@@ -67,8 +68,8 @@
 		<column name="id" type="VARCHAR" size="16" description="Eindeutige Schaden-ID" required="true"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
 		<column name="nummer" type="VARCHAR" size="20" description="Nummer der Bauzeitversicherung"/>
-		<column name="datum" type="VARCHAR" size="10" description="Schadendatum"/>
-		<column name="datum_erledigung" type="VARCHAR" size="10" description="Erledigungsdatum Versicherungsfall"/>
+		<column name="datum" type="DATE" description="Schadendatum"/>
+		<column name="datum_erledigung" type="DATE" description="Erledigungsdatum Versicherungsfall"/>
 		<column name="art_code" type="VARCHAR" size="10" description="Schadenart codiert"/>
 		<column name="art_text" type="VARCHAR" size="255" description="Schadenart im Klartext"/>
 		<column name="ursache_code" type="VARCHAR" size="10" description="Schadenursache codiert"/>
@@ -88,13 +89,13 @@
 		<option key="file" value="gv_schaetzung.dat"/>
 		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutige ID für die Schätzung" required="true"/>
 		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
-		<column name="datum_ausfuehrung" type="VARCHAR" size="10" description="Schätzungsdatum"/>
+		<column name="datum_ausfuehrung" type="DATE" description="Schätzungsdatum"/>
 		<column name="grund_code" type="VARCHAR" size="10" description="Schätzungsgrund codiert"/>
 		<column name="grund_text" type="VARCHAR" size="255" description="Schätzungsgrund im Klartext"/>
 		<column name="wertvermehrung" type="DOUBLE" description="Wertvermehrende Investitionen"/>
 		<column name="wertvermehrung_kommentar" type="VARCHAR" size="255" description="Kommentar wertvermehrende Investitionen"/>
 		<column name="kommentar_zusatz" type="VARCHAR" size="255" description="Zusatzkommentar"/>
-		<column name="datum_erledigung" type="VARCHAR" size="10" description="Erledigungsdatum"/>
+		<column name="datum_erledigung" type="DATE" description="Erledigungsdatum"/>
 		<column name="status_code" type="VARCHAR" size="10" description="Dispostatus codiert"/>
 		<column name="status_text" type="VARCHAR" size="255" description="Dispostatus im Klartext"/>
 		<column name="ereignis_code" type="VARCHAR" size="10" description="Ereignis codiert"/>

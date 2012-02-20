@@ -43,10 +43,5 @@ csv2siard
 		metadata.xsd
 		datatype-model.xml
 [Open project files]
-0=run.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=run.bat
-[run.bat]
-TopLine=1
-Caret=53,2

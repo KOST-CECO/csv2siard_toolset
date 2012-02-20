@@ -3,8 +3,8 @@ id;grundstueck_id;police_nr;suchbegriff;status_code;status_text;zweck_code;zweck
 01 10002;588;01 10002;;;aktiv;90;Nebengeb.u.nicht bes.eing.Geb.;1973;H;Hart;;;BL;4;4469;Anwil;Bohlstr.;;;;;;
 01 10003;313;01 10003;;;aktiv;73;Maschinenind. und Apparatebau;1974;H;Hart;;;BL;4;4469;Anwil;Wängistr.;;;;;;
 01 10004;201;01 10004;;;aktiv;32;Reine landw. Betriebsgebäude;1899;W;Weich;;;BL;4;4469;Anwil;Sulzerhof;;;;;;
-01 10005;201;01 10005;;;aktiv;32;Reine landw. Betriebsgebäude;1860;G;Gemischt;;;BL;4;4469;Anwil;Sulzerhof;5;;;;;
+01 10005;201;01 10005;;;abgebrochen;32;Reine landw. Betriebsgebäude;1860;G;Gemischt;;;BL;4;4469;Anwil;Sulzerhof;5;;;;;
 01 10006;352;01 10006;;;aktiv;90;Nebengeb.u.nicht bes.eing.Geb.;1974;H;Hart;;;BL;4;4469;Anwil;Grüntal;;;;;;
 01 10007;864;01 10007;;;aktiv;16;Kunst-,Kultur-undSportgebäude;1974;H;Hart;;;BL;4;4469;Anwil;In der Rotfarb;;;;;;
-01 10008;202;01 10008;;;aktiv;20;Reine Wohngebäude;1969;H;Hart;;;BL;4;4469;Anwil;Baslerstr.;2;;;;;
-01 10009;1;01 10009;;;aktiv;81;Gastwirtschaftsbetriebe;1899;G;Gemischt;;;BL;4;4469;Anwil;Hauptstr.;50/Grill El Capone;;;;;
+01 10008;202;01 10008;;;aktiv;20;Reine Wohngebäude;1969;H;Hart;;;BL;4;4416;Bubendorf;Baslerstr.;2;;;;;
+01 10009;1;01 10009;Gasthof;;aktiv;81;Gastwirtschaftsbetriebe;1899;G;Gemischt;;;BL;4;4416;Bubendorf;Hauptstr.;50;;;;;
