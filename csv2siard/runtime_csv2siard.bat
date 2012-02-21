@@ -73,7 +73,7 @@ CALL csv2siard.exe no_db_model ..\..\csvdata ..\..\test.siard
 REM zip ------------------------------------------------------------------------
 CD ..
 %UNIX_HOME%\7z.exe a -mx9 %RUNTIME%.zip *
-COPY %RUNTIME%.zip ..\%RUNTIME%.zip
+COPY %RUNTIME%.zip ..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
 CD ..
 RMDIR /S /Q %RUNTIME%

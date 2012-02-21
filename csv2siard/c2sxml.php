@@ -89,12 +89,31 @@ function ins2ary(&$ary, $element, $pos) {
 // -----------------------------------------------------------------------------
 // encode string with xml entities: < &lt;  > &gt;  & &amp;  " &quot;  ' &apos;
 function xml_encode($buf) {
+global $prg_option;
+
 	$buf = str_replace ("&", "&amp;", $buf);
 	$buf = str_replace ("'", "&apos;", $buf);
 	$buf = str_replace ('"', "&quot;", $buf);
 	$buf = str_replace ("<", "&lt;", $buf);
 	$buf = str_replace (">", "&gt;", $buf);
-	return($buf);
+	
+	// convert all non printable character to xml entities
+	if ($prg_option['INVALID_ENTITIES']) {
+		$out = '';
+		for ( $i=0; $i < strlen( $buf ); ){
+			$val = $buf[$i++];
+			$ordval = ord($val);
+			if ($ordval < 32 and $ordval != 9) {
+				$out = $out.'&#'. sprintf("%04d", $ordval).';';
+			}
+			else {
+				$out = $out.$val;
+			}
+		}
+		return($out);
+	} 
+	else {
+		return($buf);
+	}
 }
 ?>
-

@@ -88,6 +88,8 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['PI_COUNT'] = 100;						// progress indicator per line processed
 	$prg_option['MAX_ROWSIZE'] = 100000;			// maximal CSV row size
 	$prg_option['VERBOSITY'] = false;					// Display additional messages
+	$prg_option['DATE_FORMAT'] = false;				// Special date format string according to php strptime()
+	$prg_option['INVALID_ENTITIES'] = false;	// Ignore invalid XML character
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description
 	$prg_option['ARCHIVED_BY'] = '';					// Database archived by
@@ -100,7 +102,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 
 	// specific preference file
 	if ($argc == 5) {
-		$prefsfile = str_replace('\\', '/', "$wdir/$argv[4]");
+		$prefsfile = str_replace('\\', '/', realpath($argv[4]));
 		if (!is_file($prefsfile)) {
 			echo "Preference file $prefsfile not found\n"; exit(1);
 		}

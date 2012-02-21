@@ -165,10 +165,15 @@ if(function_exists("strptime") == false)
    empty [date] means convertion failor 
 */
 function convert2XMLdate($str) {
+global $prg_option;
 $retval = array();
 
+	// using DATE_FORMAT sting from Preference file
+	if ($prg_option['DATE_FORMAT'] and is_array($arr = strptime($str, $prg_option['DATE_FORMAT'])) and $arr['unparsed'] == '') {
+		$retval['type'] = "Preference DATE_FORMAT";
+	}
 	// non-standard: YY MM DD hh II SS like '20080701223807'
-	if (is_array($arr = strptime($str, '%Y%m%d%H%M%S')) and $arr['unparsed'] == '') {
+	elseif (is_array($arr = strptime($str, '%Y%m%d%H%M%S')) and $arr['unparsed'] == '') {
 		$retval['type'] = "non-standard";
 	}
 	// XMLRPC (Compact): YY MM DD 't' hh II SS "20080701t223807" or "20080701T093807" 
@@ -210,6 +215,10 @@ $retval = array();
 		$arr = strptime($retval['date'], '%Y-%m-%dT%H:%M:%S');
 		$retval['type'] = "Common Log Format";
 	}
+	// MS-Excel non standard (DE) dd "." mm "." YY " " hh ":" ii ":" ss "01.07.2008 09:03:37" 
+	elseif (is_array($arr = strptime($str, '%d.%m.%Y %H:%M:%S')) and $arr['unparsed'] == '') {
+		$retval['type'] = "MS-Excel non standard (DE)";
+	}
 	// UNIX date format
 	else {
 		$tmp = @strtotime($str);
@@ -219,7 +228,7 @@ $retval = array();
 	}
 	// prepare output in XML date format
 	if (is_array($arr)) {
-		// Date '0' is not supposed to be UNIX 'now' or 'epoche' but no date information
+		// Date='0' is not supposed to be UNIX  +-0 from 'now' or 'epoche' but no date information
 		if ($str == 0) {
 			$retval['date'] = '';
 			$retval['utc'] = '0';
