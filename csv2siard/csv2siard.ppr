@@ -32,7 +32,6 @@ csv2siard
 		c2stimedate.php
 		zip.php
 	+datamodel
-		gv-model-v8.xml
 		minimal-model.xml
 		minimal1-model.xml
 		minimal2-model.xml

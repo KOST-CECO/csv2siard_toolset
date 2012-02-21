@@ -212,15 +212,21 @@ $retval = array();
 	}
 	// UNIX date format
 	else {
-		$tmp = strtotime($str);
+		$tmp = @strtotime($str);
 		$retval['date'] = strftime('%Y-%m-%dT%H:%M:%S', $tmp);
 		$arr = strptime($retval['date'], '%Y-%m-%dT%H:%M:%S');
-		$retval['type'] = "UNIX native date format";		
+		$retval['type'] = "UNIX native date format";
 	}
 	// prepare output in XML date format
 	if (is_array($arr)) {
-		$retval['date'] = sprintf('%02d-%02d-%02dT%02d:%02d:%02d', $arr['tm_year']+1900, $arr['tm_mon']+1, $arr['tm_mday'], $arr['tm_hour'], $arr['tm_min'], $arr['tm_sec']);
-		$retval['utc'] = $arr['tm_utc'];
+		// Date '0' is not supposed to be UNIX 'now' or 'epoche' but no date information
+		if ($str == 0) {
+			$retval['date'] = '';
+			$retval['utc'] = '0';
+		} else {
+			$retval['date'] = sprintf('%02d-%02d-%02dT%02d:%02d:%02d', $arr['tm_year']+1900, $arr['tm_mon']+1, $arr['tm_mday'], $arr['tm_hour'], $arr['tm_min'], $arr['tm_sec']);
+			$retval['utc'] = $arr['tm_utc'];
+		}
 		return($retval);
 	}
 	else {

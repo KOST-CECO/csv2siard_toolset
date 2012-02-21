@@ -1,7 +1,7 @@
 @ECHO OFF
 DEL /Q *.siard
 echo --------- %time%
-csv2siard.exe gv-model-v9.xml csvdata gvtg.siard csvdata\gvtg.prefs
+php.exe csv2siard.php gv-model-v9.xml csvdata gvtg.siard csvdata\gvtg.prefs
 
 REM csv2siard.exe gv-model-v9.xml P:\KOST\Pilotloesungen\Gebaeudeversicherung\4_GV-Viewer\csvdata P:\KOST\Pilotloesungen\Gebaeudeversicherung\4_GV-Viewer\gvtg.siard
 REM csv2siard.exe gv-model-v9.xml P:\KOST\Pilotloesungen\Gebaeudeversicherung\9_Testdaten\csvdata_TG(vertraulich) P:\KOST\Pilotloesungen\Gebaeudeversicherung\4_GV-Viewer\gvtg(vertraulich).siard
@@ -21,6 +21,6 @@ REM csv2siard.exe NO_DB_MODEL ../9_Testdaten/csvdata_TG test.siard
 @ECHO OFF
 if %ERRORLEVEL% == 0 (
 	REM SIARD v.1.20 kann in MS Access importieren (Fehler in v.1.26)
-	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.20\bin\SiardEdit.jar"
+	CALL "C:\Software\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.20\bin\SiardEdit.jar"
 )
 exit /b

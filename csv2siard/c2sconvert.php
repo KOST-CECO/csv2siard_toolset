@@ -62,6 +62,7 @@ global $prg_option;
 
 	fwrite ($siardhandle, "<row>");
 	
+	// handle each <column> in a CSV line
 	for ($i=1; $i <= $columcount; $i++) {
 		// multiple columns or only one column
 		$column = (array_key_exists($i-1, $table['_c']['column'])) ? $table['_c']['column'][$i-1] : $table['_c']['column'];
@@ -130,15 +131,15 @@ global $prg_option;
 					break;
 				case "DATE":
 				$td = convert2XMLdate($buf);
-					if ($td['date'] == '') {
+					if (!$td) {
 						echo "\nDate convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
-						$buf = substr($td['date'], 0, 10).'Z';
+						$buf = substr($td['date'], 0, 10);
 					}
 					break;
 				case "TIME":
 					$td = convert2XMLdate($buf);
-					if ($td['date'] == '') {
+					if (!$td) {
 						echo "\nTime convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
 						$buf = substr($td['date'], 11);
@@ -146,7 +147,7 @@ global $prg_option;
 					break;
 				case "TIMESTAMP":
 				$td = convert2XMLdate($buf);
-					if ($td['date'] == '') {
+					if (!$td) {
 						echo "\nTimestamp convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
 						$buf = $td['date'].'.000000000Z';
@@ -221,8 +222,12 @@ global $prg_option;
 			}
 			
 			// write a <column> into SIARD XML file
-			$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
-			fwrite ($siardhandle, $buf);
+			if ($required != 'true' and $buf == '') {
+				// do not write empty column if not necessary (e.g. date = 0)
+			} else {
+				$buf = '<c' . $i . '>' . $buf . '</c' . $i . '>';
+				fwrite ($siardhandle, $buf);
+			}
 		}
 	}
 
