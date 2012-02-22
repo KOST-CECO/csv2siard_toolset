@@ -58,7 +58,7 @@ $version = '1.6.1';	// detectSUB fix
 $version = '1.6.2';	// binary field processing implemented
 $version = '1.6.3';	// enhanced xmllint output
 $version = '1.6.4';	// date = 0 fixed
-$version = '1.6.5';	// preference path fixed and allow invalid xml character / XML schema violation
+$version = '1.7';		// preference path fixed and allow invalid xml character / XML schema violation
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

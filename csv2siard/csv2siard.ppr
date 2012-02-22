@@ -42,5 +42,14 @@ csv2siard
 		metadata.xsd
 		datatype-model.xml
 [Open project files]
+0=Neu1.txt
+1=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
+Selected=csv2siard.php
+[Neu1.txt]
+TopLine=1
+Caret=1,1
+[csv2siard.php]
+TopLine=15
+Caret=20,61
