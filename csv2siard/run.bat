@@ -1,6 +1,7 @@
 @ECHO OFF
 DEL /Q *.siard
 echo --------- %time%
+REM php.exe csv2siard.php datatype-model.xml csvtest gvtg.siard csvtest\csvtest.prefs
 php.exe csv2siard.php gv-model-v9.xml csvdata gvtg.siard csvdata\gvtg.prefs
 
 REM csv2siard.exe gv-model-v9.xml P:\KOST\Pilotloesungen\Gebaeudeversicherung\4_GV-Viewer\csvdata P:\KOST\Pilotloesungen\Gebaeudeversicherung\4_GV-Viewer\gvtg.siard

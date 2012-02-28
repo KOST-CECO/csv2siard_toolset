@@ -37,7 +37,7 @@
 		<column name="real" type="REAL"/>
     <column name="double" type="DOUBLE"/>
 	</table>
-<!-- -->
+	
 	<table name="datatype_binary">
 		<column name="bit" type="BIT" size="8"/>
 		<column name="binary" type="BINARY" size="40"/>
@@ -48,4 +48,10 @@
 		<column name="booleanint" type="BOOLEANINT"/>
 		<column name="booleanchar" type="BOOLEANCHAR"/>
 	</table>
+	
+	<table name="ascii">
+		<column name="string_1" type="VARCHAR" size="1000"/>
+		<column name="string_2" type="VARCHAR" size="1000"/>
+	</table>
+
 </database>

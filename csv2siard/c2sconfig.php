@@ -89,7 +89,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['MAX_ROWSIZE'] = 100000;			// maximal CSV row size
 	$prg_option['VERBOSITY'] = false;					// Display additional messages
 	$prg_option['DATE_FORMAT'] = false;				// Special date format string according to php strptime()
-	$prg_option['INVALID_ENTITIES'] = false;	// Ignore invalid XML character
+	$prg_option['UNICODE_EXTENDED'] = false;	// Convert non Unicode character to \u00xx notation
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description
 	$prg_option['ARCHIVED_BY'] = '';					// Database archived by

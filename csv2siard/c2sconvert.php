@@ -166,6 +166,11 @@ global $prg_option;
 					}
 					// xml encode
 					$buf = xml_encode($buf);
+					
+					// encode consecutive spaces
+					$buf = str_replace ('  ', ' \u0020', $buf);
+					$buf = str_replace ('\u0020 \u0020', '\u0020\u0020\u0020', $buf);
+					
 					$size = (is_null($size)) ? 255 : $size; // default size
 					if (strlen($buf) > $size) {
 						echo "\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;

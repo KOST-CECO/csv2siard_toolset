@@ -68,6 +68,7 @@ CALL csv2siard.exe
 CALL csv2siard.exe ..\..\table2-model.xml ..\..\csvdata ..\..\test.siard
 DEL /Q ..\..\test.siard
 CALL csv2siard.exe no_db_model ..\..\csvdata ..\..\test.siard
+DEL no_db_model.xml
 
 @ECHO OFF
 REM zip ------------------------------------------------------------------------

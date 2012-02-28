@@ -58,7 +58,7 @@ $version = '1.6.1';	// detectSUB fix
 $version = '1.6.2';	// binary field processing implemented
 $version = '1.6.3';	// enhanced xmllint output
 $version = '1.6.4';	// date = 0 fixed
-$version = '1.7';		// preference path fixed and allow invalid xml character / XML schema violation
+$version = '1.7';		// preference path fixed/non Unicode character/XML schema violation/consecutive spaces
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -156,7 +156,7 @@ if ($prg_option['ERR'] == 0) {
 	echo "\nSIARD file created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n";
 	echo "Conversion completed\n";
 }
-elseif ($prg_option['INVALID_ENTITIES'] and $prg_option['ERR'] == 64) {
+elseif ($prg_option['UNICODE_EXTENDED'] and $prg_option['ERR'] == 64) {
 	echo "\nSIARD file with XML ERRORS created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n";
 	echo "Conversion completed\n";
 }

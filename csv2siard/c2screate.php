@@ -122,7 +122,7 @@ global $prg_option, $prgdir;
 		}
 		elseif(count($buf) < $columcount) {
 			if ($prg_option['CHECK_COLUMN']) {
-				echo "\nIncorrect CSV on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
+				echo "\nIncorrect columne count on line $rowcount in file $csvfile"; $prg_option['ERR'] = 4;
 			}
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];

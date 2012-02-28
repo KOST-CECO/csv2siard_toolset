@@ -90,21 +90,23 @@ function ins2ary(&$ary, $element, $pos) {
 // encode string with xml entities: < &lt;  > &gt;  & &amp;  " &quot;  ' &apos;
 function xml_encode($buf) {
 global $prg_option;
+	// Convert special characters to XML entities
+	$buf = htmlspecialchars($buf, ENT_QUOTES);
 
-	$buf = str_replace ("&", "&amp;", $buf);
-	$buf = str_replace ("'", "&apos;", $buf);
-	$buf = str_replace ('"', "&quot;", $buf);
-	$buf = str_replace ("<", "&lt;", $buf);
-	$buf = str_replace (">", "&gt;", $buf);
-	
 	// convert all non printable character to xml entities
-	if ($prg_option['INVALID_ENTITIES']) {
+	if ($prg_option['UNICODE_EXTENDED']) {
 		$out = '';
 		for ( $i=0; $i < strlen( $buf ); ){
 			$val = $buf[$i++];
 			$ordval = ord($val);
-			if ($ordval < 32 and $ordval != 9) {
-				$out = $out.'&#'. sprintf("%04d", $ordval).';';
+			if ($ordval <= 8
+						or ($ordval >= 14 and $ordval <= 31)
+						// string is allready converted to UTF-8
+						// or ($ordval >= 92)
+						// or ($ordval >= 127 and $ordval <= 159)
+					) {
+				$out = $out.'\u'. sprintf("%04x", $ordval);
+				// $out = $out.'&#'. sprintf("%04d", $ordval).';';
 			}
 			else {
 				$out = $out.$val;
