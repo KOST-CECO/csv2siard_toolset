@@ -93,7 +93,7 @@ global $prg_option;
 	// Convert special characters to XML entities
 	$buf = htmlspecialchars($buf, ENT_QUOTES);
 
-	// convert all non printable character to xml entities
+	// use escaped Unicode encodings for non printable character (\u00xx)
 	if ($prg_option['UNICODE_EXTENDED']) {
 		$out = '';
 		for ( $i=0; $i < strlen( $buf ); ){
@@ -117,5 +117,13 @@ global $prg_option;
 	else {
 		return($buf);
 	}
+}
+
+// -----------------------------------------------------------------------------
+// encode consecutive white space with Unicode \u0020
+function xml_white_space($buf) {
+	$buf = str_replace ('  ', ' \u0020', $buf);
+	$buf = str_replace ('\u0020 \u0020', '\u0020\u0020\u0020', $buf);
+	return($buf);
 }
 ?>

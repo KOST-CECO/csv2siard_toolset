@@ -166,10 +166,8 @@ global $prg_option;
 					}
 					// xml encode
 					$buf = xml_encode($buf);
-					
 					// encode consecutive spaces
-					$buf = str_replace ('  ', ' \u0020', $buf);
-					$buf = str_replace ('\u0020 \u0020', '\u0020\u0020\u0020', $buf);
+					$buf = xml_white_space($buf);
 					
 					$size = (is_null($size)) ? 255 : $size; // default size
 					if (strlen($buf) > $size) {

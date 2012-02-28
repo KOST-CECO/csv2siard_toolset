@@ -43,9 +43,13 @@ csv2siard
 		ascii-model.xml
 [Open project files]
 0=runtime_csv2siard.bat
+1=compile_csv2siard.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=runtime_csv2siard.bat
+Selected=compile_csv2siard.bat
 [runtime_csv2siard.bat]
-TopLine=34
+TopLine=33
 Caret=23,83
+[compile_csv2siard.bat]
+TopLine=1
+Caret=1,1
