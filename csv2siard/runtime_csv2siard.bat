@@ -78,3 +78,6 @@ COPY %RUNTIME%.zip ..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
 CD ..
 RMDIR /S /Q %RUNTIME%
+
+REM MD5 ------------------------------------------------------------------------
+%UNIX_HOME%\md5sum.exe ..\04_Publikation\%RUNTIME%.zip

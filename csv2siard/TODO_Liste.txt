@@ -1,0 +1,41 @@
+csv2siard TODO Liste
+++++++++++++++++++++
+
+Planung csv2siard 1.7
+---------------------
+- base64 codiert Binärdaten richtig übernehmen
+- anonymisiert (binäre) Testdaten
+- verbesserte DATE Format Erkennung
+- mehrere folgende Leerzeichen richtig verarbeiten
+
+
+csv2siard 1.8
+-------------
+- zip64 Erweiterung
+- no_db_model Verarbeitung beschleunigen durch verbesserte DATE Format Erkennung
+- no_db_model Verarbeitung beschleunigen durch inkrementelle Feld Format Erkennung
+- Datenbank Konsistenz prüfen (Constraints)
+- Schema Validator in Programm integrieren (statt xmllint.exe)
+- crc32 in DLL auslagern
+- File Type Erkennung in PHP integrieren
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Hier die Verarbeitungszeiten für eine CSV Sammlung mit 900 MB -> 1,9 GB SIARD
+- csv2siard mit Datenbankschema  3h 20 min
+- csv2siard no_db_model         13h 10 min
+
+Zum Vergleich:
+- SIARDtoDB 1,9 GB SIARD -> 1.7 GB Access DB 	5h 30 min
+- SIARDfromDB 1.7 GB Access DB -> 1,9 GB SIARD	5h 15 min
+
+Der Speicherplatzbedarf ist natürlich sehr stark abhängig von den Daten:
+CSV			49.0 MB	 909 MB
+SIARD			99.0 MB	1860 MB
+ZIP komprimiert	11.4 MB	  14.1 MB
+GZIP komprimiert	10.8 MB	  10.7 MB
+
+Der Unterschied CSV zu SIARD 1:2 scheint plausibel und ist auch einfach erklärbar.
+Bei der Komprimierung kommt es stark auf die Datenqualität an (Entropie der Daten) Aber wahrscheinlich komprimieren grösser Datenbestände besser.
+Der Unterschied zwischen GZIP und ZIP ist vernachlässigbar, weil die einzelnen Dateien im SIARD File schon die kritische Grösse erreichen.
+Ich würde sagen, dass bei grösseren SIARD Dateien ein komprimierungsfaktor 10 die Regel sein dürfte.

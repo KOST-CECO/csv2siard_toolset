@@ -42,18 +42,10 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=c2sxml.php
-1=ascii-model.xml
-2=csv2siard.php
+0=runtime_csv2siard.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=csv2siard.php
-[c2sxml.php]
-TopLine=69
-Caret=9,105
-[ascii-model.xml]
-TopLine=1
-Caret=50,6
-[csv2siard.php]
-TopLine=129
-Caret=4,166
+Selected=runtime_csv2siard.bat
+[runtime_csv2siard.bat]
+TopLine=34
+Caret=23,83
