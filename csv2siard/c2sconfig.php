@@ -130,6 +130,10 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 			else { $prg_option[$key] = utf8_encode(utf8_decode($val)); }
 		}
 	}
+	
+	// Set special preferences
+	$prg_option['CONNECTION'] = 'file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
+	$prg_option['CLIENTMACHINE'] = $_SERVER['COMPUTERNAME'].'.'.$_SERVER['USERDNSDOMAIN'];
 }
 // check utility programms  ----------------------------------------------------
 function checkUtils() {

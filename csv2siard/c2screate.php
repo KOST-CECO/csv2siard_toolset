@@ -220,9 +220,9 @@ global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $stati
 		'producerApplication' => "$prgname $version - Convert multiple CSV files to siard file",
 		'archivalDate'        => date("Y-m-d"),
 		'messageDigest'       => 'MD5',
-		'clientMachine'       => $_SERVER['COMPUTERNAME'],
+		'clientMachine'       => $prg_option['CLIENTMACHINE'],
 		'databaseProduct'     => $prg_option['DB_TYPE'],
-		'connection'          => 'file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER'])),
+		'connection'          => $prg_option['CONNECTION'],
 		'databaseUser'        => $prg_option['SIARD_USER'],
 		'databaseSchema'      => $prg_option['SIARD_SCHEMA']
 );

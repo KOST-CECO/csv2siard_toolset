@@ -26,30 +26,43 @@ global $prg_option, $prgdir;
 	if(!isset($csvfile) or !is_file($csvfile)) {
 		echo "ODBC specification file $tablename not found\n"; $prg_option['ERR'] = 2; return;
 	}
-
-	//TODO
-	setTableOption($table, 'localfile', xml_encode($csvfile));
+	setTableOption($table, 'localfile', "123".xml_encode($csvfile));
 	
+	// open ODCB table
 	echo "Process table $tablename ";
-	$odbchandle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
-	if (!$odbchandle) {
-		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n"; $prg_option['ERR'] = 2; return;
+	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
+	if (!$odbc_handle) {
+		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
+		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
+		$prg_option['ERR'] = 2;
+		return;
 	}
-	$sql = rtrim(file_get_contents($csvfile), ';');
-	$recordset = odbc_exec($odbchandle, $sql);
+	// execute a dummy odbc query to get typ of ODCB connection out of error message
+	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
+	// set type and connection info
+	$prg_option['DB_TYPE'] = trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]');
+	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query form file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
+
+	// execute sql command to select table content
+	$sql = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($csvfile)),"\x0A\x0D" , "  ")), '; ');
+	$recordset = @odbc_exec($odbc_handle, $sql);
 	if (!$recordset) {
-		echo "Error in SQL '$sql'\n"; $prg_option['ERR'] = 2; return;
+		echo "Error in SQL command '$sql'\n";
+		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
+		$prg_option['ERR'] = 2;
+		odbc_close($odbc_handle);
+		return;
 	}
 	
 	// open SIARD table XML file for writing
 	$tablefolder = getTableOption($table, 'folder');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
-	$siardhandle = fopen($siardfile, "w");
-	if(!$siardhandle) {
-		echo "Could not write SIARD table XML file $siardfile\n"; $prg_option['ERR'] = 8; return;
+	$siard_handle = fopen($siardfile, "w");
+	if(!$siard_handle) {
+		echo "Could not write SIARD table XML file $siardfile\n"; $prg_option['ERR'] = 8; odbc_close($odbc_handle); return;
 	}
 	// write SIARD file XML header
-	writeSIARDHeader($siardhandle, $tablefolder);
+	writeSIARDHeader($siard_handle, $tablefolder);
 	
 	// read and process CSV file
 	reset($table);
@@ -59,24 +72,24 @@ global $prg_option, $prgdir;
 	while (odbc_fetch_into($recordset, $buf)) {
 		if(count($buf) != $columcount) {
 			echo "\nIncorrect columne count in table $csvfile"; $prg_option['ERR'] = 4;
+			break;
 		}
-
 		// write SIARD table
-		writeSIARDColumn($siardhandle, $buf, $columcount, $rowcount, $table);
+		writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
 		
 		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
 		$rowcount++;
 	}
 
 	// write SIARD file XML footer
-	writeSIARDFooter($siardhandle);
+	writeSIARDFooter($siard_handle);
 	
 	// update table row counter
 	setTableOption($table, 'rowcount', $rowcount-1);
 
 	echo "\n";
-	odbc_close($odbchandle);
-	fclose($siardhandle);
+	odbc_close($odbc_handle);
+	fclose($siard_handle);
 }
 
 ?>
