@@ -62,8 +62,21 @@ $folderstructur ="
 	return;
 }
 // -----------------------------------------------------------------------------
-// read a CSV file and write a SIARD table
 function creatSIARDTable(&$table) {
+global $prg_option;
+
+	if ($prg_option['ODBC_DSN']) {
+		odbc2SIARDTable(&$table);
+	}
+	else {
+		csv2SIARDTable(&$table);
+	}
+	return;
+}
+
+// -----------------------------------------------------------------------------
+// read a CSV file and write a SIARD table
+function csv2SIARDTable(&$table) {
 global $prg_option, $prgdir;
 
 	$tablename = $table['_a']['name'];

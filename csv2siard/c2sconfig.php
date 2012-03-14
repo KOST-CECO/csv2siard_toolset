@@ -99,6 +99,10 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['DB_TYPE'] = 'CSV';						// Type of Database or database product
 	$prg_option['SIARD_USER'] = 'admin';			// default user
 	$prg_option['SIARD_SCHEMA'] = 'schema0';	// default schema
+	// ODBC settings
+	$prg_option['ODBC_DSN'] = '';							// Database source name for the connection
+	$prg_option['ODBC_USER'] = '';						// Database user name
+	$prg_option['ODBC_PASSWORD'] = '';				// Database password
 
 	// specific preference file
 	if ($argc == 5) {

@@ -36,6 +36,7 @@ include 'c2snodbmodel.php';
 include 'c2schema.php';
 include 'c2stimedate.php';
 include 'zip.php';
+include 'c2odbc.php';
 
 // Versionen Liste
 $version = '0.1';		// Read and check command-line arguments
@@ -59,6 +60,7 @@ $version = '1.6.2';	// binary field processing implemented
 $version = '1.6.3';	// enhanced xmllint output
 $version = '1.6.4';	// date = 0 fixed
 $version = '1.7';		// preference path fixed/non Unicode character/XML schema violation/consecutive spaces
+$version = '1.7.1';	// ODBC
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

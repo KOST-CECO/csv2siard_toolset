@@ -42,14 +42,26 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=runtime_csv2siard.bat
-1=compile_csv2siard.bat
+0=Neu1.txt
+1=sqldata\gv_anlage.sql
+2=c2odbc.php
+3=c2screate.php
+4=run.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=compile_csv2siard.bat
-[runtime_csv2siard.bat]
-TopLine=33
-Caret=23,83
-[compile_csv2siard.bat]
+Selected=c2odbc.php
+[Neu1.txt]
 TopLine=1
 Caret=1,1
+[sqldata\gv_anlage.sql]
+TopLine=1
+Caret=2,1
+[c2odbc.php]
+TopLine=11
+Caret=22,33
+[c2screate.php]
+TopLine=85
+Caret=1,111
+[run.bat]
+TopLine=1
+Caret=15,5
