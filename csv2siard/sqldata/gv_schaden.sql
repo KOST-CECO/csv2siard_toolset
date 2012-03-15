@@ -1,1 +1,1 @@
-SELECT * FROM gv_schaden;
+SELECT id, gebaeude_id, nummer, datum, datum_erledigung, art_code, art_text, ursache_code, ursache_text, ursache_zusatz, schadensumme, status_code, status_text, versicherungswert, vkf_code, vkf_text FROM gv_schaden.csv;

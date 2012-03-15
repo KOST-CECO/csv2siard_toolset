@@ -62,6 +62,7 @@ $folderstructur ="
 	return;
 }
 // -----------------------------------------------------------------------------
+// create a SIARD table using either CSV file or ODBC connection
 function creatSIARDTable(&$table) {
 global $prg_option;
 
@@ -73,7 +74,6 @@ global $prg_option;
 	}
 	return;
 }
-
 // -----------------------------------------------------------------------------
 // read a CSV file and write a SIARD table
 function csv2SIARDTable(&$table) {

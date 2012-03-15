@@ -8,7 +8,7 @@ REM php.exe csv2siard.php gv-model-v9.xml csvdata test.siard csvdata\gvtg.prefs
 DEL /Q *.siard
 ECHO --------- %time%
 ECHO.
-php.exe csv2siard.php sqldata\gv-model-v9.xml sqldata test.siard sqldata\gvtg.prefs
+php.exe csv2siard.php sqldata\gv-model-v9.xml sqldata test.siard sqldata\csvtext.prefs
 REM csv2siard.exe sqldata\gv-model-v9.xml sqldata test.siard sqldata\gvtg.prefs
 
 REM php.exe csv2siard.php no_db_model csvtest test.siard csvtest\csvtest.prefs

@@ -16,6 +16,6 @@ TMPDIR=c:\tmp
 DESCRIPTION=Gebäudeversicherung Kanton Thurgau 2006
 TIMESPAN=2005-2006
 
-ODBC_DSN=gvtg
-#ODBC_DSN=csvtext
+#ODBC_DSN=gvtg
+ODBC_DSN=csvtext
 ODBC_USER=Admin

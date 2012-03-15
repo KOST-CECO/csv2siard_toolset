@@ -31,6 +31,7 @@ csv2siard
 		c2schema.php
 		c2stimedate.php
 		zip.php
+		c2odbc.php
 	+datamodel
 		minimal-model.xml
 		minimal1-model.xml
@@ -42,26 +43,30 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=Neu1.txt
-1=sqldata\gv_anlage.sql
-2=c2odbc.php
-3=c2screate.php
-4=run.bat
+0=c2odbc.php
+1=run.bat
+2=sqldata\gvtg.prefs
+3=sqldata\gv_anlage.sql
+4=c2screate.php
+5=csvtextODBC.php
 [Selected Project Files]
 Main=csv2siard.php
 Selected=c2odbc.php
-[Neu1.txt]
-TopLine=1
-Caret=1,1
-[sqldata\gv_anlage.sql]
-TopLine=1
-Caret=2,1
 [c2odbc.php]
-TopLine=11
-Caret=22,33
-[c2screate.php]
-TopLine=85
-Caret=1,111
+TopLine=45
+Caret=3,80
 [run.bat]
 TopLine=1
-Caret=15,5
+Caret=1,6
+[sqldata\gvtg.prefs]
+TopLine=1
+Caret=13,6
+[sqldata\gv_anlage.sql]
+TopLine=1
+Caret=9,1
+[c2screate.php]
+TopLine=110
+Caret=92,121
+[csvtextODBC.php]
+TopLine=1
+Caret=30,39

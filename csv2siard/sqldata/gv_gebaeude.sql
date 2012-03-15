@@ -1,1 +1,1 @@
-SELECT * FROM gv_gebaeude;
+SELECT * FROM gv_gebaeude.csv;

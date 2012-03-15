@@ -29,7 +29,7 @@ global $prg_option, $prgdir;
 	setTableOption($table, 'localfile', "123".xml_encode($csvfile));
 	
 	// open ODCB table
-	echo "Process table $tablename ";
+	echo "Process table (encoding: $prg_option[CHARSET]) $tablename ";
 	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
 	if (!$odbc_handle) {
 		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
@@ -40,7 +40,7 @@ global $prg_option, $prgdir;
 	// execute a dummy odbc query to get typ of ODCB connection out of error message
 	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
 	// set type and connection info
-	$prg_option['DB_TYPE'] = trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]');
+	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
 	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query form file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
 
 	// execute sql command to select table content
@@ -69,16 +69,32 @@ global $prg_option, $prgdir;
 	$rowcount = 1;
 	$columcount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
 	
-	while (odbc_fetch_into($recordset, $buf)) {
-		if(count($buf) != $columcount) {
-			echo "\nIncorrect columne count in table $csvfile"; $prg_option['ERR'] = 4;
-			break;
-		}
-		// write SIARD table
-		writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
+	if($prg_option['COLUMN_NAMES']) {
+		$clist = getColumnNames($table);
+		print_r($clist);
 		
-		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
-		$rowcount++;
+		while (odbc_fetch_row($recordset)) {
+		
+		
+			// write SIARD table
+			//writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
+			
+			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
+			$rowcount++;
+		}
+	}
+	else {
+		while (odbc_fetch_into($recordset, $buf)) {
+			if(count($buf) < $columcount) {
+				echo "\nIncorrect columne count in table $csvfile"; $prg_option['ERR'] = 4;
+				break;
+			}
+			// write SIARD table
+			writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
+			
+			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
+			$rowcount++;
+		}
 	}
 
 	// write SIARD file XML footer
@@ -90,6 +106,31 @@ global $prg_option, $prgdir;
 	echo "\n";
 	odbc_close($odbc_handle);
 	fclose($siard_handle);
+}
+
+// -----------------------------------------------------------------------------
+//get column names from DB-Model and check SQL-naming convention
+// return a list of column names or null
+function getColumnNames($table) {
+global $prg_option;
+	$collist = array();
+	$errflag = null;
+	
+	// check for column names
+	$fct = 0;
+	foreach ($table['_c']['column'] as $column) {
+		if (is_array($column)) {
+			// multiple columns or only one column
+			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
+			$fct++;
+			if (!testDBMSNaming($name)) {
+				echo "\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention";
+			}
+			$collist[] = $name;
+		}
+	}
+	if ($errflag){ $prg_option['ERR'] = 32; return; }
+	return($collist);
 }
 
 ?>
