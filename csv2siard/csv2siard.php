@@ -61,6 +61,7 @@ $version = '1.6.3';	// enhanced xmllint output
 $version = '1.6.4';	// date = 0 fixed
 $version = '1.7';		// preference path fixed/non Unicode character/XML schema violation/consecutive spaces
 $version = '1.7.1';	// ODBC
+$version = '1.7.2';	// ODBC fetch by order and by name
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

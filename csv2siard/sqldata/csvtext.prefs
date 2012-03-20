@@ -1,12 +1,18 @@
-# Default preferences
+﻿# Default preferences
 # FILE_MASK: wild card is replaced with table name
 # 
 DELIMITED=;
 QUOTE="
 COLUMN_NAMES=TRUE
+
 CHARSET=ISO-8859-1
+#CHARSET=OEM
+#CHARSET=ANSI
 #CHARSET=UTF-8
-FILE_MASK=*.sql
+
+FILE_MASK=*.sqlm
+#FILE_MASK=*.sql
+
 #FILE_MASK=*.csv
 CHECK_COLUMN=TRUE
 #
@@ -16,6 +22,6 @@ TMPDIR=c:\tmp
 DESCRIPTION=Gebäudeversicherung Kanton Thurgau 2006
 TIMESPAN=2005-2006
 
-#ODBC_DSN=gvtg
-ODBC_DSN=csvtext
+ODBC_DSN=gvtg
+#ODBC_DSN=csvtext
 ODBC_USER=Admin

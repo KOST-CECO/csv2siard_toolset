@@ -64,38 +64,52 @@ global $prg_option, $prgdir;
 	// write SIARD file XML header
 	writeSIARDHeader($siard_handle, $tablefolder);
 	
+	// get columnlist form database model
+	$columnlist = getColumnNames($table);
+	
 	// read and process CSV file
 	reset($table);
 	$rowcount = 1;
-	$columcount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
+	$columncount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
 	
+	$bbbuf = '';
+	// get columns form ODCB source by name
 	if($prg_option['COLUMN_NAMES']) {
-		$clist = getColumnNames($table);
-		print_r($clist);
-		
 		while (odbc_fetch_row($recordset)) {
-		
-		
+			$buf = array();
+			foreach ($columnlist as $column) {
+				$col = @odbc_result($recordset, $column);
+				if ($col === false) {
+					echo "\nColumne name '$column' not found in odbc query $csvfile"; $prg_option['ERR'] = 4;
+				}
+				$buf[] = $col;
+			}
+			if ($prg_option['ERR']) { break; }
+			$bbbuf = $bbbuf."\n".implode("; ", $buf);
 			// write SIARD table
-			//writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
+			writeSIARDColumn($siard_handle, $buf, $columncount, $rowcount, $table);
 			
 			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
 			$rowcount++;
 		}
+		print_r($bbbuf);
+		file_put_contents ( "$csvfile.txt", $bbbuf);
 	}
+	// get columns form ODCB source by order
 	else {
 		while (odbc_fetch_into($recordset, $buf)) {
-			if(count($buf) < $columcount) {
-				echo "\nIncorrect columne count in table $csvfile"; $prg_option['ERR'] = 4;
+			if(count($buf) < $columncount) {
+				echo "\nIncorrect columne count in odbc query $csvfile"; $prg_option['ERR'] = 4;
 				break;
 			}
 			// write SIARD table
-			writeSIARDColumn($siard_handle, $buf, $columcount, $rowcount, $table);
+			writeSIARDColumn($siard_handle, $buf, $columncount, $rowcount, $table);
 			
 			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
 			$rowcount++;
 		}
 	}
+
 
 	// write SIARD file XML footer
 	writeSIARDFooter($siard_handle);
@@ -109,12 +123,12 @@ global $prg_option, $prgdir;
 }
 
 // -----------------------------------------------------------------------------
-//get column names from DB-Model and check SQL-naming convention
+// get column names for one table from DB-Model and check SQL-naming convention
 // return a list of column names or null
 function getColumnNames($table) {
 global $prg_option;
 	$collist = array();
-	$errflag = null;
+	$errflag = false;
 	
 	// check for column names
 	$fct = 0;
@@ -125,12 +139,12 @@ global $prg_option;
 			$fct++;
 			if (!testDBMSNaming($name)) {
 				echo "\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention";
+				$errflag = true;
 			}
 			$collist[] = $name;
 		}
 	}
-	if ($errflag){ $prg_option['ERR'] = 32; return; }
+	if ($errflag){ $prg_option['ERR'] = 32; return(null); }
 	return($collist);
 }
-
 ?>

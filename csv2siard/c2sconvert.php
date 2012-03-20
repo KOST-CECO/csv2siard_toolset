@@ -161,6 +161,9 @@ global $prg_option;
 					if ($prg_option['CHARSET'] == 'ASCII') {
 						$buf = utf8_encode(ascii2ansi($buf));
 					}
+					elseif ($prg_option['CHARSET'] == 'OEM') {
+						$buf = utf8_encode(ansi2ascii($buf));
+					}
 					elseif ($prg_option['CHARSET'] == 'ISO-8859-1') {
 						$buf = utf8_encode($buf);
 					}
