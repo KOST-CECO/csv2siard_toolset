@@ -119,30 +119,4 @@ global $prg_option, $prgdir;
 	odbc_close($odbc_handle);
 	fclose($siard_handle);
 }
-
-// -----------------------------------------------------------------------------
-// get column names for one table from DB-Model and check SQL-naming convention
-// return a list of column names or null
-function getColumnNames($table) {
-global $prg_option;
-	$collist = array();
-	$errflag = false;
-	
-	// check for column names
-	$fct = 0;
-	foreach ($table['_c']['column'] as $column) {
-		if (is_array($column)) {
-			// multiple columns or only one column
-			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
-			$fct++;
-			if (!testDBMSNaming($name)) {
-				echo "\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention";
-				$errflag = true;
-			}
-			$collist[] = $name;
-		}
-	}
-	if ($errflag){ $prg_option['ERR'] = 32; return(null); }
-	return($collist);
-}
 ?>

@@ -7,29 +7,21 @@ error_reporting(E_ALL);
 function processCSVColumnNames($buffer, $file, $table, $input) {
 global $prg_option;
 
+	$columnlist = getColumnNames($table);
 	$fct = 0;
 	// check for column names
-	foreach ($table['_c']['column'] as $column) {
-		if (is_array($column)) {
-			// multiple columns or only one column
-			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
-			$colname = trim($buffer[$fct]);
-			if (!testDBMSNaming($name)) {
-				$cn = $fct + 1;
-				echo "\nColumn no $cn '$name' does not confirm with SQL naming convention";
-				$prg_option['ERR'] = 32;
+	foreach ($columnlist as $name) {
+		$colname = trim($buffer[$fct]);
+		if ($prg_option['CHECK_NAMES'] and strcasecmp($name, $colname) != 0) {
+			if ($colname == '') {
+				echo "\nColumn '$name' in database model is missing in CSV file $file";
+			} else {
+				echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
 			}
-			if ($prg_option['CHECK_NAMES'] and strcasecmp($name, $colname) != 0) {
-				if ($colname == '') {
-					echo "\nColumn '$name' in database model is missing in CSV file $file";
-				} else {
-					echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
-				}
-				$prg_option['ERR'] = 32;
-				return(false);
-			}
-			$fct++;
+			$prg_option['ERR'] = 32;
+			return(false);
 		}
+		$fct++;
 	}
 	
 	// check column count
@@ -42,6 +34,30 @@ global $prg_option;
 	return(true);
 }
 // -----------------------------------------------------------------------------
+// get column names for one table from DB-Model and check SQL-naming convention
+// return a list of column names or null
+function getColumnNames($table) {
+global $prg_option;
+	$collist = array();
+	$errflag = false;
+	
+	// check for column names
+	$fct = 0;
+	foreach ($table['_c']['column'] as $column) {
+		if (is_array($column)) {
+			// multiple columns or only one column
+			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
+			$fct++;
+			if (!testDBMSNaming($name)) {
+				echo "\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention";
+				$errflag = true;
+			}
+			$collist[] = $name;
+		}
+	}
+	if ($errflag){ $prg_option['ERR'] = 32; return(null); }
+	return($collist);
+}
 // -----------------------------------------------------------------------------
 // write header for SIARD XML file
 function writeSIARDHeader($siardhandle, $tablefolder) {
