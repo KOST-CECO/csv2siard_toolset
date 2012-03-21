@@ -92,8 +92,6 @@ global $prg_option, $prgdir;
 			if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
 			$rowcount++;
 		}
-		print_r($bbbuf);
-		file_put_contents ( "$csvfile.txt", $bbbuf);
 	}
 	// get columns form ODCB source by order
 	else {

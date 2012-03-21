@@ -158,13 +158,10 @@ global $prg_option;
 				case "LONGVARCHAR":
 				case "CLOB":
 					// convert string to XML characterset utf-8
-					if ($prg_option['CHARSET'] == 'ASCII') {
+					if ($prg_option['CHARSET'] == 'ASCII') {					// includes ASCII and OEM
 						$buf = utf8_encode(ascii2ansi($buf));
 					}
-					elseif ($prg_option['CHARSET'] == 'OEM') {
-						$buf = utf8_encode(ansi2ascii($buf));
-					}
-					elseif ($prg_option['CHARSET'] == 'ISO-8859-1') {
+					elseif ($prg_option['CHARSET'] == 'ISO-8859-1') {	// includes ANSI and ISO-8859-1
 						$buf = utf8_encode($buf);
 					}
 					// xml encode

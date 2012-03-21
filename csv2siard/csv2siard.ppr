@@ -43,10 +43,10 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=run.bat
+0=charset\test.txt
 [Selected Project Files]
 Main=csv2siard.php
-Selected=run.bat
-[run.bat]
+Selected=charset\test.txt
+[charset\test.txt]
 TopLine=1
-Caret=9,8
+Caret=6,1

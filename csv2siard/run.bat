@@ -4,8 +4,6 @@ DEL /Q *.siard
 ECHO --------- %time%
 ECHO.
 php.exe csv2siard.php sqldata\gv-model-v9.xml sqldata test.siard sqldata\csvtext.prefs
-hexdump sqldata\gv_person.sql.txt | grep Martin
-hexdump sqldata\gv_person.sqlm.txt | grep Martin
 
 REM csv2siard.exe sqldata\gv-model-v9.xml sqldata_mdb test.siard sqldata\csvtext.prefs
 REM php.exe csv2siard.php gv-model-v9.xml csvdata test.siard csvdata\gvtg.prefs
