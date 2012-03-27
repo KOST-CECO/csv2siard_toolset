@@ -43,12 +43,17 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 		unlink("$temp/$torque_schema");
 		$prg_option['DB_MODEL'] = $dbmodel;
 	}
-	// check folder with csv files
+	// check folder with csv files or ODBC connection
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
-	if (!is_dir($csvpath)) {
+	if (strcasecmp($argv[2],'ODBC')==0) {
+		$prg_option['CSV_FOLDER'] = 'ODBC';
+	}
+	elseif (!is_dir($csvpath)) {
 		echo "'$argv[2]' is not a valid path\n"; exit(1);
 	}
-	$prg_option['CSV_FOLDER'] = $csvpath;
+	else {
+		$prg_option['CSV_FOLDER'] = $csvpath;
+	}
 	
 	// check for existing SIARD file
 	$siardbase = basename($argv[3]);
@@ -123,7 +128,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	foreach ($prefs as $pref) {
 		if (substr($pref, 0, 1) != '#') {
 			$key = trim(strtok($pref, "=#"));
-			$val = trim(strtok("=#"));
+			$val = trim(strtok("#"));
 			if (strcasecmp($val, 'true') == 0) { $prg_option[$key] = true; }
 			elseif (strcasecmp($val, 'false') == 0) { $prg_option[$key] = false; }
 			elseif ($val == '\t') { $prg_option[$key] = "\t"; }

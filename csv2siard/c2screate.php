@@ -66,7 +66,7 @@ $folderstructur ="
 function creatSIARDTable(&$table) {
 global $prg_option;
 
-	if ($prg_option['ODBC_DSN']) {
+	if ($prg_option['ODBC_DSN'] or $prg_option['CSV_FOLDER'] == 'ODBC') {
 		odbc2SIARDTable(&$table);
 	}
 	else {

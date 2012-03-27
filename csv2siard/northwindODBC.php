@@ -1,6 +1,9 @@
 <?
 
-$conn=odbc_connect('northwind','','');
+// Microsoft Access
+$conn = odbc_connect("Driver={Microsoft Access Driver (*.mdb)};Dbq=Northwind", '', '');
+//$conn = odbc_connect("Driver={Microsoft Text Driver (*.csv)};Dbq=csvtext\schema.ini", '', '');
+//$conn=odbc_connect('northwind','','');
 if (!$conn) {
 	exit("Connection Failed: " . $conn);
 }

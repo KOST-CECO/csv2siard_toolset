@@ -9,25 +9,32 @@ global $prg_option, $prgdir;
 
 	$tablename = $table['_a']['name'];
 
-	// check for CSV file and open it for reading
-	//$csvfile = $prg_option['CSV_FOLDER'].'/'.preg_replace('/([^\*]*)\*([^\*]*)/i', '${1}'.$tablename.'${2}', $prg_option['FILE_MASK']);
-	$reg = '#^'.Wildcard2Regex($prg_option['FILE_MASK']).'$#i';
-	if ( $dirhandle = opendir($prg_option['CSV_FOLDER'])) {
-		while (false !== ($file = readdir($dirhandle))) {
-			if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
-				$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
-				if ($name == $tablename) {
-					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
+	if ($prg_option['CSV_FOLDER']=='ODBC') {
+		$query = "select * from $tablename";
+	}
+	else {
+		// check for ODBC specification file and open it for reading
+		$reg = '#^'.Wildcard2Regex($prg_option['FILE_MASK']).'$#i';
+		if ( $dirhandle = opendir($prg_option['CSV_FOLDER'])) {
+			while (false !== ($file = readdir($dirhandle))) {
+				if (preg_match($reg, $file) > 0 and ($file != "." && $file != "..") ) {
+					$name = preg_replace($reg, '${1}${2}${3}${4}${5}',$file);
+					if ($name == $tablename) {
+						$sqlfile = $prg_option['CSV_FOLDER'].'/'.$file;
+					}
 				}
 			}
+			closedir($dirhandle);
 		}
-		closedir($dirhandle);
+		if(!isset($sqlfile) or !is_file($sqlfile)) {
+			echo "ODBC specification file for table $tablename not found\n"; $prg_option['ERR'] = 2; return;
+		}
+		setTableOption($table, 'localfile', xml_encode($sqlfile));
+		
+		// get sql query
+		$query = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($sqlfile)),"\x0A\x0D" , "  ")), '; ');
 	}
-	if(!isset($csvfile) or !is_file($csvfile)) {
-		echo "ODBC specification file $tablename not found\n"; $prg_option['ERR'] = 2; return;
-	}
-	setTableOption($table, 'localfile', "123".xml_encode($csvfile));
-	
+
 	// open ODCB table
 	echo "Process table (encoding: $prg_option[CHARSET]) $tablename ";
 	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
@@ -41,13 +48,12 @@ global $prg_option, $prgdir;
 	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
 	// set type and connection info
 	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
-	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query form file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
+	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
 
-	// execute sql command to select table content
-	$sql = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($csvfile)),"\x0A\x0D" , "  ")), '; ');
-	$recordset = @odbc_exec($odbc_handle, $sql);
+	// execute query command to select table content
+	$recordset = @odbc_exec($odbc_handle, $query);
 	if (!$recordset) {
-		echo "Error in SQL command '$sql'\n";
+		echo "Error in SQL command '$query'\n";
 		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
 		$prg_option['ERR'] = 2;
 		odbc_close($odbc_handle);
@@ -80,7 +86,7 @@ global $prg_option, $prgdir;
 			foreach ($columnlist as $column) {
 				$col = @odbc_result($recordset, $column);
 				if ($col === false) {
-					echo "\nColumne name '$column' not found in odbc query $csvfile"; $prg_option['ERR'] = 4;
+					echo "\nColumne name '$column' not found in odbc query $sqlfile"; $prg_option['ERR'] = 4;
 				}
 				$buf[] = $col;
 			}
@@ -97,7 +103,7 @@ global $prg_option, $prgdir;
 	else {
 		while (odbc_fetch_into($recordset, $buf)) {
 			if(count($buf) < $columncount) {
-				echo "\nIncorrect columne count in odbc query $csvfile"; $prg_option['ERR'] = 4;
+				echo "\nIncorrect columne count in odbc query $sqlfile"; $prg_option['ERR'] = 4;
 				break;
 			}
 			// write SIARD table

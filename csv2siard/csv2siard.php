@@ -62,6 +62,8 @@ $version = '1.6.4';	// date = 0 fixed
 $version = '1.7';		// preference path fixed/non Unicode character/XML schema violation/consecutive spaces
 $version = '1.7.1';	// ODBC
 $version = '1.7.2';	// ODBC fetch by order and by name
+$version = '1.7.3';	// keyword ODBC
+
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -96,8 +98,8 @@ $dbmod = array();													//nested array to hold the database model
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]
-    database :: database description according to torque.v4 XML model or NO_DB_MODEL
-     csvpath :: path where to find the csv files
+    database :: database description according to torque.v4 XML model or keyword NO_DB_MODEL
+     csvpath :: path where to find csv files or keyword ODBC
    siardfile :: SIARD file to be created
        prefs :: configuration file (default $prefs)
 

@@ -3,8 +3,9 @@
 //SELECT gv_gebaeude.police_nr, gv_gebaeude.zweck_text, gv_person.rolle_text, gv_person.name
 //FROM gv_gebaeude INNER JOIN gv_person ON gv_gebaeude.id = gv_person.gebaeude_id;
 
-
-$conn=odbc_connect('gvtg','Admin','');
+$conn = odbc_connect("Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\sqldata\gvtg.mdb", '', '');
+//$conn = odbc_connect("Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Pilotloesungen\Gebaeudeversicherung\06_GV-Viewer\gvtg.mdb", '', '');
+//$conn=odbc_connect('gvtg','Admin','');
 if (!$conn) {
 	exit("Connection Failed: " . $conn);
 }
