@@ -63,6 +63,7 @@ $version = '1.7';		// preference path fixed/non Unicode character/XML schema vio
 $version = '1.7.1';	// ODBC
 $version = '1.7.2';	// ODBC fetch by order and by name
 $version = '1.7.3';	// keyword ODBC
+$version = '1.7.4';	// ODBC Connection nur einmal öffnen
 
 
 // global settings -------------------------------------------------------------
