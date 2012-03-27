@@ -139,6 +139,10 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	// Set special preferences
 	$prg_option['CONNECTION'] = 'file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
 	$prg_option['CLIENTMACHINE'] = $_SERVER['COMPUTERNAME'].'.'.$_SERVER['USERDNSDOMAIN'];
+	// Open ODBC connection if necessary
+	if ($prg_option['ODBC_DSN'] or $prg_option['CSV_FOLDER'] == 'ODBC') {
+		openODCBConnection();
+	}
 }
 // check utility programms  ----------------------------------------------------
 function checkUtils() {

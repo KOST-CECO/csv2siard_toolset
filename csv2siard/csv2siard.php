@@ -78,6 +78,7 @@ $siard_schema   = '_metadata-1.0.xsd';		// XML schema defines the structure of t
 $siard2html     = '_metadata-1.0.xsl';		// XS transformation: SIARD metadata.xml to xhtml (no function)
 $torque2siard   = '_torque2siard.xsl';		//convert torque.v4 XML datamodel to SIARD XML metadata file
 $prefs          = 'preferences.prefs';		// Preference file
+$odbc_handle    = null;										// used if ODBC instead of CSV
 $dbmod = array();													//nested array to hold the database model
 
 // Error code meaning

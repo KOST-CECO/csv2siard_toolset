@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 // -----------------------------------------------------------------------------
 // read a ODCB table and write a SIARD table
 function odbc2SIARDTable(&$table) {
-global $prg_option, $prgdir;
+global $prg_option, $prgdir, $odbc_handle;
 
 	$tablename = $table['_a']['name'];
 
@@ -35,20 +35,8 @@ global $prg_option, $prgdir;
 		$query = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($sqlfile)),"\x0A\x0D" , "  ")), '; ');
 	}
 
-	// open ODCB table
+	// process ODCB table
 	echo "Process table (encoding: $prg_option[CHARSET]) $tablename ";
-	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
-	if (!$odbc_handle) {
-		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
-		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
-		$prg_option['ERR'] = 2;
-		return;
-	}
-	// execute a dummy odbc query to get typ of ODCB connection out of error message
-	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
-	// set type and connection info
-	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
-	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
 
 	// execute query command to select table content
 	$recordset = @odbc_exec($odbc_handle, $query);
@@ -122,7 +110,25 @@ global $prg_option, $prgdir;
 	setTableOption($table, 'rowcount', $rowcount-1);
 
 	echo "\n";
-	odbc_close($odbc_handle);
 	fclose($siard_handle);
 }
+
+// -----------------------------------------------------------------------------
+// open the ODCB connection
+function openODCBConnection() {
+global $prg_option, $odbc_handle;
+
+	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD']);
+	if (!$odbc_handle) {
+		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
+		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
+		exit(2);
+	}
+	// execute a dummy odbc query to get typ of ODCB connection out of error message
+	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
+	// set type and connection info
+	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
+	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
+}
+
 ?>

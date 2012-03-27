@@ -64,9 +64,9 @@ $folderstructur ="
 // -----------------------------------------------------------------------------
 // create a SIARD table using either CSV file or ODBC connection
 function creatSIARDTable(&$table) {
-global $prg_option;
+global $odbc_handle;
 
-	if ($prg_option['ODBC_DSN'] or $prg_option['CSV_FOLDER'] == 'ODBC') {
+	if ($odbc_handle != null) {
 		odbc2SIARDTable(&$table);
 	}
 	else {

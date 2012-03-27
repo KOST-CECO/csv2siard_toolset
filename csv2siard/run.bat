@@ -3,7 +3,8 @@
 DEL /Q *.siard
 ECHO --------- %time%
 ECHO.
-php.exe csv2siard.php sqldata\gv-model-v9.xml odbc test.siard sqldata\sqldata.prefs
+php.exe csv2siard.php sqldata\gv-model-v9.xml sqldata test.siard sqldata\sqldata.prefs
+REM php.exe csv2siard.php sqldata\gv-model-v9.xml odbc test.siard sqldata\sqldata.prefs
 
 REM php.exe csv2siard.php csvdata\gv-model-v9.xml csvdata test.siard csvdata\gvtg.prefs
 

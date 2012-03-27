@@ -18,12 +18,12 @@ FILE_MASK=*.access.sql
 CHECK_COLUMN=TRUE
 #
 TMPDIR=c:\tmp
-#VERBOSITY=TRUE
+VERBOSITY=TRUE
 
 DESCRIPTION=Gebäudeversicherung Kanton Thurgau 2006
 TIMESPAN=2005-2006
 
-ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\sqldata\gvtg.mdb
+ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\gvtg.mdb
 #ODBC_DSN=gvtg
 #ODBC_DSN=csvtext
 ODBC_USER=Admin
