@@ -2888,6 +2888,13 @@ $static_torque2siard = '<?xml version="1.0"?>
 			<xsl:if test="@description">
 				<xsl:element name="description">
 					<xsl:value-of select="@description"/>
+					<xsl:if test="db:option[@key=\'query\']/@value">
+						<!-- Insert a solid line break  -->
+						<xsl:text xml:space="preserve">\\u000A</xsl:text>
+						<xsl:text>QUERY: </xsl:text>
+						<xsl:value-of select="db:option[@key=\'query\']/@value"/>
+						<xsl:text>;</xsl:text>
+					</xsl:if>
 				</xsl:element>
 			</xsl:if>
 			<!-- COLUMNS -->

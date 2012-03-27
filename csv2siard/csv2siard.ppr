@@ -43,18 +43,5 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=run.bat
-1=c2sconfig.php
-2=sqldata\sqldata.prefs
 [Selected Project Files]
 Main=csv2siard.php
-Selected=run.bat
-[run.bat]
-TopLine=1
-Caret=51,6
-[c2sconfig.php]
-TopLine=31
-Caret=34,49
-[sqldata\sqldata.prefs]
-TopLine=1
-Caret=2,21

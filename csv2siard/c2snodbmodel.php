@@ -2,9 +2,12 @@
 error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
-global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema;
+global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema, $odbc_handle;
 $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE' => 3, 'VARCHAR' => 4);
 
+	if ($odbc_handle != null) {
+		echo "Option NO_DB_MODEL cannot be used with ODBC data source!\n"; exit(1); 
+	}
 // Create CSV file list
 	$file_arr = array();
 	$reg = '#^'.Wildcard2Regex($prg_option['FILE_MASK']).'$#i';

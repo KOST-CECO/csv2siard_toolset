@@ -30,10 +30,11 @@ global $prg_option, $prgdir, $odbc_handle;
 			echo "ODBC specification file for table $tablename not found\n"; $prg_option['ERR'] = 2; return;
 		}
 		setTableOption($table, 'localfile', xml_encode($sqlfile));
-		
 		// get sql query
 		$query = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($sqlfile)),"\x0A\x0D" , "  ")), '; ');
 	}
+	
+	setTableOption($table, 'query', xml_encode($query));
 
 	// process ODCB table
 	echo "Process table (encoding: $prg_option[CHARSET]) $tablename ";
