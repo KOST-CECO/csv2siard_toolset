@@ -63,14 +63,14 @@ $version = '1.7';		// preference path fixed/non Unicode character/XML schema vio
 $version = '1.7.1';	// ODBC
 $version = '1.7.2';	// ODBC fetch by order and by name
 $version = '1.7.3';	// keyword ODBC
-$version = '1.7.4';	// ODBC Connection nur einmal öffnen
-
+$version = '1.7.4';	// Using only one ODBC Connection
+$version = '1.7.5';	// Documentation: creating SIARD file using ODBC Connection
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
 $prgname = strtolower(basename($argv[0], '.exe'));	// Programm Name
 $prgname = basename($prgname, '.php');							// Programm Name
-$prgdir  = dirname(realpath($argv[0]));							//Programmverzeichnis
+$prgdir  = dirname(realpath("$prgname.exe"));				//Programmverzeichnis
 
 $prg_option['ERR'] = 0;										// Programm optionen
 $torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema
