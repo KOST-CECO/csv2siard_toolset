@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 
 function loadSchema() {
 global $torque_schema, $siard_schema, $siard2html, $torque2siard;
+echo "Load all XML schema into array and write to c2schema.php.php\n";
 	$schema = array();
 	$schema['torque_schema'] = file_get_contents($torque_schema);
 	$schema['siard_schema'] = file_get_contents($siard_schema);
@@ -11,9 +12,17 @@ global $torque_schema, $siard_schema, $siard2html, $torque2siard;
 	$schema['torque2siard'] = file_get_contents($torque2siard);
 	
 	$export = var_export($schema, true);
-	file_put_contents('c2schema.php.txt',$export);
+	file_put_contents('c2schema.php.php', $export);
 }
-//loadSchema();
+function unloadSchema() {
+global $torque_schema, $siard_schema, $siard2html, $torque2siard, $static_torque_schema, $static_siard_schema, $static_siard2html, $static_torque2siard;
+echo "Unload all XML schema\n";
+	file_put_contents($torque_schema, $static_torque_schema);
+	file_put_contents($siard_schema, $static_siard_schema);
+	file_put_contents($siard2html, $static_siard2html);
+	file_put_contents($torque2siard, $static_torque2siard);
+}
+
 // -----------------------------------------------------------------------------
 $static_torque_schema = '<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -878,7 +887,7 @@ SQL Standard non-delimited identifiers.
 ';
 
 // -----------------------------------------------------------------------------
-$static_siard_schema = '<?xml version="1.0" encoding="utf-8"?>
+$static_siard_schema = '<?xml version="1.0" encoding="utf-8" ?>
 <!-- $Workfile: metadata.xsd $	*********************************** -->
 <!-- Metadata schema for SIARD 1.0                                  -->
 <!-- Version    : $Id$ -->
@@ -890,592 +899,634 @@ $static_siard_schema = '<?xml version="1.0" encoding="utf-8"?>
 <!-- ************************************************************** -->
 <!-- Copyright  :  2007, Swiss Federal Archives, Berne, Switzerland -->
 <!-- ************************************************************** -->
-<xs:schema targetNamespace="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" id="metadata">
-	<!-- root element of an XML file conforming to this XML schema -->
-	<xs:element name="siardArchive">
-		<xs:complexType>
-			<xs:annotation>
-				<xs:documentation>
+<xs:schema id="metadata" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd"
+  targetNamespace="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <!-- root element of an XML file conforming to this XML schema -->
+  <xs:element name="siardArchive">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>
           Root element of meta data of the SIARD archive
         </xs:documentation>
-			</xs:annotation>
-			<xs:sequence>
-				<xs:element name="dbname" type="mandatoryString"/>
-				<xs:element name="description" type="xs:string" minOccurs="0"/>
-				<xs:element name="archiver" type="xs:string" minOccurs="0"/>
-				<xs:element name="archiverContact" type="xs:string" minOccurs="0"/>
-				<xs:element name="dataOwner" type="mandatoryString"/>
-				<xs:element name="dataOriginTimespan" type="mandatoryString"/>
-				<xs:element name="producerApplication" type="xs:string" minOccurs="0"/>
-				<xs:element name="archivalDate" type="xs:date"/>
-				<xs:element name="messageDigest" type="digestType"/>
-				<xs:element name="clientMachine" type="xs:string" minOccurs="0"/>
-				<xs:element name="databaseProduct" type="xs:string" minOccurs="0"/>
-				<xs:element name="connection" type="xs:string" minOccurs="0"/>
-				<xs:element name="databaseUser" type="xs:string" minOccurs="0"/>
-				<xs:element name="schemas" type="schemasType"/>
-				<xs:element name="users" type="usersType"/>
-				<xs:element name="roles" type="rolesType" minOccurs="0"/>
-				<xs:element name="privileges" type="privilegesType" minOccurs="0"/>
-				<!-- name of the archived database -->
-				<!-- short free form description of the database content -->
-				<!-- name of person responsible for archiving the database -->
-				<!-- contact data (telephone number or email address) of archiver -->
-				<!-- name of data owner (section and institution responsible for data)
+      </xs:annotation>
+      <xs:sequence>
+        <!-- name of the archived database -->
+        <xs:element name="dbname" type="mandatoryString"/>
+        <!-- short free form description of the database content -->
+        <xs:element name="description" type="xs:string" minOccurs="0"/>
+        <!-- name of person responsible for archiving the database -->
+        <xs:element name="archiver" type="xs:string" minOccurs="0"/>
+        <!-- contact data (telephone number or email address) of archiver -->
+        <xs:element name="archiverContact" type="xs:string" minOccurs="0"/>
+        <!-- name of data owner (section and institution responsible for data)
              of database when it was archived -->
-				<!-- time span during which data where entered into the database -->
-				<!-- name and version of program that generated the metadata file -->
-				<!-- date of creation of archive (automatically generated by SIARD) -->
-				<!-- message digest code over all primary data in folder "content" -->
-				<!-- DNS name of client machine from which SIARD was running for archiving -->
-				<!-- name of database product and version from which database originates -->
-				<!-- connection string used for archiving -->
-				<!-- database user used for archiving -->
-				<!--  list of schemas in database  -->
-				<!-- list of users in the archived database -->
-				<!-- list of roles in the archived database -->
-				<!-- list of privileges in the archived database -->
-			</xs:sequence>
-			<xs:attribute name="version" type="versionType" use="required"/>
-			<!-- constraint: version number must be 1.0 -->
-		</xs:complexType>
-	</xs:element>
-	<!-- complex type schemas -->
-	<xs:complexType name="schemasType">
-		<xs:annotation>
-			<xs:documentation>
+        <xs:element name="dataOwner" type="mandatoryString"/>
+        <!-- time span during which data where entered into the database -->
+        <xs:element name="dataOriginTimespan" type="mandatoryString"/>
+        <!-- name and version of program that generated the metadata file -->
+        <xs:element name="producerApplication" type="xs:string" minOccurs="0"/>
+        <!-- date of creation of archive (automatically generated by SIARD) -->
+        <xs:element name="archivalDate" type="xs:date"/>
+        <!-- message digest code over all primary data in folder "content" -->
+        <xs:element name="messageDigest" type="digestType"/>
+        <!-- DNS name of client machine from which SIARD was running for archiving -->
+        <xs:element name="clientMachine" type="xs:string" minOccurs="0"/>
+        <!-- name of database product and version from which database originates -->
+        <xs:element name ="databaseProduct" type="xs:string" minOccurs="0"/>
+        <!-- connection string used for archiving -->
+        <xs:element name="connection" type="xs:string" minOccurs="0"/>
+        <!-- database user used for archiving -->
+        <xs:element name="databaseUser" type="xs:string" minOccurs="0"/>
+        <!--  list of schemas in database  -->
+        <xs:element name="schemas" type="schemasType"/>
+        <!-- list of users in the archived database -->
+        <xs:element name="users" type="usersType"/>
+        <!-- list of roles in the archived database -->
+        <xs:element name="roles" type="rolesType" minOccurs="0"/>
+        <!-- list of privileges in the archived database -->
+        <xs:element name="privileges" type="privilegesType" minOccurs="0"/>
+      </xs:sequence>
+      <!-- constraint: version number must be 1.0 -->
+      <xs:attribute name="version" type="versionType" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- complex type schemas -->
+  <xs:complexType name="schemasType">
+    <xs:annotation>
+      <xs:documentation>
         List of schemas
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="schema" type="schemaType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type schema -->
-	<xs:complexType name="schemaType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="schema" type="schemaType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type schema -->
+  <xs:complexType name="schemaType">
+    <xs:annotation>
+      <xs:documentation>
         Schema element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="folder" type="fsName"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="tables" type="tablesType"/>
-			<xs:element name="views" type="viewsType" minOccurs="0"/>
-			<xs:element name="routines" type="routinesType" minOccurs="0"/>
-			<!-- database name of the schema -->
-			<!-- archive name of the schema folder -->
-			<!-- description of the schema\'s meaning and content -->
-			<!-- list of tables in the schema -->
-			<!-- list of views in the schema -->
-			<!-- list of routines in the archived database -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type tables -->
-	<xs:complexType name="tablesType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the schema -->
+      <xs:element name="name" type="xs:string" />
+      <!-- archive name of the schema folder -->
+      <xs:element name="folder" type="fsName"/>
+      <!-- description of the schema\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- list of tables in the schema -->
+      <xs:element name="tables" type="tablesType"/>
+      <!-- list of views in the schema -->
+      <xs:element name="views" type="viewsType" minOccurs="0"/>
+      <!-- list of routines in the archived database -->
+      <xs:element name="routines" type="routinesType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type tables -->
+  <xs:complexType name="tablesType">
+    <xs:annotation>
+      <xs:documentation>
         List of tables
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="table" type="tableType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type table -->
-	<xs:complexType name="tableType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="table" type="tableType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type table -->
+  <xs:complexType name="tableType">
+    <xs:annotation>
+      <xs:documentation>
         Table element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="folder" type="fsName"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="columns" type="columnsType"/>
-			<xs:element name="primaryKey" type="primaryKeyType" minOccurs="0"/>
-			<xs:element name="foreignKeys" type="foreignKeysType" minOccurs="0"/>
-			<xs:element name="candidateKeys" type="candidateKeysType" minOccurs="0"/>
-			<xs:element name="checkConstraints" type="checkConstraintsType" minOccurs="0"/>
-			<xs:element name="triggers" type="triggersType" minOccurs="0"/>
-			<xs:element name="rows" type="xs:integer"/>
-			<!-- database name of the table -->
-			<!-- archive name of the table folder -->
-			<!-- description of the table\'s meaning and content -->
-			<!-- list of columns of the table -->
-			<!--  primary key -->
-			<!--  foreign keys  -->
-			<!--  candidate keys (unique constraints)  -->
-			<!-- list of (check) constraints -->
-			<!--  list of triggers  -->
-			<!--  number of rows in the table -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type views -->
-	<xs:complexType name="viewsType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the table -->
+      <xs:element name="name" type="xs:string"/>
+      <!-- archive name of the table folder -->
+      <xs:element name="folder" type="fsName"/>
+      <!-- description of the table\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- list of columns of the table -->
+      <xs:element name="columns" type="columnsType"/>
+      <!--  primary key -->
+      <xs:element name="primaryKey" type="primaryKeyType" minOccurs="0"/>
+      <!--  foreign keys  -->
+      <xs:element name="foreignKeys" type="foreignKeysType" minOccurs="0"/>
+      <!--  candidate keys (unique constraints)  -->
+      <xs:element name="candidateKeys" type="candidateKeysType" minOccurs="0"/>
+      <!-- list of (check) constraints -->
+      <xs:element name="checkConstraints" type="checkConstraintsType" minOccurs="0"/>
+      <!--  list of triggers  -->
+      <xs:element name="triggers" type="triggersType" minOccurs="0"/>
+      <!--  number of rows in the table -->
+      <xs:element name="rows" type="xs:integer"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type views -->
+  <xs:complexType name="viewsType">
+    <xs:annotation>
+      <xs:documentation>
         List of views
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="view" type="viewType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type view -->
-	<xs:complexType name="viewType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="view" type="viewType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type view -->
+  <xs:complexType name="viewType">
+    <xs:annotation>
+      <xs:documentation>
         View element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="query" type="xs:string" minOccurs="0"/>
-			<xs:element name="queryOriginal" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="columns" type="columnsType"/>
-			<!-- database name of the view -->
-			<!-- SQL query string defining the view -->
-			<!-- original query string defining the view -->
-			<!-- description of the view\'s meaning and content -->
-			<!-- list of columns of the view -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type columns -->
-	<xs:complexType name="columnsType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the view -->
+      <xs:element name="name" type="xs:string" />
+      <!-- SQL query string defining the view -->
+      <xs:element name="query" type="xs:string" minOccurs="0"/>
+      <!-- original query string defining the view -->
+      <xs:element name="queryOriginal" type="xs:string" minOccurs="0"/>
+      <!-- description of the view\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- list of columns of the view -->
+      <xs:element name="columns" type="columnsType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type columns -->
+  <xs:complexType name="columnsType">
+    <xs:annotation>
+      <xs:documentation>
         List of columns
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="column" type="columnType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type column -->
-	<xs:complexType name="columnType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="column" type="columnType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type column -->
+  <xs:complexType name="columnType">
+    <xs:annotation>
+      <xs:documentation>
         Column element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="folder" type="fsName" minOccurs="0"/>
-			<xs:element name="type" type="xs:string"/>
-			<xs:element name="typeOriginal" type="xs:string" minOccurs="0"/>
-			<xs:element name="defaultValue" type="xs:string" minOccurs="0"/>
-			<xs:element name="nullable" type="xs:boolean"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- database name of the column -->
-			<!-- archive name of the lob folder -->
-			<!-- SQL:1999 data type of the column -->
-			<!-- original data type of the column -->
-			<!-- default value -->
-			<!-- nullability -->
-			<!-- unique, references, check column constraints 
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the column -->
+      <xs:element name="name" type="xs:string" />
+      <!-- archive name of the lob folder -->
+      <xs:element name="folder" type="fsName" minOccurs="0"/>
+      <!-- SQL:1999 data type of the column -->
+      <xs:element name="type" type="xs:string" />
+      <!-- original data type of the column -->
+      <xs:element name="typeOriginal" type="xs:string" minOccurs="0"/>
+      <!-- default value -->
+      <xs:element name="defaultValue" type="xs:string" minOccurs="0"/>
+      <!-- nullability -->
+      <xs:element name="nullable" type="xs:boolean"/>
+      <!-- unique, references, check column constraints 
            are stored as table constraints -->
-			<!-- description of the column\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type primaryKey -->
-	<xs:complexType name="primaryKeyType">
-		<xs:annotation>
-			<xs:documentation>
+      <!-- description of the column\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- complex type primaryKey -->
+  <xs:complexType name="primaryKeyType">
+    <xs:annotation>
+      <xs:documentation>
         primaryKey element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="column" type="xs:string" maxOccurs="unbounded"/>
-			<!-- database name of the primary key -->
-			<!-- description of the primary key\'s meaning and content -->
-			<!-- columns belonging to the primary key -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type foreignKeys -->
-	<xs:complexType name="foreignKeysType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the primary key -->
+      <xs:element name="name" type="xs:string" minOccurs="0" />
+       <!-- description of the primary key\'s meaning and content -->
+       <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- columns belonging to the primary key -->
+      <xs:element name="column" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type foreignKeys -->
+  <xs:complexType name="foreignKeysType">
+    <xs:annotation>
+      <xs:documentation>
         List of foreign key constraints
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="foreignKey" type="foreignKeyType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type foreignKey -->
-	<xs:complexType name="foreignKeyType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="foreignKey" type="foreignKeyType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type foreignKey -->
+  <xs:complexType name="foreignKeyType">
+    <xs:annotation>
+      <xs:documentation>
         foreignKey element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="referencedSchema" type="xs:string"/>
-			<xs:element name="referencedTable" type="xs:string"/>
-			<xs:element name="reference" type="referenceType" maxOccurs="unbounded"/>
-			<xs:element name="matchType" type="matchTypeType" minOccurs="0"/>
-			<xs:element name="deleteAction" type="xs:string" minOccurs="0"/>
-			<xs:element name="updateAction" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- database name of the foreign key -->
-			<!--  referenced schema -->
-			<!-- referenced table -->
-			<!--  references -->
-			<!-- match type (FULL, PARTIAL, SIMPLE) -->
-			<!-- ON DELETE action e.g. ON DELETE CASCADE -->
-			<!-- ON UPDATE action e.g. ON UPDATE SET DEFAULT -->
-			<!-- description of the foreign key\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type reference -->
-	<xs:complexType name="referenceType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the foreign key -->
+      <xs:element name="name" type="xs:string" />
+      <!--  referenced schema -->
+      <xs:element name="referencedSchema" type="xs:string"/>
+      <!-- referenced table -->
+      <xs:element name="referencedTable" type="xs:string"/>
+      <!--  references -->
+      <xs:element name="reference" type="referenceType" minOccurs="1" maxOccurs="unbounded"/> 
+      <!-- match type (FULL, PARTIAL, SIMPLE) -->
+      <xs:element name="matchType" type="matchTypeType" minOccurs="0"/>
+      <!-- ON DELETE action e.g. ON DELETE CASCADE -->
+      <xs:element name="deleteAction" type="xs:string" minOccurs="0"/>
+      <!-- ON UPDATE action e.g. ON UPDATE SET DEFAULT -->
+      <xs:element name="updateAction" type="xs:string" minOccurs="0"/>
+      <!-- description of the foreign key\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type reference -->
+  <xs:complexType name="referenceType">
+    <xs:annotation>
+      <xs:documentation>
         reference element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="column" type="xs:string"/>
-			<xs:element name="referenced" type="xs:string"/>
-			<!-- referencing column -->
-			<!-- referenced column (table.column) -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type candidateKeys -->
-	<xs:complexType name="candidateKeysType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- referencing column -->
+      <xs:element name="column" type="xs:string"/>
+      <!-- referenced column (table.column) -->
+      <xs:element name="referenced" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type candidateKeys -->
+  <xs:complexType name="candidateKeysType">
+    <xs:annotation>
+      <xs:documentation>
         List of candidate key (unique) constraints
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="candidateKey" type="candidateKeyType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type candidateKey -->
-	<xs:complexType name="candidateKeyType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="candidateKey" type="candidateKeyType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type candidateKey -->
+  <xs:complexType name="candidateKeyType">
+    <xs:annotation>
+      <xs:documentation>
         candiate key (unique) element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="column" type="xs:string" maxOccurs="unbounded"/>
-			<!-- database name of the candidate key -->
-			<!-- description of the candidate key\'s meaning and content -->
-			<!-- columns belonging to the candidate key -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type check constraints -->
-	<xs:complexType name="checkConstraintsType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the candidate key -->
+      <xs:element name="name" type="xs:string"/>
+       <!-- description of the candidate key\'s meaning and content -->
+       <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- columns belonging to the candidate key -->
+      <xs:element name="column" type="xs:string"  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type check constraints -->
+  <xs:complexType name="checkConstraintsType">
+    <xs:annotation>
+      <xs:documentation>
         List of check constraints
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="checkConstraint" type="checkConstraintType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type check constraint -->
-	<xs:complexType name="checkConstraintType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="checkConstraint" type="checkConstraintType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type check constraint -->
+  <xs:complexType name="checkConstraintType">
+    <xs:annotation>
+      <xs:documentation>
         Check constraint element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="condition" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- database name of the constraint -->
-			<!-- check condition -->
-			<!-- description of the constraint\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type triggers -->
-	<xs:complexType name="triggersType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the constraint -->
+      <xs:element name="name" type="xs:string"/>
+      <!-- check condition -->
+      <xs:element name="condition" type="xs:string"/>
+      <!-- description of the constraint\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type triggers -->
+  <xs:complexType name="triggersType">
+    <xs:annotation>
+      <xs:documentation>
         List of triggers
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="trigger" type="triggerType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type trigger -->
-	<xs:complexType name="triggerType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="trigger" type="triggerType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- complex type trigger -->
+  <xs:complexType name="triggerType">
+    <xs:annotation>
+      <xs:documentation>
         Trigger element in siardArchive
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="actionTime" type="actionTimeType"/>
-			<xs:element name="triggerEvent" type="xs:string"/>
-			<xs:element name="aliasList" type="xs:string" minOccurs="0"/>
-			<xs:element name="triggeredAction" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- database name of the trigger -->
-			<!--  action time -->
-			<!--  trigger event INSERT, DELETE, UPDATE [OF <trigger column list>] -->
-			<!--  alias list <old or new values alias> -->
-			<!--  triggered action -->
-			<!-- description of the trigger\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type routines -->
-	<xs:complexType name="routinesType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of the trigger -->
+      <xs:element name="name" type="xs:string" />
+      <!--  action time -->
+      <xs:element name="actionTime" type="actionTimeType"/>
+      <!--  trigger event INSERT, DELETE, UPDATE [OF <trigger column list>] -->
+      <xs:element name="triggerEvent" type="xs:string"/>
+      <!--  alias list <old or new values alias> -->
+      <xs:element name="aliasList" type="xs:string" minOccurs="0"/>
+      <!--  triggered action -->
+      <xs:element name="triggeredAction" type="xs:string"/>
+      <!-- description of the trigger\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- complex type routines -->
+  <xs:complexType name="routinesType">
+    <xs:annotation>
+      <xs:documentation>
         List of routines
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="routine" type="routineType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type routine -->
-	<xs:complexType name="routineType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="routine" type="routineType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type routine -->
+  <xs:complexType name="routineType">
+    <xs:annotation>
+      <xs:documentation>
         Routine
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="source" type="xs:string" minOccurs="0"/>
-			<xs:element name="body" type="xs:string" minOccurs="0"/>
-			<xs:element name="characteristic" type="xs:string" minOccurs="0"/>
-			<xs:element name="returnType" type="xs:string" minOccurs="0"/>
-			<xs:element name="parameters" type="parametersType" minOccurs="0"/>
-			<!-- database name of routine in schema -->
-			<!-- description of the routines\'s meaning and content -->
-			<!-- original source code (VBA, PL/SQL, ...) defining the routine -->
-			<!--  SQL:1999 body of routine  -->
-			<!--  routine characteristic -->
-			<!--  SQL:1999 data type of the return value (for functions) -->
-			<!--  list of parameters -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type parameters -->
-	<xs:complexType name="parametersType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- database name of routine in schema -->
+      <xs:element name="name" type="xs:string"/>
+      <!-- description of the routines\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <!-- original source code (VBA, PL/SQL, ...) defining the routine -->
+      <xs:element name="source" type="xs:string" minOccurs="0"/>
+      <!--  SQL:1999 body of routine  -->
+      <xs:element name="body" type="xs:string" minOccurs="0"/>
+      <!--  routine characteristic -->
+      <xs:element name="characteristic" type="xs:string" minOccurs="0"/>
+      <!--  SQL:1999 data type of the return value (for functions) -->
+      <xs:element name="returnType" type="xs:string" minOccurs="0"/>
+      <!--  list of parameters -->
+      <xs:element name="parameters" type="parametersType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- complex type parameters -->
+  <xs:complexType name="parametersType">
+    <xs:annotation>
+      <xs:documentation>
         List of parameters of a routine
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="parameter" type="parameterType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type parameter -->
-	<xs:complexType name="parameterType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="parameter" type="parameterType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!-- complex type parameter -->
+  <xs:complexType name="parameterType">
+    <xs:annotation>
+      <xs:documentation>
         Parameter of a routine
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="mode" type="xs:string"/>
-			<xs:element name="type" type="xs:string"/>
-			<xs:element name="typeOriginal" type="xs:string" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!--  name of parameter  -->
-			<!--  mode of parameter (IN, OUT, INOUT) -->
-			<!--  SQL:1999 type of argument -->
-			<!-- original data type of the argument -->
-			<!-- description of the parameter\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type users -->
-	<xs:complexType name="usersType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!--  name of parameter  -->
+	  <xs:element name="name" type="xs:string"/>
+	  <!--  mode of parameter (IN, OUT, INOUT) -->
+	  <xs:element name="mode" type="xs:string"/>
+	  <!--  SQL:1999 type of argument -->
+	  <xs:element name="type" type="xs:string"/>
+      <!-- original data type of the argument -->
+      <xs:element name="typeOriginal" type="xs:string" minOccurs="0"/>
+      <!-- description of the parameter\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type users -->
+  <xs:complexType name="usersType">
+    <xs:annotation>
+      <xs:documentation>
         List of users
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="user" type="userType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type user -->
-	<xs:complexType name="userType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="user" type="userType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type user -->
+  <xs:complexType name="userType">
+    <xs:annotation>
+      <xs:documentation>
         User
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- user name -->
-			<!-- description of the user\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type roles -->
-	<xs:complexType name="rolesType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- user name -->
+      <xs:element name="name" type="xs:string"/>
+      <!-- description of the user\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type roles -->
+  <xs:complexType name="rolesType">
+    <xs:annotation>
+      <xs:documentation>
         List of roles
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="role" type="roleType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type role -->
-	<xs:complexType name="roleType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="role" type="roleType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type role -->
+  <xs:complexType name="roleType">
+    <xs:annotation>
+      <xs:documentation>
         Role
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="name" type="xs:string"/>
-			<xs:element name="admin" type="xs:string"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- role name -->
-			<!-- role ADMIN (user or role) -->
-			<!-- description of the role\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type privileges -->
-	<xs:complexType name="privilegesType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- role name -->
+      <xs:element name="name" type="xs:string"/>
+      <!-- role ADMIN (user or role) -->
+      <xs:element name="admin" type="xs:string"/>
+      <!-- description of the role\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type privileges -->
+  <xs:complexType name="privilegesType">
+    <xs:annotation>
+      <xs:documentation>
         List of grants
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="privilege" type="privilegeType" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<!-- complex type privilege -->
-	<xs:complexType name="privilegeType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="privilege" type="privilegeType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- complex type privilege -->
+  <xs:complexType name="privilegeType">
+    <xs:annotation>
+      <xs:documentation>
         Grant (incl. grant of role)
       </xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="type" type="xs:string"/>
-			<xs:element name="object" type="xs:string" minOccurs="0"/>
-			<xs:element name="grantor" type="xs:string"/>
-			<xs:element name="grantee" type="xs:string"/>
-			<xs:element name="option" type="privOptionType" minOccurs="0"/>
-			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<!-- privilege type (incl. ROLE privilege or "ALL PRIVILEGES" -->
-			<!-- privilege object (may be omitted for ROLE privilege) -->
-			<!-- GRANTED BY -->
-			<!-- user list of users or roles or single value "PUBLIC" -->
-			<!-- optional option "GRANT" or "ADMIN" -->
-			<!-- description of the grant\'s meaning and content -->
-		</xs:sequence>
-	</xs:complexType>
-	<!-- simple type for digest string -->
-	<xs:simpleType name="digestType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <!-- privilege type (incl. ROLE privilege or "ALL PRIVILEGES" -->
+      <xs:element name="type" type="xs:string"/>
+      <!-- privilege object (may be omitted for ROLE privilege) -->
+      <xs:element name="object" type="xs:string" minOccurs="0"/>
+      <!-- GRANTED BY -->
+      <xs:element name="grantor" type="xs:string"/>
+      <!-- user list of users or roles or single value "PUBLIC" -->
+      <xs:element name="grantee" type="xs:string"/>
+      <!-- optional option "GRANT" or "ADMIN" -->
+      <xs:element name="option" type="privOptionType" minOccurs="0"/>
+      <!-- description of the grant\'s meaning and content -->
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- simple type for digest string -->
+  <xs:simpleType name="digestType">
+    <xs:annotation>
+      <xs:documentation>
         digestType must be empty or prefixed by MD5 oder SHA1
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="collapse"/>
-			<xs:pattern value="(MD5.+|SHA-1.+)*"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type for version number -->
-	<xs:simpleType name="versionType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="(|(MD5|SHA-1).*)" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- simple type for version number -->
+  <xs:simpleType name="versionType">
+    <xs:annotation>
+      <xs:documentation>
         versionType must be constrained to "1.0"
         for conformity with this XLM schema
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="collapse"/>
-			<xs:enumeration value="1.0"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type for privilege option -->
-	<xs:simpleType name="privOptionType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:enumeration value="1.0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- simple type for privilege option -->
+  <xs:simpleType name="privOptionType">
+    <xs:annotation>
+      <xs:documentation>
         privOptionType must be "ADMIN" or "GRANT"
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="collapse"/>
-			<xs:enumeration value="ADMIN"/>
-			<xs:enumeration value="GRANT"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type for mandatory string 
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:enumeration value="ADMIN"/>
+      <xs:enumeration value="GRANT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- simple type for mandatory string 
        which must contain at least 1 character -->
-	<xs:simpleType name="mandatoryString">
-		<xs:annotation>
-			<xs:documentation>
+  <xs:simpleType name="mandatoryString">
+    <xs:annotation>
+      <xs:documentation>
         mandatoryType must contain at least 1 character
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:whiteSpace value="preserve"/>
-			<xs:minLength value="1"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type of a filesystem (file or folder) name -->
-	<xs:simpleType name="fsName">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- simple type of a filesystem (file or folder) name -->
+  <xs:simpleType name="fsName">
+    <xs:annotation>
+      <xs:documentation>
         fsNames may only consist of ASCII characters and digits
         and must start with a non-digit 
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:minLength value="1"/>
-			<xs:pattern value="([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]).*"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type for action time of a trigger -->
-	<xs:simpleType name="actionTimeType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]).*" />
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- simple type for action time of a trigger -->
+  <xs:simpleType name="actionTimeType">
+    <xs:annotation>
+      <xs:documentation>
         actionTime is BEFORE or AFTER
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="BEFORE"/>
-			<xs:enumeration value="AFTER"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<!-- simple type for match type of a foreign key -->
-	<xs:simpleType name="matchTypeType">
-		<xs:annotation>
-			<xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BEFORE" />
+      <xs:enumeration value="AFTER" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <!-- simple type for match type of a foreign key -->
+  <xs:simpleType name="matchTypeType">
+    <xs:annotation>
+      <xs:documentation>
         matchType is FULL, PARTIAL or SIMPLE
       </xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="FULL"/>
-			<xs:enumeration value="PARTIAL"/>
-			<xs:enumeration value="SIMPLE"/>
-		</xs:restriction>
-	</xs:simpleType>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FULL" />
+      <xs:enumeration value="PARTIAL" />
+      <xs:enumeration value="SIMPLE" />
+    </xs:restriction>
+  </xs:simpleType>
+
 </xs:schema>
 ';
 

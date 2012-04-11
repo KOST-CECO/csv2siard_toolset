@@ -76,7 +76,8 @@ $prg_option['ERR'] = 0;										// Programm optionen
 $torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema
 $siard_schema   = '_metadata-1.0.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
 $siard2html     = '_metadata-1.0.xsl';		// XS transformation: SIARD metadata.xml to xhtml (no function)
-$torque2siard   = '_torque2siard.xsl';		//convert torque.v4 XML datamodel to SIARD XML metadata file
+$torque2siard   = '_torque2siard.xsl';		// convert torque.v4 XML datamodel to SIARD XML metadata file
+//loadSchema(); unloadSchema();						// load or unload file based XML schema
 $prefs          = 'preferences.prefs';		// Preference file
 $odbc_handle    = null;										// used if ODBC instead of CSV
 $dbmod = array();													//nested array to hold the database model
