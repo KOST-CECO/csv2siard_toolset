@@ -17,7 +17,7 @@ SET RUNTIME=.\csv2siard_v.%VERSION%
 
 REM copy -----------------------------------------------------------------------
 ECHO .
-REM RMDIR /S /Q %RUNTIME%
+RMDIR /S /Q %RUNTIME%
 
 MKDIR %RUNTIME%
 MKDIR %RUNTIME%\bin
@@ -55,29 +55,28 @@ COPY Anwendungshandbuch*.pdf %RUNTIME%
 COPY *.php %RUNTIME%\source
 COPY csv2siard.bcp %RUNTIME%\source
 
-COPY csvdata\* %RUNTIME%\csvdata
-COPY csvtest\* %RUNTIME%\csvtest
+COPY csvdata\*.dat %RUNTIME%\csvdata
+COPY csvtest\*     %RUNTIME%\csvtest
 
 REM test -----------------------------------------------------------------------
-CD %RUNTIME%\bin
-DEL /Q ..\..\test.siard
+CD %RUNTIME%
+DEL /Q ..\test.siard
 SET PATH=
 
 @ECHO ON
-CALL csv2siard.exe
-CALL csv2siard.exe ..\..\table2-model.xml ..\..\csvdata ..\..\test.siard
-DEL /Q ..\..\test.siard
-CALL csv2siard.exe no_db_model ..\..\csvdata ..\..\test.siard
+CALL bin\csv2siard.exe
+CALL bin\csv2siard.exe ..\table2-model.xml ..\csvdata ..\test.siard
+DEL /Q ..\test.siard
+CALL bin\csv2siard.exe no_db_model ..\csvdata ..\test.siard
 DEL no_db_model.xml
 
 @ECHO OFF
 REM zip ------------------------------------------------------------------------
-CD ..
 %UNIX_HOME%\7z.exe a -mx9 %RUNTIME%.zip *
 COPY %RUNTIME%.zip ..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
 CD ..
-RMDIR /S /Q %RUNTIME%
+REM RMDIR /S /Q %RUNTIME%
 
 REM MD5 ------------------------------------------------------------------------
 %UNIX_HOME%\md5sum.exe ..\04_Publikation\%RUNTIME%.zip

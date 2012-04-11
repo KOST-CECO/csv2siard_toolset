@@ -70,7 +70,7 @@ $version = '1.7.5';	// Documentation: creating SIARD file using ODBC Connection
 $wdir = getcwd();																		// Arbeitsverzeichnis
 $prgname = strtolower(basename($argv[0], '.exe'));	// Programm Name
 $prgname = basename($prgname, '.php');							// Programm Name
-$prgdir  = dirname(realpath("$prgname.exe"));				//Programmverzeichnis
+$prgdir  = realpath(dirname($argv[0]));							//Programmverzeichnis
 
 $prg_option['ERR'] = 0;										// Programm optionen
 $torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema

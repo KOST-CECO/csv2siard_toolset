@@ -146,7 +146,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 }
 // check utility programms  ----------------------------------------------------
 function checkUtils() {
-global $prgdir, $prg_option;
+global $prgdir, $prgname, $prg_option;
 
 // Libraries missing
 	// <eXpat/> the Expat XML Parser http://expat.sourceforge.net and www.sysinternals.com
