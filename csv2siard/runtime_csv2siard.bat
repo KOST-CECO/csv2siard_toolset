@@ -17,7 +17,7 @@ SET RUNTIME=.\csv2siard_v.%VERSION%
 
 REM copy -----------------------------------------------------------------------
 ECHO .
-RMDIR /S /Q %RUNTIME%
+REM RMDIR /S /Q %RUNTIME%
 
 MKDIR %RUNTIME%
 MKDIR %RUNTIME%\bin
@@ -76,7 +76,7 @@ REM zip ------------------------------------------------------------------------
 COPY %RUNTIME%.zip ..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
 CD ..
-REM RMDIR /S /Q %RUNTIME%
+RMDIR /S /Q %RUNTIME%
 
 REM MD5 ------------------------------------------------------------------------
 %UNIX_HOME%\md5sum.exe ..\04_Publikation\%RUNTIME%.zip

@@ -43,10 +43,5 @@ csv2siard
 		metadata.xsd
 		ascii-model.xml
 [Open project files]
-0=c2schema.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=c2schema.php
-[c2schema.php]
-TopLine=1
-Caret=2,12

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="datatypetest" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+
+	<table name="datatype_utf8">
+		<column name="char_1" type="CHAR"/>
+		<column name="char_2" type="CHAR" size="3"/>
+		<column name="varchar_1" type="VARCHAR" size="72"/>
+		<column name="varchar_2" type="VARCHAR" size="55"/>
+		<column name="longvarchar" type="LONGVARCHAR"/>
+		<column name="clob" type="CLOB"/>
+		<column name="ref" type="REF"/>
+	</table>
+
+</database>

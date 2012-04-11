@@ -173,6 +173,13 @@ global $prg_option;
 				case "VARCHAR":
 				case "LONGVARCHAR":
 				case "CLOB":
+					// check field size
+					$size = (is_null($size)) ? 255 : $size; // default size
+					$plain = ($prg_option['CHARSET'] == 'UTF-8') ? utf8_decode($buf) : $buf;
+					if (strlen($plain) > $size) {
+						$plain = ansi2ascii($plain);
+						echo "\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$plain'"; $prg_option['ERR'] = 32;
+					}
 					// convert string to XML characterset utf-8
 					if ($prg_option['CHARSET'] == 'ASCII') {					// includes ASCII and OEM
 						$buf = utf8_encode(ascii2ansi($buf));
@@ -184,11 +191,6 @@ global $prg_option;
 					$buf = xml_encode($buf);
 					// encode consecutive spaces
 					$buf = xml_white_space($buf);
-					
-					$size = (is_null($size)) ? 255 : $size; // default size
-					if (strlen($buf) > $size) {
-						echo "\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
-					}
 					break;
 				case "BIT":
 					$size = (is_null($size)) ? 8 : $size; // default size

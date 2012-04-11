@@ -65,6 +65,7 @@ $version = '1.7.2';	// ODBC fetch by order and by name
 $version = '1.7.3';	// keyword ODBC
 $version = '1.7.4';	// Using only one ODBC Connection
 $version = '1.7.5';	// Documentation: creating SIARD file using ODBC Connection
+$version = '1.7.6';	// UTF-8 Field size corrected
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

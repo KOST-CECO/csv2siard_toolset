@@ -102,11 +102,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 						$colarr[$colcnt]['size'] = 0;
 					}
 					// Different stringlength in case of ISO-8859 or UTF-8
-					if ($prg_option['CHARSET'] == 'ISO-8859-1') {
-						$slb = strlen(xml_white_space(xml_encode(utf8_encode($b))));
-					} else {
-						$slb = strlen(xml_white_space(xml_encode($b)));
-					}
+					$slb = ($prg_option['CHARSET'] == 'UTF-8') ? strlen(utf8_decode(trim($b))) : strlen(trim($b));
 					if ($slb > $colarr[$colcnt]['size']) {
 						$colarr[$colcnt]['size'] = $slb;
 					}

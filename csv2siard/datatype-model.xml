@@ -4,8 +4,8 @@
 	<table name="datatype_string">
 		<column name="char_1" type="CHAR"/>
 		<column name="char_2" type="CHAR" size="3"/>
-		<column name="varchar_1" type="VARCHAR"/>
-		<column name="varchar_2" type="VARCHAR" size="70"/>
+		<column name="varchar_1" type="VARCHAR" size="72"/>
+		<column name="varchar_2" type="VARCHAR" size="55"/>
 		<column name="longvarchar" type="LONGVARCHAR"/>
 		<column name="clob" type="CLOB"/>
 		<column name="ref" type="REF"/>
