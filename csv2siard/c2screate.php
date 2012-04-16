@@ -1,12 +1,20 @@
 <?
 // Report all PHP errors
 error_reporting(E_ALL);
+
 // -----------------------------------------------------------------------------
 // read XML database model into multi-dimensional array
 function loadDatabaseModell(&$dbmod) {
 global $prg_option;
 
-	$dbmod = xml2ary(file_get_contents($prg_option['DB_MODEL']));
+	$input=file_get_contents($prg_option['DB_MODEL']);
+	// remove BOM from head of UTF-8 file if exists
+	if ((substr($input, 0, 3)) == hex2bin("efbbbf")) {
+		$input = substr($input, 3);
+	}
+	// convert to array
+	$dbmod = xml2ary($input);
+
 	return;
 }
 // -----------------------------------------------------------------------------

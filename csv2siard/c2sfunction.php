@@ -480,4 +480,21 @@ function gmtime($time) {
 	
 	return($tp);
 } 
+
+// -----------------------------------------------------------------------------
+// Converts the hex representation of data to binary
+// @param   string  $str        Hexadecimal representation of data
+// @return  string              Returns the binary representation of the given data
+if(!function_exists('hex2bin')) {
+	function hex2bin($data) {
+		$bin    = "";
+		$i      = 0;
+		do {
+			$bin    .= chr(hexdec($data{$i}.$data{($i + 1)}));
+			$i      += 2;
+		} while ($i < strlen($data));
+		return $bin;
+	}
+}
+
 ?>

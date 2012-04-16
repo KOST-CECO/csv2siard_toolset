@@ -11,7 +11,7 @@ global $prg_option;
 	$fct = 0;
 	// check for column names
 	foreach ($columnlist as $name) {
-		$colname = trim($buffer[$fct]);
+		$colname = trim(@$buffer[$fct]);
 		if ($prg_option['CHECK_NAMES'] and strcasecmp($name, $colname) != 0) {
 			if ($colname == '') {
 				echo "\nColumn '$name' in database model is missing in CSV file $file";
