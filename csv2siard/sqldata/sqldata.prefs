@@ -3,13 +3,9 @@
 # 
 DELIMITED=;
 QUOTE="
-COLUMN_NAMES=FALSE
+COLUMN_NAMES=TRUE
 
 CHARSET=ISO-8859-1
-#CHARSET=OEM
-#CHARSET=ANSI
-#CHARSET=UTF-8
-#CHARSET=ASCII
 
 FILE_MASK=*.access.sql
 #FILE_MASK=*.text.sql
@@ -23,7 +19,6 @@ TMPDIR=c:\tmp
 DESCRIPTION=Gebäudeversicherung Kanton Thurgau 2006
 TIMESPAN=2005-2006
 
-ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\gvtg.mdb
-#ODBC_DSN=gvtg
-#ODBC_DSN=csvtext
+#ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\gvtg.mdb
+ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\csvtext\
 ODBC_USER=Admin

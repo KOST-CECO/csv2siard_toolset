@@ -10,7 +10,9 @@ global $prg_option, $prgdir, $odbc_handle;
 	$tablename = $table['_a']['name'];
 
 	if ($prg_option['CSV_FOLDER']=='ODBC') {
+		// no ODBC specification with SQL query available
 		$query = "select * from $tablename";
+		$sqlfile = "'$query'";
 	}
 	else {
 		// check for ODBC specification file and open it for reading
@@ -41,11 +43,14 @@ global $prg_option, $prgdir, $odbc_handle;
 
 	// execute query command to select table content
 	$recordset = @odbc_exec($odbc_handle, $query);
+	// might be a text ODBC source
+	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.csv'); }
+	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.txt'); }
 	if (!$recordset) {
 		echo "Error in SQL command '$query'\n";
 		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
 		$prg_option['ERR'] = 2;
-		odbc_close($odbc_handle);
+		@odbc_close($odbc_handle);
 		return;
 	}
 	
@@ -68,7 +73,7 @@ global $prg_option, $prgdir, $odbc_handle;
 	$columncount = (array_key_exists('_a', $table['_c']['column'])) ? 1 : count($table['_c']['column']);
 	
 	$bbbuf = '';
-	// get columns form ODCB source by name
+	// get columns form ODCB source by name --------------------------------------
 	if($prg_option['COLUMN_NAMES']) {
 		while (odbc_fetch_row($recordset)) {
 			$buf = array();
@@ -88,7 +93,7 @@ global $prg_option, $prgdir, $odbc_handle;
 			$rowcount++;
 		}
 	}
-	// get columns form ODCB source by order
+	// get columns form ODCB source by order -------------------------------------
 	else {
 		while (odbc_fetch_into($recordset, $buf)) {
 			if(count($buf) < $columncount) {
@@ -102,7 +107,6 @@ global $prg_option, $prgdir, $odbc_handle;
 			$rowcount++;
 		}
 	}
-
 
 	// write SIARD file XML footer
 	writeSIARDFooter($siard_handle);
