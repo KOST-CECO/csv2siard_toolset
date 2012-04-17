@@ -23,7 +23,8 @@ MKDIR %RUNTIME%
 MKDIR %RUNTIME%\bin
 MKDIR %RUNTIME%\source
 MKDIR %RUNTIME%\csvdata
-MKDIR %RUNTIME%\csvtest
+MKDIR %RUNTIME%\datatype
+MKDIR %RUNTIME%\odbcdata
 
 COPY csv2siard.exe %RUNTIME%\bin
 
@@ -52,12 +53,14 @@ COPY datatype-model.xml %RUNTIME%
 
 COPY Anwendungshandbuch*.pdf %RUNTIME%
 
-COPY *.php %RUNTIME%\source
+COPY *.php         %RUNTIME%\source
 COPY csv2siard.bcp %RUNTIME%\source
 
 COPY csvdata\*      %RUNTIME%\csvdata
 COPY datatype\*     %RUNTIME%\datatype
 COPY odbcdata\*     %RUNTIME%\odbcdata
+
+COPY demo.*     %RUNTIME%
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%

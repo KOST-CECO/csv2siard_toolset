@@ -25,7 +25,7 @@ DEL /Q test.siard
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
 
 DEL /Q test.siard
-CALL csv2siard.exe datatype-model.xml csvtest test.siard csvtest\csvtest.prefs
+CALL csv2siard.exe datatype-model.xml datatype test.siard datatype\datatype.prefs
 
 DEL /Q test.siard
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
