@@ -55,8 +55,9 @@ COPY Anwendungshandbuch*.pdf %RUNTIME%
 COPY *.php %RUNTIME%\source
 COPY csv2siard.bcp %RUNTIME%\source
 
-COPY csvdata\*.dat %RUNTIME%\csvdata
-COPY csvtest\*     %RUNTIME%\csvtest
+COPY csvdata\*      %RUNTIME%\csvdata
+COPY datatype\*     %RUNTIME%\datatype
+COPY odbcdata\*     %RUNTIME%\odbcdata
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%
