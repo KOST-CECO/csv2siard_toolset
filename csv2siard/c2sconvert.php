@@ -117,6 +117,9 @@ global $prg_option;
 				case "SMALLINT":
 				case "INTEGER":
 				case "BIGINT":
+					// remove decimal zeros (e.g. 127.0)
+					$b_ = round($buf);
+					if ($b_ == $buf) { $buf = $b_; }
 					if (!ctype_digit(ltrim($buf, '-'))) {
 						echo "\nInteger type convertion failed in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
 					}
@@ -146,7 +149,10 @@ global $prg_option;
 					}
 					break;
 				case "DATE":
-				$td = convert2XMLdate($buf);
+					// remove decimal zeros (e.g. 127.0)
+					$b_ = @round($buf);
+					if ($b_ == $buf) { $buf = $b_; }
+					$td = convert2XMLdate($buf);
 					if (!$td) {
 						echo "\nDate convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {
@@ -162,7 +168,7 @@ global $prg_option;
 					}
 					break;
 				case "TIMESTAMP":
-				$td = convert2XMLdate($buf);
+					$td = convert2XMLdate($buf);
 					if (!$td) {
 						echo "\nTimestamp convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					} else {

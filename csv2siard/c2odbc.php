@@ -43,9 +43,14 @@ global $prg_option, $prgdir, $odbc_handle;
 
 	// execute query command to select table content
 	$recordset = @odbc_exec($odbc_handle, $query);
-	// might be a text ODBC source
+	// might be Text ODBC source
 	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.csv'); }
 	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.txt'); }
+	// might be Excel ODBC source
+	if (!$recordset) {
+		$query = 'select * from ['.$tablename.'$]';
+		$recordset = @odbc_exec($odbc_handle, $query);
+	}
 	if (!$recordset) {
 		echo "Error in SQL command '$query'\n";
 		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }

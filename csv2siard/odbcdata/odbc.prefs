@@ -19,6 +19,7 @@ TMPDIR=c:\tmp
 DESCRIPTION=Gebäudeversicherung Kanton Thurgau 2006
 TIMESPAN=2005-2006
 
-#ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=P:\KOST\Tools\csv2siard\_workbench\gvtg.mdb
-ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\csvtext\
-ODBC_USER=Admin
+ODBC_DSN=Driver={Microsoft Excel Driver (*.xls)};Dbq=gvtg.xls
+#ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=gvtg.mdb
+#ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\csvtext\
+#ODBC_USER=Admin
