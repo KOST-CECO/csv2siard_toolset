@@ -50,7 +50,7 @@ COPY GPL-2.0_COPYING.txt %RUNTIME%\bin
 
 COPY database-torque-4-0.xsd %RUNTIME%
 COPY gv-model-v9.xml %RUNTIME%
-COPY gv-model-norm.xml %RUNTIME%
+COPY gv-model-nf.xml %RUNTIME%
 COPY datatype-model.xml %RUNTIME%
 
 COPY Anwendungshandbuch*.pdf %RUNTIME%
