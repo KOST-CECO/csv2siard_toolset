@@ -25,6 +25,7 @@ MKDIR %RUNTIME%\source
 MKDIR %RUNTIME%\csvdata
 MKDIR %RUNTIME%\datatype
 MKDIR %RUNTIME%\odbcdata
+MKDIR %RUNTIME%\odbcsql
 
 COPY csv2siard.exe %RUNTIME%\bin
 
@@ -49,6 +50,7 @@ COPY GPL-2.0_COPYING.txt %RUNTIME%\bin
 
 COPY database-torque-4-0.xsd %RUNTIME%
 COPY gv-model-v9.xml %RUNTIME%
+COPY gv-model-norm.xml %RUNTIME%
 COPY datatype-model.xml %RUNTIME%
 
 COPY Anwendungshandbuch*.pdf %RUNTIME%
@@ -59,6 +61,7 @@ COPY csv2siard.bcp %RUNTIME%\source
 COPY csvdata\*      %RUNTIME%\csvdata
 COPY datatype\*     %RUNTIME%\datatype
 COPY odbcdata\*     %RUNTIME%\odbcdata
+COPY odbcsql\*      %RUNTIME%\odbcsql
 
 COPY demo.*     %RUNTIME%
 

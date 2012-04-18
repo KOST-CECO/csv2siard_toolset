@@ -48,12 +48,14 @@ global $prg_option, $prgdir, $odbc_handle;
 	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.txt'); }
 	// might be Excel ODBC source
 	if (!$recordset) {
-		$query = 'select * from ['.$tablename.'$]';
-		$recordset = @odbc_exec($odbc_handle, $query);
+		$recordset = @odbc_exec($odbc_handle, 'select * from ['.$tablename.'$]');
 	}
 	if (!$recordset) {
 		echo "Error in SQL command '$query'\n";
-		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
+		if ($prg_option['VERBOSITY']) { 
+			$recordset = @odbc_exec($odbc_handle, $query);
+			echo odbc_errormsg()."\n"; 
+		}
 		$prg_option['ERR'] = 2;
 		@odbc_close($odbc_handle);
 		return;
@@ -138,7 +140,8 @@ global $prg_option, $odbc_handle;
 	@odbc_exec($odbc_handle, 'SELECT * from ODCB');
 	// set type and connection info
 	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
-	$prg_option['CONNECTION'] = 'odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
+	// no backslash allowed in metadata.xml connection element
+	$prg_option['CONNECTION'] = xml_encode(utf8_encode(strtr('odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.$prg_option['CSV_FOLDER'], '\\', '/')));
 }
 
 ?>

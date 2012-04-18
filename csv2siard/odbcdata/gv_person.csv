@@ -11,4 +11,5 @@ id;person_id;gebaeude_id;klasse_code;klasse_text;name;strasse;strasse_nr;wohnung
 29777;29777;01 10007;;;Bitzer Peter;;;;AT;4432;;Lampenberg;;;;E;Eigentuemer
 24400;24400;01 10008;;;Sacchet Italo Erben;;;;AT;4432;;Lampenberg;;;;E;Eigentuemer
 23807;23807;01 10006;;;Meier Ernst (-Stierlin);Grüntal;;;;4469;;Anwil;;;;E;Eigentuemer
-23808;23808;01 10006;;;Kaiser Martin;;;;;;;Grüntal;;;;V;Verwalter
+64612;64610;01 10007;;;Sacchet Ernestina;Baslerstr.;2;;;4469;;Anwil;;;;V;Verwalter
+64613;64610;01 10003;;;Sacchet Ernestina;Baslerstr.;2;;;4469;;Anwil;;;;V;Verwalter
