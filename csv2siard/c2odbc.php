@@ -29,7 +29,7 @@ global $prg_option, $prgdir, $odbc_handle;
 			closedir($dirhandle);
 		}
 		if(!isset($sqlfile) or !is_file($sqlfile)) {
-			echo "ODBC specification file for table $tablename not found\n"; $prg_option['ERR'] = 2; return;
+			echo "ODBC specification file for table '$tablename' not found\n"; $prg_option['ERR'] = 2; return;
 		}
 		setTableOption($table, 'localfile', xml_encode($sqlfile));
 		// get sql query

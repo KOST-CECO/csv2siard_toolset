@@ -73,6 +73,10 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 			}
 			// Read first line to detect columns
 			if ($rowcount == 0) {
+				// first row may contain UTF-8 BOM
+				if ((substr($buf[0], 0, 3)) == hex2bin("efbbbf")) {
+					$buf[0] = substr($buf[0], 3);
+				}
 				$colcnt = 0;
 				reset($buf);
 				foreach ($buf as $b) {

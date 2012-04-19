@@ -17,17 +17,26 @@ IF %ERRORLEVEL% GTR 1 (
 )
 REM test function --------------------------------------------------------------
 @ECHO ON
-DEL /Q *.siard
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 unzip -t test.siard
-
-DEL /Q test.siard
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
 CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
-
-DEL /Q test.siard
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
 CALL csv2siard.exe datatype-model.xml datatype test.siard datatype\datatype.prefs
-
-DEL /Q test.siard
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
+CALL csv2siard.exe gv-model-nf.xml odbcsql test.siard odbcsql\odbcsql.prefs
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 
 @ECHO OFF

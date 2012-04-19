@@ -104,13 +104,13 @@ global $prg_option, $prgdir;
 		closedir($dirhandle);
 	}
 	if(!isset($csvfile)) {
-		echo "CSV table $tablename not found\n"; $prg_option['ERR'] = 2; return;
+		echo "CSV table '$tablename' not found\n"; $prg_option['ERR'] = 2; return;
 	}
 
 	setTableOption($table, 'localfile', xml_encode($csvfile));
 
 	if(!is_file($csvfile)) {
-		echo "CSV file $csvfile not found\n"; $prg_option['ERR'] = 2; return;
+		echo "CSV file '$csvfile' not found\n"; $prg_option['ERR'] = 2; return;
 	}
 	
 	// detect encoding with GNU file-5.03
@@ -147,6 +147,12 @@ global $prg_option, $prgdir;
 			}
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
+		// first row may contain UTF-8 BOM
+		if ($rowcount == 1) {
+			if ((substr($buffer[0], 0, 3)) == hex2bin("efbbbf")) {
+				$buffer[0] = substr($buffer[0], 3);
+			}
+		}
 		// first row contains column names
 		if ($rowcount == 1 and $prg_option['COLUMN_NAMES']) {
 			processCSVColumnNames($buffer, $csvfile, $table, $buf);
