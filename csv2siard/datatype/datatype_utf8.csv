@@ -1,4 +1,4 @@
-char_1;char_2;varchar_1;varchar_2;longvarchar;clob;ref
+﻿char_1;char_2;varchar_1;varchar_2;longvarchar;clob;ref
 A;A;This is an encoded string;This is an encoded string;This is an encoded string;This is an encoded string;http://ch.php.net/manual/en/function.base64-decode.php
 ABC;ABC;The quick brown fox jumps over the lazy dog;The quick brown fox jumps over the lazy dog;The quick brown fox jumps over the lazy dog;The quick brown fox jumps over the lazy dog;http://ch.php.net/manual/en/function.base64-decode.php
 ABC;ABC;The quick brown fox jumps over the lazy dog;Victor jagt zwölf Boxkämpfer quer über den Sylter Deich;El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja;The quick brown fox jumps over the lazy dog;http://ch.php.net/manual/en/function.base64-decode.php
