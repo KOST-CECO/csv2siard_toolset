@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Heinz Gnehm (Schweizerisches Bundesarchiv / Fachstelle ARELDA) -->
-<!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by XMLSPY 2005 Professional Ed., Installed for 5 users (Schweiz Landesbibliothek) -->
+<!-- edited with XMLSpy v2012 rel. 2 (http://www.altova.com) by Thomas Bula (Bundesamt für Informatik und Telekommunikation) -->
 <database name="gemdat5" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+	<table name="anl" description="Enthält Angaben zu Brandschutzanlagen, die in den exportierten Gebäuden installiert sind">
+		<column name="id" type="VARCHAR" size="16" description="Eindeutige Anlage-ID" required="true"/>
+		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
+		<column name="typ_text" type="VARCHAR" size="255" description="Anlagetyp im Klartext"/>
+		<foreign-key foreignTable="geb" name="fk_anlage_gebaeude">
+			<reference local="gebaeude_id" foreign="id"/>
+		</foreign-key>
+	</table>
 	<table name="geb" description="Umfasst die Basisdaten zu versicherten und fremdversicherten Gebäuden sowie zu abgebrochenen Gebäuden mit einem Schadenfall in der Beobachtungsperiode">
 		<column name="id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutiger Schlüssel für das Gebäude" required="true"/>
 		<column name="grundstueck_id" type="VARCHAR" size="20" description="Grundstücknummer"/>
@@ -21,31 +29,40 @@
 		<column name="plz" type="VARCHAR" size="6" description="4-stellige Plz"/>
 		<column name="ort" type="VARCHAR" size="255" description="Ort"/>
 	</table>
-	<table name="rol" description="pro Person-Gebäude-Beziehung einen Datensatz">
-		<column name="person_id" type="VARCHAR" size="16" description="Eindeutige Personen-ID" required="true"/>
-		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude" required="true"/>
-		<column name="rolle" type="VARCHAR" size="255" description="Rolle im Klartext" required="true"/>
-		<foreign-key foreignTable="geb" name="fk_person_gebaeude">
-			<reference local="gebaeude_id" foreign="id"/>
-		</foreign-key>
-	</table>
 	<table name="per" description="Enthält für alle exportierten Gebäude die Personendaten für die Personen, die entweder als Eigentümer oder Verwalter auftreten">
-		<column name="person_id" type="VARCHAR" size="16" description="Eindeutige Personen-ID" required="true"/>
+		<column name="person_id" type="VARCHAR" primaryKey="true" size="16" description="Eindeutige Personen-ID" required="true"/>
 		<column name="name" type="VARCHAR" size="255" description="Personen-Suchbegriff"/>
 		<column name="strasse" type="VARCHAR" size="255" description="Strasse oder Flurbezeichnung"/>
 		<column name="land" type="VARCHAR" size="255" description="Land"/>
 		<column name="plz" type="VARCHAR" size="6" description="Postleitzahl"/>
 		<column name="ort" type="VARCHAR" size="255" description="Ort"/>
-		<foreign-key foreignTable="rol" name="fk_person_rolle">
-			<reference local="person_id" foreign="person_id"/>
+	</table>
+	<table name="pos" description="Enthält die einzelnen Schätzungspositionen, aus denen sich jede Schätzung in shz zusammensetzt">
+		<column name="id" type="VARCHAR" size="16" description="Eindeutige ID der Schätzposition" required="true"/>
+		<column name="schaetzung_id" type="VARCHAR" size="16" description="ID für die Referenz zur Schätzung"/>
+		<column name="art_text" type="VARCHAR" size="255" description="Positionsart "/>
+		<column name="text" type="VARCHAR" size="1000" description="Text"/>
+		<column name="volumen" type="DECIMAL" description="Volumen m3"/>
+		<column name="versicherungswert" type="DOUBLE" description="Versicherungswert"/>
+		<column name="laenge" type="DECIMAL" description="Ausmasse: Länge"/>
+		<column name="breite" type="DECIMAL" description="Ausmasse: Breite"/>
+		<column name="hoehe" type="DECIMAL" description="Ausmasse: Höhe"/>
+		<column name="abnutzung" type="DECIMAL" description="Abnützung in Prozent"/>
+		<column name="erfasster_wert" type="DOUBLE" description="Dieser interne Wert enthält den durch den Benutzer erfassten Wert pro Schätzposition"/>
+		<column name="bauart_text" type="VARCHAR" size="255" description="Bauart"/>
+		<foreign-key foreignTable="shz" name="fk_position_schaetzung">
+			<reference local="schaetzung_id" foreign="id"/>
 		</foreign-key>
 	</table>
-	<table name="anl" description="Enthält Angaben zu Brandschutzanlagen, die in den exportierten Gebäuden installiert sind">
-		<column name="id" type="VARCHAR" size="16" description="Eindeutige Anlage-ID" required="true"/>
-		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude"/>
-		<column name="typ_text" type="VARCHAR" size="255" description="Anlagetyp im Klartext"/>
-		<foreign-key foreignTable="geb" name="fk_anlage_gebaeude">
+	<table name="rol" description="pro Person-Gebäude-Beziehung einen Datensatz">
+		<column name="person_id" type="VARCHAR" size="16" description="Eindeutige Personen-ID" required="true"/>
+		<column name="gebaeude_id" type="VARCHAR" size="16" description="ID für die Referenz zum Gebäude" required="true"/>
+		<column name="rolle" type="VARCHAR" size="255" description="Rolle im Klartext"/>
+		<foreign-key foreignTable="geb" name="fk_rolle_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
+		</foreign-key>
+		<foreign-key foreignTable="per" name="fk_rolle_person">
+			<reference local="person_id" foreign="person_id"/>
 		</foreign-key>
 	</table>
 	<table name="shd" description="Enthält alle Schadensmeldungen für die exportierten Gebäude (ein Datensatz pro Schadensfall)">
@@ -83,23 +100,6 @@
 		<column name="volumen" type="DOUBLE" description="Gebäudevolumen m3"/>
 		<foreign-key foreignTable="geb" name="fk_schaetzung_gebaeude">
 			<reference local="gebaeude_id" foreign="id"/>
-		</foreign-key>
-	</table>
-	<table name="pos" description="Enthält die einzelnen Schätzungspositionen, aus denen sich jede Schätzung in shz zusammensetzt">
-		<column name="id" type="VARCHAR" size="16" description="Eindeutige ID der Schätzposition" required="true"/>
-		<column name="schaetzung_id" type="VARCHAR" size="16" description="ID für die Referenz zur Schätzung"/>
-		<column name="art_text" type="VARCHAR" size="255" description="Positionsart "/>
-		<column name="text" type="VARCHAR" size="1000" description="Text"/>
-		<column name="volumen" type="DECIMAL" description="Volumen m3"/>
-		<column name="versicherungswert" type="DOUBLE" description="Versicherungswert"/>
-		<column name="laenge" type="DECIMAL" description="Ausmasse: Länge"/>
-		<column name="breite" type="DECIMAL" description="Ausmasse: Breite"/>
-		<column name="hoehe" type="DECIMAL" description="Ausmasse: Höhe"/>
-		<column name="abnutzung" type="DECIMAL" description="Abnützung in Prozent"/>
-		<column name="erfasster_wert" type="DOUBLE" description="Dieser interne Wert enthält den durch den Benutzer erfassten Wert pro Schätzposition"/>
-		<column name="bauart_text" type="VARCHAR" size="255" description="Bauart"/>
-		<foreign-key foreignTable="shz" name="fk_position_schaetzung">
-			<reference local="schaetzung_id" foreign="id"/>
 		</foreign-key>
 	</table>
 </database>
