@@ -38,28 +38,9 @@ include 'c2schema.php';
 include 'c2stimedate.php';
 include 'zip.php';
 include 'c2odbc.php';
+include 'c2snodbodbc.php';
 
 // Versionen Liste
-$version = '0.1';		// Read and check command-line arguments
-$version = '0.2';		// Load Datamodel
-$version = '0.3';		// Write SIARD XML files
-$version = '0.4';		// Write SIARD metadata files
-$version = '0.5';		// Read preference settings into metadata.xml
-$version = '0.6';		// CSV encoding ISO-8859-1 and UTF-8
-$version = '0.7';		// check CSV column names
-$version = '0.8';		// necessary exe and dll
-$version = '0.9';		// NO_DB_MODEL implementieren
-$version = '1.0';		// XSL and XSD include in program source
-$version = '1.1';		// convert date/time fields to xs:date
-$version = '1.2';		// check column type for NO_DB_MODEL 
-$version = '1.3';		// correct field type setting
-$version = '1.4';		// fix in NO_DB_MODEL and MS-Excel flavour
-$version = '1.5';		// DBMS Naming restriction with NO_DB_MODEL
-$version = '1.6';		// SIARD Datei mit MD5 Hash & SUB an Dateiende möglich
-$version = '1.6.1';	// detectSUB fix
-$version = '1.6.2';	// binary field processing implemented
-$version = '1.6.3';	// enhanced xmllint output
-$version = '1.6.4';	// date = 0 fixed
 $version = '1.7';		// preference path fixed/non Unicode character/XML schema violation/consecutive spaces
 $version = '1.7.1';	// ODBC
 $version = '1.7.2';	// ODBC fetch by order and by name
@@ -69,6 +50,7 @@ $version = '1.7.5';	// Documentation: creating SIARD file using ODBC Connection
 $version = '1.7.6';	// UTF-8 Field size corrected
 $version = '1.7.7';	// remove BOM from head of UTF-8 file
 $version = '1.7.8';	// fix minor MS-Excel problems and finish DOCU
+$version = '1.7.9';	// :NO_DB_MODEL on ODBC Connection
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -105,8 +87,8 @@ $dbmod = array();													//nested array to hold the database model
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]
-    database :: database description according to torque.v4 XML model or keyword NO_DB_MODEL
-     csvpath :: path where to find csv files or keyword ODBC
+    database :: database description according to torque.v4 XML model or keyword :NO_DB_MODEL
+     csvpath :: path where to find csv files or keyword :ODBC
    siardfile :: SIARD file to be created
        prefs :: configuration file (default $prefs)
 

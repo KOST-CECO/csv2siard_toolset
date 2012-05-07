@@ -9,9 +9,9 @@ global $prg_option, $prgdir, $odbc_handle;
 
 	$tablename = $table['_a']['name'];
 
-	if ($prg_option['CSV_FOLDER']=='ODBC') {
+	if ($prg_option['CSV_FOLDER']=='') {
 		// no ODBC specification with SQL query available
-		$query = "select * from $tablename";
+		$query = "select * from [$tablename]";
 		$sqlfile = "'$query'";
 	}
 	else {
@@ -44,8 +44,8 @@ global $prg_option, $prgdir, $odbc_handle;
 	// execute query command to select table content
 	$recordset = @odbc_exec($odbc_handle, $query);
 	// might be Text ODBC source
-	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.csv'); }
-	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, $query.'.txt'); }
+	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, "select * from $tablename.csv"); }
+	if (!$recordset) { $recordset = @odbc_exec($odbc_handle, "select * from $tablename.csv"); }
 	// might be Excel ODBC source
 	if (!$recordset) {
 		$recordset = @odbc_exec($odbc_handle, 'select * from ['.$tablename.'$]');
@@ -92,7 +92,6 @@ global $prg_option, $prgdir, $odbc_handle;
 				$buf[] = $col;
 			}
 			if ($prg_option['ERR']) { break; }
-			$bbbuf = $bbbuf."\n".implode("; ", $buf);
 			// write SIARD table
 			writeSIARDColumn($siard_handle, $buf, $columncount, $rowcount, $table);
 			
@@ -141,7 +140,8 @@ global $prg_option, $odbc_handle;
 	// set type and connection info
 	$prg_option['DB_TYPE'] = xml_encode(utf8_encode(trim(preg_replace('/(\[.+\])(\[.+\]).+/','${2}', odbc_errormsg($odbc_handle)), '[]')));
 	// no backslash allowed in metadata.xml connection element
-	$prg_option['CONNECTION'] = xml_encode(utf8_encode(strtr('odbc:'.$prg_option['ODBC_DSN'].' - query from file://'.$prg_option['CSV_FOLDER'], '\\', '/')));
+	$prg_option['CONNECTION'] = ($prg_option['CSV_FOLDER'] == '') ? $prg_option['ODBC_DSN'] : $prg_option['ODBC_DSN'].' - query from file://'.$prg_option['CSV_FOLDER'];
+	$prg_option['CONNECTION'] = xml_encode(utf8_encode(strtr($prg_option['CONNECTION'], '\\', '/')));
 }
 
 ?>

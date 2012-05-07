@@ -149,9 +149,11 @@ global $prg_option;
 					}
 					break;
 				case "DATE":
-					// remove decimal zeros (e.g. 127.0)
-					$b_ = @round($buf);
-					if ($b_ == $buf) { $buf = $b_; }
+					// remove decimal zeros from EXCEL(e.g. 127.0)
+					if (is_numeric($buf)) {
+						$b_ = @round($buf);
+						if ($b_ == $buf) { $buf = $b_; }
+					}
 					$td = convert2XMLdate($buf);
 					if (!$td) {
 						echo "\nDate convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
@@ -201,32 +203,32 @@ global $prg_option;
 				case "BIT":
 					$size = (is_null($size)) ? 8 : $size; // default size
 					if (strlen($buf) > $size) {
-						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i"; $prg_option['ERR'] = 32;
 					}
 					if ($size > 8) {
-						echo "\nFieldsize $size exceeds max bit size 8 in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo "\nFieldsize $size exceeds max bit size 8 in row $rowcount, column $i"; $prg_option['ERR'] = 32;
 					}
 					$buf = bindec($buf); 
 					$buf = chr($buf);
 					$buf = bin2hex($buf);
 					break;
 				case "BINARY":
-					$size = (is_null($size)) ? 4080 : $size; // default size
-					if ((strlen($buf)*8) > $size) {
-						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					$size = (is_null($size)) ? 4096 : $size; // default size
+					if (strlen($buf) > $size) {
+						echo "\nFieldsize (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i"; $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($buf);
 					break;
 				case "VARBINARY":
 				case "LONGVARBINARY":
 				case "BLOB":
-					$size = (is_null($size)) ? 4080 : $size; // default size
+					$size = (is_null($size)) ? 4096 : $size; // default size
 					$bbuf = base64_decode($buf);
 					if ($bbuf == FALSE) {
 						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 						$bbuf = $buf;
-					} elseif ((strlen($bbuf)*8) > $size) {
-						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					} elseif (strlen($buf) > $size) {
+						echo "\nFieldsize  (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($bbuf);
 					break;

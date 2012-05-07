@@ -27,7 +27,7 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 	}
 	
 	// check database description XML file
-	if (strcasecmp($argv[1], 'NO_DB_MODEL') == 0) {
+	if (strcasecmp($argv[1], ':NO_DB_MODEL') == 0) {
 		$prg_option['DB_MODEL'] = 'NO_DB_MODEL';
 	}
 	else {
@@ -45,8 +45,8 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 	}
 	// check folder with csv files or ODBC connection
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
-	if (strcasecmp($argv[2],'ODBC')==0) {
-		$prg_option['CSV_FOLDER'] = 'ODBC';
+	if (strcasecmp($argv[2],':ODBC')==0) {
+		$prg_option['CSV_FOLDER'] = '';
 	}
 	elseif (!is_dir($csvpath)) {
 		echo "'$argv[2]' is not a valid path\n"; exit(1);
@@ -138,7 +138,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	
 	// Set special preferences
 	$prg_option['CONNECTION'] = 'file://'.xml_encode(utf8_encode($prg_option['CSV_FOLDER']));
-	$prg_option['CLIENTMACHINE'] = $_SERVER['COMPUTERNAME'].'.'.$_SERVER['USERDNSDOMAIN'];
+	$prg_option['CLIENTMACHINE'] = @$_SERVER['COMPUTERNAME'].'.'.@$_SERVER['USERDNSDOMAIN'];
 	// Open ODBC connection if necessary
 	if ($prg_option['ODBC_DSN'] or $prg_option['CSV_FOLDER'] == 'ODBC') {
 		openODCBConnection();

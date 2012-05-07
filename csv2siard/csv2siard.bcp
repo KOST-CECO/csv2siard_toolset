@@ -15,6 +15,7 @@ embed c2sfunction.php
 embed c2sxml.php
 embed c2odbc.php
 embed c2snodbmodel.php
+embed c2snodbodbc.php
 embed c2schema.php
 embed c2stimedate.php
 embed zip.php

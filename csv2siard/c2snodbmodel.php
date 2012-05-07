@@ -2,11 +2,11 @@
 error_reporting(E_ALL);
 // create database model from scratch
 function createDBModel(){
-global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema, $odbc_handle;
+global $prg_option, $wdir, $odbc_handle;
 $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE' => 3, 'VARCHAR' => 4);
 
 	if ($odbc_handle != null) {
-		echo "Option NO_DB_MODEL cannot be used with ODBC data source!\n"; exit(1); 
+		createDBModel_odbc(); return;
 	}
 // Create CSV file list
 	$file_arr = array();
@@ -36,7 +36,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 			}
 		}
 	}
-	closedir($dirhandle);
+	@closedir($dirhandle);
 	asort($file_arr);
 	if (count($file_arr) == 0) {
 		echo "No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"; exit(2);
@@ -59,7 +59,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	reset($file_arr);
 	// Read each CSV file
 	while (list($name, $file) = each($file_arr)) {
-		$csvhandle = fopen($file, "r");
+		$csvhandle = @fopen($file, "r");
 		if(!$csvhandle) {
 			echo "Could not read CSV file $file\n"; exit(2);
 		}
@@ -125,8 +125,21 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	}
 
 	// create database description according to torque.v4 XML model
-	$dbname = basename($prg_option['CSV_FOLDER']);
-	
+	writeDBModel($file_arr, $csv_arr, basename($prg_option['CSV_FOLDER']));
+
+	// write console message
+	echo "\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n";
+	reset($file_arr);
+	while (list($key, $val) = each($file_arr)) {
+		$val = ansi2ascii($val);
+		echo "  [$key] => $val\n";
+	}
+}
+
+// -----------------------------------------------------------------------------
+// write database description according to torque.v4 XML model
+function writeDBModel($file_arr, $csv_arr, $dbname) {
+global $prg_option, $wdir, $torque_schema, $static_torque_schema;
 	$xmldata = "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n";
 	$xmldata = $xmldata . "<database name=\"$dbname\" xmlns=\"http://db.apache.org/torque/4.0/templates/database\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd\">\n";
 	reset($csv_arr);
@@ -163,16 +176,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		exit(16);
 	}
 	unlink("$prg_option[TMPDIR]/$torque_schema");
-
-	// write console message
-	echo "\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n";
-	reset($file_arr);
-	while (list($key, $val) = each($file_arr)) {
-		$val = ansi2ascii($val);
-		echo "  [$key] => $val\n";
-	}
 }
-
 // -----------------------------------------------------------------------------
 // guess data type of string $buf, returns data type
 function guessDataType($buf) {

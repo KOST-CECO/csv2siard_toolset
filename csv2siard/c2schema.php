@@ -3064,7 +3064,7 @@ $static_torque2siard = '<?xml version="1.0"?>
 									<xsl:text>)</xsl:text>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:text>(4080)</xsl:text>
+									<xsl:text>(4096)</xsl:text>
 								</xsl:otherwise>
 							</xsl:choose>
 					</xsl:when>

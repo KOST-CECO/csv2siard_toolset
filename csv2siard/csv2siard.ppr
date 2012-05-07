@@ -28,11 +28,14 @@ csv2siard
 		c2screate.php
 		c2sconvert.php
 		c2snodbmodel.php
+		c2snodbodbc.php
 		c2schema.php
 		c2stimedate.php
 		c2odbc.php
 		zip.php
 	+datamodel
+		gv-model-v9.xml
+		gv-model-nf.xml
 		minimal-model.xml
 		minimal1-model.xml
 		minimal2-model.xml
@@ -41,12 +44,6 @@ csv2siard
 		test-model.xml
 		database-torque-4-0.xsd
 		metadata.xsd
-		ascii-model.xml
 [Open project files]
-0=Neu1.txt
 [Selected Project Files]
 Main=csv2siard.php
-Selected=Neu1.txt
-[Neu1.txt]
-TopLine=1
-Caret=62,1

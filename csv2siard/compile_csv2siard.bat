@@ -25,7 +25,11 @@ unzip -t test.siard
 ECHO.
 @ECHO --------------------------------------------------------------------------
 @DEL /Q *.siard
-CALL csv2siard.exe NO_DB_MODEL csvdata test.siard
+CALL csv2siard.exe :NO_DB_MODEL csvdata test.siard
+ECHO.
+@ECHO --------------------------------------------------------------------------
+@DEL /Q *.siard
+CALL csv2siard.exe :NO_DB_MODEL :ODBC test.siard odbcsql\odbcsql.prefs
 ECHO.
 @ECHO --------------------------------------------------------------------------
 @DEL /Q *.siard
@@ -41,5 +45,6 @@ CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 
 @ECHO OFF
 if %ERRORLEVEL% == 0 (
-	CALL "C:\Program Files\Java\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.26\bin\SiardEdit.jar"
+	REM CALL C:\Software\jre6\bin\javaw.exe -jar "C:\Software\siardsuite_1.20\bin\SiardEdit.jar"
+	CALL C:\Software\jre6\bin\javaw.exe -jar "C:\Software\SIARD Suite-1.44\bin\SiardEdit.jar"
 )
