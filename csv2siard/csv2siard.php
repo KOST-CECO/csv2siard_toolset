@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Report all PHP errors
 error_reporting(E_ALL);
+//xdebug_start_trace("trace.out");
 //phpinfo(INFO_ALL);
 // phpinfo(INFO_ENVIRONMENT);
 
