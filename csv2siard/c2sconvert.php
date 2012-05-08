@@ -320,7 +320,7 @@ function writeSchemaContent($siardhandle, &$table){
 				case "FLOAT":
 				case "REAL":
 				case "DOUBLE":
-					$xstype = 'double'; break;
+					$xstype = 'float'; break;
 				case "NUMERIC":
 				case "DECIMAL":
 					$xstype = 'decimal'; break;

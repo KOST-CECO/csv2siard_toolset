@@ -2,7 +2,7 @@
 
 @DEL /Q *.siard
 @ECHO --------- %time% --------- 
-php.exe csv2siard.php nw.xml :ODBC test.siard odbc.prefs
+php.exe csv2siard.php :NO_DB_MODEL :ODBC test.siard odbc.prefs
 @REM php.exe csv2siard.php northwind.xml :ODBC test.siard odbc.prefs
 
 @REM php.exe csv2siard.php gv-model-v9.xml :ODBC test.siard odbc.prefs

@@ -1,19 +1,23 @@
 csv2siard TODO Liste
 ++++++++++++++++++++
 
-Planung csv2siard 1.7
----------------------
-- base64 codiert Binärdaten richtig übernehmen
-- anonymisiert (binäre) Testdaten
-- verbesserte DATE Format Erkennung
-- mehrere folgende Leerzeichen richtig verarbeiten
-
-
 csv2siard 1.8
 -------------
+- Verarbeiten von ODBC Quellen
+- NO_DB_MODEL mit ODBC Quellen
+
+csv2siard 1.8.x
+---------------
+- ODCB Felder grösser 4Kb übernehmen (odbc_longreadlen)
+- ODCB Characterset prüfen
+- Erstellen der CSV Dateilist / ODBC Tabellenliste verbessern
+- bei NO_DB_MODEL mit ODBC Quellen Primärschlüssel übernehmen
+- NO_DB_MODEL Verarbeitung beschleunigen durch verbesserte DATE Format Erkennung
+- NO_DB_MODEL Verarbeitung beschleunigen durch inkrementelle Feld Format Erkennung
+
+csv2siard 1.9
+-------------
 - zip64 Erweiterung
-- no_db_model Verarbeitung beschleunigen durch verbesserte DATE Format Erkennung
-- no_db_model Verarbeitung beschleunigen durch inkrementelle Feld Format Erkennung
 - Datenbank Konsistenz prüfen (Constraints)
 - Schema Validator in Programm integrieren (statt xmllint.exe)
 - crc32 in DLL auslagern
