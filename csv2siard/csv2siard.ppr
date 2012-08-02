@@ -45,10 +45,5 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=TODO_Liste.txt
 [Selected Project Files]
 Main=csv2siard.php
-Selected=TODO_Liste.txt
-[TODO_Liste.txt]
-TopLine=1
-Caret=1,25

@@ -50,8 +50,9 @@ $version = '1.7.5';	// Documentation: creating SIARD file using ODBC Connection
 $version = '1.7.6';	// UTF-8 Field size corrected
 $version = '1.7.7';	// remove BOM from head of UTF-8 file
 $version = '1.7.8';	// fix minor MS-Excel problems and finish DOCU
-$version = '1.7.9';	// :NO_DB_MODEL on ODBC Connection
-$version = '1.8';		// :Update documentation
+$version = '1.7.9';	// NO_DB_MODEL on ODBC Connection
+$version = '1.8';		// Update documentation
+$version = '1.8.1';	// SQL error message enhancement
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

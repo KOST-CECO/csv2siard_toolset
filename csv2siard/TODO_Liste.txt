@@ -1,19 +1,28 @@
 csv2siard TODO Liste
 ++++++++++++++++++++
 
+
 csv2siard 1.8
 -------------
 - Verarbeiten von ODBC Quellen
 - NO_DB_MODEL mit ODBC Quellen
+
+
+Dokumentation
+-------------
+- Erstellen einer Function-Dependency Map
+
 
 csv2siard 1.8.x
 ---------------
 - ODCB Felder grösser 4Kb übernehmen (odbc_longreadlen)
 - ODCB Characterset prüfen
 - Erstellen der CSV Dateilist / ODBC Tabellenliste verbessern
+- Feldauswahl auch bei CSV Dateien mit Feldbezeichner im Header
 - bei NO_DB_MODEL mit ODBC Quellen Primärschlüssel übernehmen
 - NO_DB_MODEL Verarbeitung beschleunigen durch verbesserte DATE Format Erkennung
 - NO_DB_MODEL Verarbeitung beschleunigen durch inkrementelle Feld Format Erkennung
+
 
 csv2siard 1.9
 -------------
@@ -22,6 +31,7 @@ csv2siard 1.9
 - Schema Validator in Programm integrieren (statt xmllint.exe)
 - crc32 in DLL auslagern
 - File Type Erkennung in PHP integrieren
+
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
