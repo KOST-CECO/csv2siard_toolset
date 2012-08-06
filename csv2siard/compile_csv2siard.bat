@@ -46,5 +46,6 @@ CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 @ECHO OFF
 if %ERRORLEVEL% == 0 (
 	REM CALL C:\Software\jre6\bin\javaw.exe -jar "C:\Software\siardsuite_1.20\bin\SiardEdit.jar"
-	CALL C:\Software\jre6\bin\javaw.exe -jar "C:\Software\SIARD Suite-1.44\bin\SiardEdit.jar"
+	CALL "C:\Software\jre6\bin\javaw.exe" -jar "C:\Software\siardsuite_1.44\bin\SiardEdit.jar"
+
 )
