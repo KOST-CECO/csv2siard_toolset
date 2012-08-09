@@ -54,6 +54,7 @@ $version = '1.7.9';	// NO_DB_MODEL on ODBC Connection
 $version = '1.8';		// Update documentation
 $version = '1.8.1';	// SQL error message enhancement
 $version = '1.8.2';	// SQL_CUR_USE_ODBC and ODBC section in php.ini
+$version = '1.8.3';	// odbcheck added
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

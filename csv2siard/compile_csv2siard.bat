@@ -10,6 +10,8 @@ GREP -v "dl(" csv2siard.php > main.php
 BAMCOMPILE.EXE csv2siard.bcp
 DEL main.php
 
+BAMCOMPILE.EXE odbcheck.bcp
+
 REM check syntax ---------------------------------------------------------------
 CALL csv2siard.exe
 IF %ERRORLEVEL% GTR 1 (

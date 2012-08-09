@@ -1,0 +1,15 @@
+; Bamcompile example project file
+
+mainfile odbcheck.php
+outfile odbcheck.exe
+
+compress
+;windowed
+dontencode
+
+embed odbcheck.php
+embed c2sconfig.php
+embed c2sfunction.php
+embed c2sxml.php
+embed c2odbc.php
+embed php.ini

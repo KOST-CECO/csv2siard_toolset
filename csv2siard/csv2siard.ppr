@@ -33,6 +33,7 @@ csv2siard
 		c2stimedate.php
 		c2odbc.php
 		zip.php
+		odbcheck.php
 	+datamodel
 		gv-model-v9.xml
 		gv-model-nf.xml
