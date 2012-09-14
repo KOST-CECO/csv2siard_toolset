@@ -3,6 +3,7 @@ SETLOCAL
 
 REM settings -------------------------------------------------------------------
 SET UNIX_HOME=C:\Software\PCUnixUtils
+SET WINDOWS_HOME=C:\Windows\system32
 SET PATH=%UNIX_HOME%;%PATH%
 
 csv2siard.exe | grep version |  cut -d " " -f 8 >version.tmp
@@ -84,6 +85,8 @@ REM zip ------------------------------------------------------------------------
 COPY %RUNTIME%.zip ..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %RUNTIME%.zip
 CD ..
+RMDIR /S /Q C:\Software\csv2siard
+%WINDOWS_HOME%\xcopy.exe %RUNTIME% C:\Software\csv2siard /I /S
 RMDIR /S /Q %RUNTIME%
 
 REM MD5 ------------------------------------------------------------------------
