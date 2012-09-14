@@ -46,14 +46,14 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=..\..\..\Pilotloesungen\Gebaeudeversicherung\07_einzelne_Archive\StALU\testODBC.php
-1=c2odbc.php
+0=Neu1.txt
+1=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=..\..\..\Pilotloesungen\Gebaeudeversicherung\07_einzelne_Archive\StALU\testODBC.php
-[..\..\..\Pilotloesungen\Gebaeudeversicherung\07_einzelne_Archive\StALU\testODBC.php]
+Selected=csv2siard.php
+[Neu1.txt]
 TopLine=1
-Caret=105,3
-[c2odbc.php]
-TopLine=126
-Caret=128,135
+Caret=1,1
+[csv2siard.php]
+TopLine=15
+Caret=65,58

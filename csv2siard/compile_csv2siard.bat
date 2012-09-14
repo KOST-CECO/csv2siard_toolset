@@ -17,10 +17,16 @@ CALL csv2siard.exe
 IF %ERRORLEVEL% GTR 1 (
 	EXIT /B
 )
+CALL odbcheck.exe
+IF %ERRORLEVEL% GTR 1 (
+	EXIT /B
+)
 REM test function --------------------------------------------------------------
 @ECHO ON
 ECHO.
 @ECHO --------------------------------------------------------------------------
+CALL odbcheck.exe odbcsql\anl.sql odbcsql\odbcsql.prefs
+ECHO.@ECHO --------------------------------------------------------------------------
 @DEL /Q *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 unzip -t test.siard

@@ -132,7 +132,7 @@ global $prg_option, $prgdir, $odbc_handle;
 function openODCBConnection() {
 global $prg_option, $odbc_handle;
 
-	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD'], SQL_CUR_USE_ODBC);
+	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD'], SQL_CUR_USE_DRIVER);
 	if (!$odbc_handle) {
 		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
 		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
