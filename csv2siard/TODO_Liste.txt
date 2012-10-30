@@ -7,6 +7,11 @@ csv2siard 1.8
 - Verarbeiten von ODBC Quellen
 - NO_DB_MODEL mit ODBC Quellen
 
+csv2siard 1.8.5
+---------------
+- table.xsd: minOccurs="0" maxOccurs="unbounded" [-> ROW_COUNT=TRUE]
+- prefs suchen in CWD dann Install DIR
+
 
 Dokumentation
 -------------

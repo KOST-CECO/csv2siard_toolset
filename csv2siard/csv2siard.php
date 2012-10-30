@@ -56,6 +56,8 @@ $version = '1.8.1';	// SQL error message enhancement
 $version = '1.8.2';	// SQL_CUR_USE_ODBC and ODBC section in php.ini
 $version = '1.8.3';	// odbcheck added
 $version = '1.8.4';	// SQL_CUR_USE_DRIVER statt SQL_CUR_USE_ODBC
+$version = '1.8.5';	// table.xsd: minOccurs="0" maxOccurs="unbounded" [-> ROW_COUNT=TRUE]
+$version = '1.8.5';	// preference file suchen in CWD dann Install DIR
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -74,7 +76,7 @@ $odbc_handle    = null;										// used if ODBC instead of CSV
 $dbmod = array();													//nested array to hold the database model
 
 // Error code meaning
-//ERR 1: Misssing or false preferences
+//ERR 1: Misssing or false parameters
 //ERR 2: CSV file not found
 //ERR 2: Could not read CSV file
 //ERR 2: No CSV files found with specified file mask

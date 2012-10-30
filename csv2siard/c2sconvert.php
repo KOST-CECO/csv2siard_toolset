@@ -276,7 +276,13 @@ global $prg_option;
 
 	$rct = (getTableOption($table, 'rowcount'));
 	if ($rct >0) {
-		$occurrence = "minOccurs=\"$rct\" maxOccurs=\"$rct\"";
+		 if (array_key_exists('ROW_COUNT', $prg_option)) {
+		 		$occurrence = "minOccurs=\"$rct\" maxOccurs=\"$rct\"";
+			}
+			// min-maxOccurs= according to eCH SIARD recomondation
+			else {
+				$occurrence = "minOccurs=\"0\" maxOccurs=\"unbounded\"";
+		}
 	}
 	else {
 		$occurrence = "minOccurs=\"0\" maxOccurs=\"unbounded\"";

@@ -118,9 +118,16 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	} 
 	// default preference file
 	else {
-		$prefsfile = str_replace('\\', '/', "$prgdir/$prefs");
-		if (!is_file($prefsfile)) {
-			echo "No preference file found, default settings are used\n"; return;
+		// preference file in current working directory
+		if (is_file($prefs)) {
+			$prefsfile = $prefs;
+		}
+		// preference file in install directory
+		else {
+			$prefsfile = str_replace('\\', '/', "$prgdir/$prefs");
+			if (!is_file($prefsfile)) {
+				echo "No preference file found, default settings are used\n"; return;
+			}
 		}
 	}
 	// read preference file and set preferences

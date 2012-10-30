@@ -16,7 +16,7 @@ csv2siard
 	+batch
 		csv2siard.bcp
 		compile_csv2siard.bat
-		runtime_csv2siard.bat
+		create_csv2siard.bat
 		run.bat
 		preferences.prefs
 		php.ini
@@ -47,13 +47,9 @@ csv2siard
 		metadata.xsd
 [Open project files]
 0=Neu1.txt
-1=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=csv2siard.php
+Selected=Neu1.txt
 [Neu1.txt]
 TopLine=1
 Caret=1,1
-[csv2siard.php]
-TopLine=15
-Caret=65,58
