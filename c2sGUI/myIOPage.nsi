@@ -12,7 +12,7 @@ Page directory Directory_PreFunction
 ;--------------------------------
 Function CustomPage
   StrCpy $R8 1 ;This is the first page
-  InstallOptions::dialog "P:\KOST\Tools\csv2siard\10_GUI\myIOPage.ini"
+  InstallOptions::dialog "$EXEDIR\myIOPage.ini"
   Pop $0
 FunctionEnd
  
