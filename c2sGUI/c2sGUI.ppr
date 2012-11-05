@@ -1,0 +1,26 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+c2sGUI
+	+NSIS scripts
+		c2sGUI.nsi
+		c2sGUI.ini
+[Open project files]
+0=c2sGUI.nsi
+1=myIOPage.nsi
+[Selected Project Files]
+Main=c2sGUI.nsi
+Selected=c2sGUI.nsi
+[c2sGUI.nsi]
+TopLine=2
+Caret=1,46
+[myIOPage.nsi]
+TopLine=1
+Caret=9,33
