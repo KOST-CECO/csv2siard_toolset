@@ -11,16 +11,22 @@ FileFormat=0
 c2sGUI
 	+NSIS scripts
 		c2sGUI.nsi
+		c2sLang.nsh
 		c2sGUI.ini
+		license.txt
 [Open project files]
-0=c2sGUI.nsi
-1=myIOPage.nsi
+0=CheckboxNotify.nsi
+1=c2sGUI.nsi
+2=SIARDval.nsi
 [Selected Project Files]
-Main=c2sGUI.nsi
+Main=
 Selected=c2sGUI.nsi
+[CheckboxNotify.nsi]
+TopLine=47
+Caret=58,57
 [c2sGUI.nsi]
-TopLine=2
-Caret=1,46
-[myIOPage.nsi]
-TopLine=1
-Caret=9,33
+TopLine=39
+Caret=34,80
+[SIARDval.nsi]
+TopLine=84
+Caret=49,90
