@@ -13,20 +13,21 @@ c2sGUI
 		c2sGUI.nsi
 		c2sLang.nsh
 		c2sGUI.ini
+		c2sPREF.ini
 		license.txt
 [Open project files]
-0=CheckboxNotify.nsi
-1=c2sGUI.nsi
-2=SIARDval.nsi
+0=c2sGUI.nsi
+1=C:\Software\NSIS\Include\WinMessages.nsh
+2=c2sGUI.ini
 [Selected Project Files]
 Main=
 Selected=c2sGUI.nsi
-[CheckboxNotify.nsi]
-TopLine=47
-Caret=58,57
 [c2sGUI.nsi]
-TopLine=39
-Caret=34,80
-[SIARDval.nsi]
-TopLine=84
-Caret=49,90
+TopLine=72
+Caret=43,97
+[C:\Software\NSIS\Include\WinMessages.nsh]
+TopLine=397
+Caret=19,421
+[c2sGUI.ini]
+TopLine=1
+Caret=1,1
