@@ -11,23 +11,21 @@ FileFormat=0
 c2sGUI
 	+NSIS scripts
 		c2sGUI.nsi
-		c2sLang.nsh
+		c2sGUI.nsh
 		c2sGUI.ini
+		c2sPREF.nsh
 		c2sPREF.ini
+		c2sLang.nsh
 		license.txt
 [Open project files]
 0=c2sGUI.nsi
-1=C:\Software\NSIS\Include\WinMessages.nsh
-2=c2sGUI.ini
+1=c2sGUI.nsh
 [Selected Project Files]
 Main=
 Selected=c2sGUI.nsi
 [c2sGUI.nsi]
-TopLine=72
-Caret=43,97
-[C:\Software\NSIS\Include\WinMessages.nsh]
-TopLine=397
-Caret=19,421
-[c2sGUI.ini]
+TopLine=12
+Caret=1,37
+[c2sGUI.nsh]
 TopLine=1
-Caret=1,1
+Caret=34,22
