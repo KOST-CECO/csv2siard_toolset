@@ -16,6 +16,9 @@ Function ShowDialog
   ${EndIf}
   InstallOptions::initDialog $DIALOG
   Pop $HWND
+  ; set button "Back" invisible 
+  GetDlgItem $1 $HWNDPARENT 3
+  ShowWindow $1 0
   InstallOptions::show
 FunctionEnd
 
@@ -90,7 +93,20 @@ Function RunCSV2SIARD
     Abort
   ${EndIf}
 
-  MessageBox MB_OK 'CALL csv2siard $DB_MODEL $CSV_FOLDER $PREFS_FILE'
+  Push $CSV_FOLDER
+  Call GetBaseName
+  Pop $0
+  StrCpy $SIARD_FILE "$EXEDIR\$0.siard"
+  ${If} ${FileExists} $SIARD_FILE
+    MessageBox MB_OKCANCEL 'Achtung: soll diese SIARD Datei überschrieben werden$\n$SIARD_FILE' IDOK overwrite IDCANCEL cancel
+cancel:
+    Abort
+overwrite:
+  ${EndIf}
+  MessageBox MB_OK '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"'
+  ExecWait '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"'
+  ;ExecWait 'csv2siard_v.1.8.5\bin\csv2siard.exe >out.txt'
+  ;ExecWait 'csv2siard_v.1.8.5\bin\csv2siard.exe csv2siard_v.1.8.5\gv-model-v9.xml csv2siard_v.1.8.5\csvdata zrdz.siard'
 FunctionEnd
 
 ;--------------------------------

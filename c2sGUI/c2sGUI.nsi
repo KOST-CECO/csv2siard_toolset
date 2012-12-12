@@ -8,8 +8,10 @@ Caption "$(^Name)"
 XPStyle on
 
 ;--------------------------------
-!define GUIFILE       "c2sGUI.ini"
-!define PREFFILE      "c2sPREF.ini"
+!define CSV2SIARD       "P:\KOST\Tools\csv2siard\10_GUI\csv2siard_v.1.8.5\bin\csv2siard.exe"
+!define CSV2SIARDDHELP  "csv2siard_v.1.8.5\Anwendungshandbuch_v1.8.pdf"
+!define GUIFILE         "c2sGUI.ini"
+!define PREFFILE        "c2sPREF.ini"
 
 ;--------------------------------
 Var DIALOG
@@ -21,6 +23,7 @@ Var CHECK_COLUMN_SWITCH   ; CHECK_COLUMN TRUE / FALSE
 VAR CSV_FOLDER
 Var DB_MODEL
 Var PREFS_FILE
+Var SIARD_FILE
 Var PAGE_NO               ; 2=Dialog, 1= Prefs
 
 ;--------------------------------
@@ -33,6 +36,7 @@ Page Custom ShowDialog LeaveDialog
 !include WinMessages.nsh
 !include LogicLib.nsh
 !include relGotoPage.nsh
+!include getBaseName.nsh
 !include c2sGUI.nsh
 !include c2sPREF.nsh
 !include c2sLang.nsh

@@ -19,6 +19,9 @@ Function ShowPrefs
     WriteINIStr $PREFS "${DEFAULT_PREFS_File}" "Text" '$PREFS_FILE'
     InstallOptions::initDialog $PREFS
     Pop $HWND
+    ; set button "Back" invisible 
+    GetDlgItem $1 $HWNDPARENT 3
+    ShowWindow $1 0
     InstallOptions::show
   ${EndIf}
 FunctionEnd
