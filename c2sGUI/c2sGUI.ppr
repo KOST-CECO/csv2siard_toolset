@@ -18,14 +18,18 @@ c2sGUI
 		c2sLang.nsh
 		license.txt
 [Open project files]
-0=c2sGUI.nsi
-1=c2sGUI.nsh
+0=c2sPREF.nsh
+1=c2sGUI.nsi
+2=c2sGUI.nsh
 [Selected Project Files]
 Main=
 Selected=c2sGUI.nsi
+[c2sPREF.nsh]
+TopLine=52
+Caret=15,91
 [c2sGUI.nsi]
-TopLine=12
-Caret=1,37
+TopLine=22
+Caret=18,48
 [c2sGUI.nsh]
-TopLine=1
-Caret=34,22
+TopLine=40
+Caret=1,59

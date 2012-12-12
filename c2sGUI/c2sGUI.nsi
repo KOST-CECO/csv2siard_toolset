@@ -7,7 +7,7 @@ RequestExecutionLevel user
 Caption "$(^Name)"
 XPStyle on
 
-;----------------------
+;--------------------------------
 !define GUIFILE       "c2sGUI.ini"
 !define PREFFILE      "c2sPREF.ini"
 
@@ -15,11 +15,13 @@ XPStyle on
 Var DIALOG
 Var PREFS
 Var HWND
-Var MODEL_SWITCH  ; 1=no_db_model, 2=model
+Var MODEL_SWITCH          ; 1=no_db_model, 2=model
+Var COLUMN_NAMES_SWITCH   ; COLUMN_NAMES TRUE / FALSE
+Var CHECK_COLUMN_SWITCH   ; CHECK_COLUMN TRUE / FALSE
 VAR CSV_FOLDER
 Var DB_MODEL
 Var PREFS_FILE
-Var PAGE_NO       ; 2=Dialog, 1= Prefs
+Var PAGE_NO               ; 2=Dialog, 1= Prefs
 
 ;--------------------------------
 LicenseData license.txt
@@ -45,14 +47,10 @@ Function .onInit
   File /oname=$PREFS ${PREFFILE}
   StrCpy $PAGE_NO 2
   StrCpy $MODEL_SWITCH 1
+  StrCpy $COLUMN_NAMES_SWITCH "TRUE"
+  StrCpy $CHECK_COLUMN_SWITCH "TRUE"
   WriteINIStr $DIALOG "${CSV_DirReqest}" "State" $EXEDIR
-FunctionEnd
-
-;--------------------------------
-Function RunCSV2SIARD
-  ${If} ${FileExists} $CSV_FOLDER
-    MessageBox MB_OK 'Folder: $CSV_FOLDER $DIALOG'
-  ${EndIf}
+  WriteINIStr $DIALOG "${PREFS_FileReqest}" "State" "$EXEDIR\preferences.prefs"
 FunctionEnd
 
 ;--------------------------------

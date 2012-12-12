@@ -21,8 +21,6 @@ FunctionEnd
 
 ;--------------------------------
 Function LeaveDialog
-  ReadINIStr $CSV_FOLDER $DIALOG "${CSV_DirReqest}" "State"
-  ReadINIStr $DB_MODEL $DIALOG "${DB_MODEL_FileRequest}" "State"
   ReadINIStr $PREFS_FILE $DIALOG "${PREFS_FileReqest}" "State"
   ReadINIStr $0 $DIALOG "Settings" "State"
   
@@ -67,6 +65,32 @@ Function LeaveDialog
       Call RunCSV2SIARD
     ${Break}
   ${EndSwitch}
+FunctionEnd
+
+;--------------------------------
+Function RunCSV2SIARD
+  ReadINIStr $CSV_FOLDER $DIALOG "${CSV_DirReqest}" "State"
+  ${IfNot} ${FileExists} $CSV_FOLDER
+    MessageBox MB_OK "Achtung: das gewählte CSV Verzeichnis existiert nicht$\n$CSV_FOLDER"
+    Abort
+  ${EndIf}
+  
+  ${If} $MODEL_SWITCH == 1
+    StrCpy $DB_MODEL '$EXEDIR\no_db_model.xml'
+  ${Else}
+    ReadINIStr $DB_MODEL $DIALOG "${DB_MODEL_FileRequest}" "State"
+    ${IfNot} ${FileExists} $DB_MODEL
+      MessageBox MB_OK "Achtung: das ausgewählte Daten Modell existiert nicht$\n$DB_MODEL"
+      Abort
+    ${EndIf}
+  ${EndIf}
+  
+  ${IfNot} ${FileExists} $PREFS_FILE
+    MessageBox MB_OK 'Achtung: keine oder keine gültige Präferenzdatei gewählt$\n$PREFS_FILE'
+    Abort
+  ${EndIf}
+
+  MessageBox MB_OK 'CALL csv2siard $DB_MODEL $CSV_FOLDER $PREFS_FILE'
 FunctionEnd
 
 ;--------------------------------
