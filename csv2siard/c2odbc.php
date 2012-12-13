@@ -29,7 +29,7 @@ global $prg_option, $prgdir, $odbc_handle;
 			closedir($dirhandle);
 		}
 		if(!isset($sqlfile) or !is_file($sqlfile)) {
-			echo "ODBC specification file for table '$tablename' not found\n"; $prg_option['ERR'] = 2; return;
+			echo("ODBC specification file for table '$tablename' not found\n"); $prg_option['ERR'] = 2; return;
 		}
 		setTableOption($table, 'localfile', $sqlfile);
 		// get sql query
@@ -39,7 +39,7 @@ global $prg_option, $prgdir, $odbc_handle;
 	setTableOption($table, 'query', $query);
 
 	// process ODCB table
-	echo "Process table (encoding: $prg_option[CHARSET]) $tablename ";
+	echo("Process table (encoding: $prg_option[CHARSET]) $tablename ");
 
 	// execute query command to select table content
 	$recordset = @odbc_exec($odbc_handle, $query);
@@ -54,7 +54,7 @@ global $prg_option, $prgdir, $odbc_handle;
 		}
 	}
 	if (!$recordset) {
-		echo "Error in SQL command '$query'\n";
+		echo("Error in SQL command '$query'\n");
 		if ($prg_option['VERBOSITY']) { 
 			$recordset = @odbc_exec($odbc_handle, $query);
 			echo odbc_errormsg()."\n"; 
@@ -69,7 +69,7 @@ global $prg_option, $prgdir, $odbc_handle;
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siard_handle = fopen($siardfile, "w");
 	if(!$siard_handle) {
-		echo "Could not write SIARD table XML file $siardfile\n"; $prg_option['ERR'] = 8; odbc_close($odbc_handle); return;
+		echo("Could not write SIARD table XML file $siardfile\n"); $prg_option['ERR'] = 8; odbc_close($odbc_handle); return;
 	}
 	// write SIARD file XML header
 	writeSIARDHeader($siard_handle, $tablefolder);
@@ -90,7 +90,7 @@ global $prg_option, $prgdir, $odbc_handle;
 			foreach ($columnlist as $column) {
 				$col = @odbc_result($recordset, $column);
 				if ($col === false) {
-					echo "\nColumne name '$column' not found in odbc query $sqlfile"; $prg_option['ERR'] = 4;
+					echo("\nColumne name '$column' not found in odbc query $sqlfile"); $prg_option['ERR'] = 4;
 				}
 				$buf[] = $col;
 			}
@@ -106,7 +106,7 @@ global $prg_option, $prgdir, $odbc_handle;
 	else {
 		while (odbc_fetch_into($recordset, $buf)) {
 			if(count($buf) < $columncount) {
-				echo "\nIncorrect columne count in odbc query $sqlfile"; $prg_option['ERR'] = 4;
+				echo("\nIncorrect columne count in odbc query $sqlfile"); $prg_option['ERR'] = 4;
 				break;
 			}
 			// write SIARD table
@@ -123,7 +123,7 @@ global $prg_option, $prgdir, $odbc_handle;
 	// update table row counter
 	setTableOption($table, 'rowcount', $rowcount-1);
 
-	echo "\n";
+	echo("\n");
 	fclose($siard_handle);
 }
 
@@ -134,7 +134,7 @@ global $prg_option, $odbc_handle;
 
 	$odbc_handle = @odbc_connect($prg_option['ODBC_DSN'], $prg_option['ODBC_USER'], $prg_option['ODBC_PASSWORD'], SQL_CUR_USE_DRIVER);
 	if (!$odbc_handle) {
-		echo "Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n";
+		echo("Could not open ODBC connection '$prg_option[ODBC_DSN]' for user '$prg_option[ODBC_USER]'\n");
 		if ($prg_option['VERBOSITY']) { echo odbc_errormsg()."\n"; }
 		exit(2);
 	}

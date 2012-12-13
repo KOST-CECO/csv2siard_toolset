@@ -9,14 +9,14 @@ global $prg_option, $prgname, $version, $disclaimer;
 	echo $disclaimer;
 	
 	if ($prg_option['VERBOSITY']) {
-		echo "\nPreferences:\n";
+		echo("\nPreferences:\n");
 		reset($prg_option);
 		while (list($key, $val) = each($prg_option)) {
 			$val = ansi2ascii(utf8_decode($val));
-			echo "  [$key] => $val\n";
+			echo("  [$key] => $val\n");
 		}
 	}
-	echo "\n";
+	echo("\n");
 }
 
 // read and check command-line arguments ---------------------------------------
@@ -26,14 +26,14 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 		echo $usage; exit(1);
 	}
 	
-	// check database description XML file
+	// 1.ARG: check database description XML file
 	if (strcasecmp($argv[1], ':NO_DB_MODEL') == 0) {
 		$prg_option['DB_MODEL'] = 'NO_DB_MODEL';
 	}
 	else {
 		$dbmodel = str_replace('\\', '/', realpath($argv[1]));
 		if (!is_file($dbmodel)) {
-			echo "Database description $argv[1] not found\n"; exit(1);
+			echo("Database description $argv[1] not found\n"); exit(1);
 		}
 		$temp = sys_get_temp_dir();
 		file_put_contents("$temp/$torque_schema", $static_torque_schema);
@@ -43,32 +43,32 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 		unlink("$temp/$torque_schema");
 		$prg_option['DB_MODEL'] = $dbmodel;
 	}
-	// check folder with csv files or ODBC connection
+	// 2.ARG: heck folder with csv files or ODBC connection
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
 	if (strcasecmp($argv[2],':ODBC')==0) {
 		$prg_option['CSV_FOLDER'] = '';
 	}
 	elseif (!is_dir($csvpath)) {
-		echo "'$argv[2]' is not a valid path\n"; exit(1);
+		echo("'$argv[2]' is not a valid path\n"); exit(1);
 	}
 	else {
 		$prg_option['CSV_FOLDER'] = $csvpath;
 	}
 	
-	// check for existing SIARD file
+	// 3:ARG check for existing SIARD file
 	$siardbase = basename($argv[3]);
 	$siarddir = realpath(dirname($argv[3]));
 	$siardfile = str_replace('\\', '/', "$siarddir/$siardbase");
 
 	if (!is_dir($siarddir)) {
 		$siarddir = dirname($argv[3]);
-		echo "Folder $siarddir for SIARD file $siardbase is missing\n"; exit(1);
+		echo("Folder $siarddir for SIARD file $siardbase is missing\n"); exit(1);
 	}
 	if (strtoupper(substr($siardfile, -6)) != ".SIARD") {
-		echo "SIARD file $argv[3] must have file extension '.siard'\n"; exit(1);
+		echo("SIARD file $argv[3] must have file extension '.siard'\n"); exit(1);
 	}
 	if (is_file($siardfile)) {
-		echo "SIARD file $argv[3] already exists\n"; exit(1);
+		echo("SIARD file $argv[3] already exists\n"); exit(1);
 	}
 	$prg_option['SIARD_FILE'] = $siardfile;
 }
@@ -95,6 +95,8 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['VERBOSITY'] = false;					// Display additional messages
 	$prg_option['DATE_FORMAT'] = false;				// Special date format string according to php strptime()
 	$prg_option['UNICODE_EXTENDED'] = false;	// Convert non Unicode character to \u00xx notation
+	$prg_option['LOG_FILE'] = false;					// Optional log file
+
 	// Optional content settings
 	$prg_option['DESCRIPTION'] = '';					// Database description
 	$prg_option['ARCHIVED_BY'] = '';					// Database archived by
@@ -113,7 +115,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	if ($argc == 5) {
 		$prefsfile = str_replace('\\', '/', realpath($argv[4]));
 		if (!is_file($prefsfile)) {
-			echo "Preference file $prefsfile not found\n"; exit(1);
+			echo("Preference file $prefsfile not found\n"); exit(1);
 		}
 	} 
 	// default preference file
@@ -126,7 +128,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 		else {
 			$prefsfile = str_replace('\\', '/', "$prgdir/$prefs");
 			if (!is_file($prefsfile)) {
-				echo "No preference file found, default settings are used\n"; return;
+				echo("No preference file found, default settings are used\n"); return;
 			}
 		}
 	}
@@ -164,35 +166,35 @@ global $prgdir, $prgname, $prg_option;
 	// The sablot.dll module is utilized by the processor of Sablotron XSLT (Extensible Stylesheet Language (XSL) 
 	// Transformations), http://www.gingerall.cz/
 	or (@md5_file("$prgdir/sablot.dll") != '89f212d20a8b7b9a30b1e3284627febf')) {
-		echo "Some libraries are missing or corrupt\n"; exit(1);
+		echo("Some libraries are missing or corrupt\n"); exit(1);
 	}
 // Programs missing
 	// xmllint libxml project http://xmlsoft.org/
 	elseif (@md5_file("$prgdir/xmllint.exe") != '5e11a78328e7cde3206f15fb8c79437c'){
-		echo "Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"; exit(1);
+		echo("Program xmllint.exe is missing, corrupt or wrong version (libxml version 20630)\n"); exit(1);
 	}
 	elseif (@md5_file("$prgdir/libxml2.dll") != 'a48f3cbb3f0176e33099274126724ea0'){
-		echo "Library libxml2.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(1);
+		echo("Library libxml2.dll is missing, corrupt or wrong version (libxml version 20630)\n"); exit(1);
 	}
 	elseif (@md5_file("$prgdir/zlib1.dll") != 'f5b8b7054675d6aaf4ce3e727395f402'){
-		echo "Library zlib1.dll is missing, corrupt or wrong version (libxml version 20630)\n"; exit(1);
+		echo("Library zlib1.dll is missing, corrupt or wrong version (libxml version 20630)\n"); exit(1);
 	}
 	// crc32sum
 	elseif (@md5_file("$prgdir/crc32sum.exe") != '05d274347d80016c5ad0aa19d6911fef'){
-		echo "crc32sum.exe is missing, corrupt or wrong version V#(1.00) 24-Jul-04\n"; exit(1);
+		echo("crc32sum.exe is missing, corrupt or wrong version V#(1.00) 24-Jul-04\n"); exit(1);
 	}
 	// GNU file-5.03
 	elseif (@md5_file("$prgdir/file.exe") != '0d76b6d325bb9336c6c6a5c220f02c37'){
-		echo "file.exe is missing, corrupt or wrong version (GNU file-5.03)\n"; exit(1);
+		echo("file.exe is missing, corrupt or wrong version (GNU file-5.03)\n"); exit(1);
 	}
 	elseif (@md5_file("$prgdir/magic.mgc") != '1dfd3dfbb62862a93112c02b26e53493'){
-		echo "magic.mgc is missing, corrupt or wrong version \n"; exit(1);
+		echo("magic.mgc is missing, corrupt or wrong version \n"); exit(1);
 	}
 	elseif (@md5_file("$prgdir/magic1.dll") != '87307712a13f3282ceb7c5868312cd76'){
-		echo "magic1.dll is missing, corrupt or wrong version \n"; exit(1);
+		echo("magic1.dll is missing, corrupt or wrong version \n"); exit(1);
 	}
 	elseif (@md5_file("$prgdir/regex2.dll") != '547c43567ab8c08eb30f6c6bacb479a3'){
-		echo "regex2.dll is missing, corrupt or wrong version \n"; exit(1);
+		echo("regex2.dll is missing, corrupt or wrong version \n"); exit(1);
 	}
 }
 // check  TMP directory --------------------------------------------------------
@@ -203,10 +205,10 @@ global $prg_option;
 
 	if (!is_dir($tmpdir)) {
 		$tmpdir = $prg_option['TMPDIR'];
-		echo "No valid TMP directory: $tmpdir\n"; exit(1);
+		echo("No valid TMP directory: $tmpdir\n"); exit(1);
 	}
 	elseif (!@touch("$tmpdir/$prgname.tmp")) {
-		echo "You may not have appropriate rights on TMP directory: $tmpdir\n"; exit(1);
+		echo("You may not have appropriate rights on TMP directory: $tmpdir\n"); exit(1);
 	}
 	@unlink("$tmpdir/$prgname.tmp");
 	$prg_option['TMPDIR'] = str_replace('\\', '/', $tmpdir);
@@ -227,7 +229,7 @@ global $prg_option;
 		case "UTF-8":
 			$prg_option['CHARSET'] = "UTF-8"; break;
 		default:
-			echo "Only the following character sets are supported: ASCII, OEM, ANSI, ISO-8859-1, and UTF-8\n"; exit(1);
+			echo("Only the following character sets are supported: ASCII, OEM, ANSI, ISO-8859-1, and UTF-8\n"); exit(1);
 	}
 }
 ?>

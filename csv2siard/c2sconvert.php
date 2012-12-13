@@ -14,9 +14,9 @@ global $prg_option;
 		$colname = trim(@$buffer[$fct]);
 		if ($prg_option['CHECK_NAMES'] and strcasecmp($name, $colname) != 0) {
 			if ($colname == '') {
-				echo "\nColumn '$name' in database model is missing in CSV file $file";
+				echo("\nColumn '$name' in database model is missing in CSV file $file");
 			} else {
-				echo "\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file";
+				echo("\nColumn '$name' in database model does not confirm with column '$buffer[$fct]' in CSV file $file");
 			}
 			$prg_option['ERR'] = 32;
 			return(false);
@@ -29,7 +29,7 @@ global $prg_option;
 	$ict = count($buf)-1;
 	$ict = (trim($buf[$ict][0]) != '') ? $ict+1 : $ict;
 	if ($fct != $ict) {
-		echo "\nTo many columns in CSV file $file"; $prg_option['ERR'] = 27; return(false);
+		echo("\nTo many columns in CSV file $file"); $prg_option['ERR'] = 27; return(false);
 	}
 	return(true);
 }
@@ -49,7 +49,7 @@ global $prg_option;
 			$name = (array_key_exists('_a', $column)) ? $column['_a']['name'] : $column['name'];
 			$fct++;
 			if (!testDBMSNaming($name)) {
-				echo "\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention";
+				echo("\nColumn no $fct '".utf8_decode($name)."' does not confirm with SQL naming convention");
 				$errflag = true;
 			}
 			$collist[] = $name;
@@ -92,7 +92,7 @@ global $prg_option;
 			$required = (array_key_exists('required', $column)) ? $column['required'] : false;
 		}
 		if ($required == 'true' and trim($buffer[$i-1] == '')) {
-			echo "\nRestriction 'field required' is violated in row $rowcount, column $i"; $prg_option['ERR'] = 32;
+			echo("\nRestriction 'field required' is violated in row $rowcount, column $i"); $prg_option['ERR'] = 32;
 		}
 
 		if (trim($buffer[$i-1]) != '') {
@@ -121,10 +121,10 @@ global $prg_option;
 					$b_ = round($buf);
 					if ($b_ == $buf) { $buf = $b_; }
 					if (!ctype_digit(ltrim($buf, '-'))) {
-						echo "\nInteger type convertion failed in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
+						echo("\nInteger type convertion failed in row $rowcount, column $i => '$buf'"); $prg_option['ERR'] = 32;
 					}
 					if (ltrim($buf, '-') > 2147483647) {
-						echo "\nValue too large for signed integer in row $rowcount, column $i => '$buf'"; $prg_option['ERR'] = 32;
+						echo("\nValue too large for signed integer in row $rowcount, column $i => '$buf'"); $prg_option['ERR'] = 32;
 					}
 					break;
 				case "FLOAT":
@@ -134,16 +134,16 @@ global $prg_option;
 				case "DECIMAL":
 					$buf = strtr ($buf, ',', '.');
 					if (!is_numeric ($buf)) {
-						echo "\nNumeric type convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nNumeric type convertion failed in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					}
 					if (!is_null($size)) {
 						if (strlen(str_replace('.', '', $buf)) > $size) {
-							echo "\nField exceeds defined precision: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+							echo("\nField exceeds defined precision: $size in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 						}
 						if (!is_null($scale)) {
 							$pbuf = explode('.', $buf);
 							if (count($pbuf) > 1 and strlen($pbuf[1]) > $scale) {
-								echo "\nField exceeds defined scale: $scale in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+								echo("\nField exceeds defined scale: $scale in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 							}
 						}
 					}
@@ -156,7 +156,7 @@ global $prg_option;
 					}
 					$td = convert2XMLdate($buf);
 					if (!$td) {
-						echo "\nDate convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nDate convertion failed in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					} else {
 						$buf = substr($td['date'], 0, 10);
 					}
@@ -164,7 +164,7 @@ global $prg_option;
 				case "TIME":
 					$td = convert2XMLdate($buf);
 					if (!$td) {
-						echo "\nTime convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nTime convertion failed in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					} else {
 						$buf = substr($td['date'], 11);
 					}
@@ -172,7 +172,7 @@ global $prg_option;
 				case "TIMESTAMP":
 					$td = convert2XMLdate($buf);
 					if (!$td) {
-						echo "\nTimestamp convertion failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nTimestamp convertion failed in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					} else {
 						$buf = $td['date'].'.000000000Z';
 					}
@@ -186,7 +186,7 @@ global $prg_option;
 					$plain = ($prg_option['CHARSET'] == 'UTF-8') ? utf8_decode($buf) : $buf;
 					if (strlen($plain) > $size) {
 						$plain = ansi2ascii($plain);
-						echo "\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$plain'"; $prg_option['ERR'] = 32;
+						echo("\nFieldsize exceeds defined char size: $size in row $rowcount, column $i => '$plain'"); $prg_option['ERR'] = 32;
 					}
 					// convert string to XML characterset utf-8
 					if ($prg_option['CHARSET'] == 'ASCII') {					// includes ASCII and OEM
@@ -203,10 +203,10 @@ global $prg_option;
 				case "BIT":
 					$size = (is_null($size)) ? 8 : $size; // default size
 					if (strlen($buf) > $size) {
-						echo "\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i"; $prg_option['ERR'] = 32;
+						echo("\nFieldsize exceeds defined bit size: $size in row $rowcount, column $i"); $prg_option['ERR'] = 32;
 					}
 					if ($size > 8) {
-						echo "\nFieldsize $size exceeds max bit size 8 in row $rowcount, column $i"; $prg_option['ERR'] = 32;
+						echo("\nFieldsize $size exceeds max bit size 8 in row $rowcount, column $i"); $prg_option['ERR'] = 32;
 					}
 					$buf = bindec($buf); 
 					$buf = chr($buf);
@@ -215,7 +215,7 @@ global $prg_option;
 				case "BINARY":
 					$size = (is_null($size)) ? 4096 : $size; // default size
 					if (strlen($buf) > $size) {
-						echo "\nFieldsize (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i"; $prg_option['ERR'] = 32;
+						echo("\nFieldsize (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i"); $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($buf);
 					break;
@@ -225,10 +225,10 @@ global $prg_option;
 					$size = (is_null($size)) ? 4096 : $size; // default size
 					$bbuf = base64_decode($buf);
 					if ($bbuf == FALSE) {
-						echo "\nBase64 decoding failed in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nBase64 decoding failed in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 						$bbuf = $buf;
 					} elseif (strlen($buf) > $size) {
-						echo "\nFieldsize  (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+						echo("\nFieldsize  (".strlen($buf).") exceeds defined size: $size in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					}
 					$buf = bin2hex($bbuf);
 					break;
@@ -238,7 +238,7 @@ global $prg_option;
 				case "DISTINCT":
 				case "STRUCT":
 				case "ARRAY":
-					echo "Data type '$type' not supported in row $rowcount, column $i => '$b'"; $prg_option['ERR'] = 32;
+					echo("Data type '$type' not supported in row $rowcount, column $i => '$b'"); $prg_option['ERR'] = 32;
 					break;
 				case "REF":
 					break;

@@ -86,7 +86,7 @@ global $prg_option, $prgdir;
 	}
 
 	if ($retval) {
-		echo "$message\n";
+		echo("$message\n");
 		//print max 3 xmllint output lines
 		$resultcnt = 1;
 		$resultfile = @fopen("$xml.out", "r");

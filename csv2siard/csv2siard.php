@@ -57,7 +57,8 @@ $version = '1.8.2';	// SQL_CUR_USE_ODBC and ODBC section in php.ini
 $version = '1.8.3';	// odbcheck added
 $version = '1.8.4';	// SQL_CUR_USE_DRIVER statt SQL_CUR_USE_ODBC
 $version = '1.8.5';	// table.xsd: minOccurs="0" maxOccurs="unbounded" [-> ROW_COUNT=TRUE]
-$version = '1.8.5';	// preference file suchen in CWD dann Install DIR
+$version = '1.8.5';	// look for 'preferences.prefs' first in CWD then Install DIR
+$version = '1.8.6';	// login option for GUI
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -125,7 +126,7 @@ printDisclaimer();
 if ($prg_option['DB_MODEL'] == 'NO_DB_MODEL') {
 	// create database model from scratch
 	createDBModel();
-	echo "\n";
+	echo("\n");
 }
 
 loadDatabaseModell($dbmod);
@@ -154,16 +155,16 @@ createSIARDMetadata($dbmod);
 createSIARDFile();
 
 if ($prg_option['ERR'] == 0) {
-	echo "\nSIARD file created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n";
-	echo "Conversion completed\n";
+	echo("\nSIARD file created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n");
+	echo("Conversion completed\n");
 }
 elseif ($prg_option['UNICODE_EXTENDED'] and $prg_option['ERR'] == 64) {
-	echo "\nSIARD file with XML ERRORS created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n";
-	echo "Conversion completed\n";
+	echo("\nSIARD file with XML ERRORS created: ".ansi2ascii($prg_option['SIARD_FILE'])."\n");
+	echo("Conversion completed\n");
 }
 else {
-	echo "\nNo SIARD file created\n";
-	echo "Conversion aborted\n";
+	echo("\nNo SIARD file created\n");
+	echo("Conversion aborted\n");
 	@unlink($prg_option['SIARD_FILE']);
 }
 

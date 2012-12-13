@@ -14,12 +14,12 @@ FileFormat=0
 [Project tree]
 csv2siard
 	+batch
-		csv2siard.bcp
 		compile_csv2siard.bat
 		create_csv2siard.bat
-		run.bat
+		csv2siard.bcp
 		preferences.prefs
 		php.ini
+		run.bat
 	+source
 		csv2siard.php
 		c2sconfig.php
@@ -46,14 +46,10 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=Neu1.txt
-1=csv2siard.php
+0=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
 Selected=csv2siard.php
-[Neu1.txt]
+[csv2siard.php]
 TopLine=1
 Caret=1,1
-[csv2siard.php]
-TopLine=27
-Caret=65,58

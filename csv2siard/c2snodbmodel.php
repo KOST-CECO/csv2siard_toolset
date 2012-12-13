@@ -26,11 +26,11 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 						}
 						else {
 							$fl = ansi2ascii($file);
-							echo "CSV file name $fl does not conform to SQL naming convention \n";
+							echo("CSV file name $fl does not conform to SQL naming convention \n");
 						}
 					}
 					else {
-						echo "Incorrect CSV file: ($mime_type) $csvfile\n";
+						echo("Incorrect CSV file: ($mime_type) $csvfile\n");
 					}
 				}
 			}
@@ -39,7 +39,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	@closedir($dirhandle);
 	asort($file_arr);
 	if (count($file_arr) == 0) {
-		echo "No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"; exit(2);
+		echo("No CSV files found with file mask '$prg_option[FILE_MASK]' in $prg_option[CSV_FOLDER]\n"); exit(2);
 	}
 	
 	// Create encoding list
@@ -50,7 +50,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		$encoding_arr[$name] = strtoupper(detectMimeType($file, 'ENCODING'));
 		if ($encoding_arr[$name] != $prg_option['CHARSET']) {
 			$fl = ansi2ascii($file);
-			echo "CSV file $fl does not conform to $prg_option[CHARSET] encoding\n";
+			echo("CSV file $fl does not conform to $prg_option[CHARSET] encoding\n");
 		}
 	}
 	
@@ -61,7 +61,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	while (list($name, $file) = each($file_arr)) {
 		$csvhandle = @fopen($file, "r");
 		if(!$csvhandle) {
-			echo "Could not read CSV file $file\n"; exit(2);
+			echo("Could not read CSV file $file\n"); exit(2);
 		}
 		$rowcount = 0;
 		$colarr = array();
@@ -83,7 +83,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 					$col = array();
 					$col['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
 					if (testDBMSNaming($col['name']) === false){
-						echo "\nColumn ". ($colcnt+1) ." does not conform to SQL naming convention \n";
+						echo("\nColumn ". ($colcnt+1) ." does not conform to SQL naming convention \n");
 						$orgname = ($encoding_arr[$name] == 'UTF-8') ? utf8_decode($col['name']) : $col['name'];
 						$col['description'] = "Original column name: '$orgname'";
 						$col['name'] = "column$colcnt";
@@ -128,11 +128,11 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	writeDBModel($file_arr, $csv_arr, basename($prg_option['CSV_FOLDER']));
 
 	// write console message
-	echo "\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n";
+	echo("\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n");
 	reset($file_arr);
 	while (list($key, $val) = each($file_arr)) {
 		$val = ansi2ascii($val);
-		echo "  [$key] => $val\n";
+		echo("  [$key] => $val\n");
 	}
 }
 
@@ -165,7 +165,7 @@ global $prg_option, $wdir, $torque_schema, $static_torque_schema;
 	// write database description no_db_model.xml
 	$dbmodel = "$wdir/no_db_model.xml";
 	if (!file_put_contents("$dbmodel", utf8_encode($xmldata))) {
-		echo "Could not write database description $dbmodel\n"; $prg_option['ERR'] = 8; return;
+		echo("Could not write database description $dbmodel\n"); $prg_option['ERR'] = 8; return;
 	}
 
 	$prg_option['DB_MODEL'] = "$dbmodel";

@@ -13,10 +13,10 @@ $odbc_handle              = null;										// used if ODBC instead of CSV
 
 // Read command line
 if (!($argc == 3 or $argc == 2)) {
-	echo "
+	echo("
        Usage :: odbcheck.exe sqlfile [prefs]
      sqlfile :: sql select statement or keyword :TABLES
-       prefs :: configuration file (default) $prefs";
+       prefs :: configuration file (default) $prefs");
 	exit(1);
 }
 
@@ -33,7 +33,7 @@ readPreferences();
 
 echo ansi2ascii(utf8_decode("$prg_option[DB_TYPE]:  "));
 $prg_option['CONNECTION'] = ($prg_option['CSV_FOLDER'] == '') ? $prg_option['ODBC_DSN'] : $prg_option['ODBC_DSN'];
-echo "$prg_option[CONNECTION]\n";
+echo("$prg_option[CONNECTION]\n");
 
 if (!$odbc_handle) {
 	exit("Connection Failed: " . $odbc_handle);
@@ -83,7 +83,7 @@ while ($row = odbc_fetch_array ($recordset)) {
 	echo ansi2ascii(implode($prg_option['DELIMITED'], $row))."\n";
 	$recordcount++;
 }
-echo "\nResult row count: $recordcount\n";
+echo("\nResult row count: $recordcount\n");
 odbc_close($odbc_handle);
 exit(0);
 ?>

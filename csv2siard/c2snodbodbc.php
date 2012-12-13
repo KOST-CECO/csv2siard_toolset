@@ -15,7 +15,7 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema, $odbc
 		}
 	}
 	if (count($table_arr) == 0) {
-		echo "No Table found in '$prg_option[CONNECTION]'\n"; exit(2);
+		echo("No Table found in '$prg_option[CONNECTION]'\n"); exit(2);
 	}
 	
 	// Create encoding list
@@ -57,11 +57,11 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema, $odbc
 	writeDBModel($table_arr, $column_arr, basename($dbname));
 
 	// write console message
-	echo "\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n";
+	echo("\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n");
 	reset($table_arr);
 	while (list($key, $val) = each($table_arr)) {
 		$val = ansi2ascii($val);
-		echo "  [$key] => $val\n";
+		echo("  [$key] => $val\n");
 	}
 
 }
