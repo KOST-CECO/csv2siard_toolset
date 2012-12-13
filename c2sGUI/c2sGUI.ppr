@@ -17,31 +17,14 @@ c2sGUI
 		c2sPREF.ini
 		c2sLang.nsh
 		license.txt
+	+includes
+		getBaseName.nsh
+		relGotoPage.nsh
 [Open project files]
-0=c2sPREF.nsh
-1=c2sGUI.nsi
-2=c2sGUI.nsh
-3=..\..\simpleGUI\_workbench\SIARDval.nsi
-4=c2sLang.nsh
-5=getBaseName.nsh
+0=c2sGUI.nsi
 [Selected Project Files]
 Main=
 Selected=c2sGUI.nsi
-[c2sPREF.nsh]
-TopLine=55
-Caret=11,73
 [c2sGUI.nsi]
 TopLine=1
-Caret=57,11
-[c2sGUI.nsh]
-TopLine=70
-Caret=4,109
-[..\..\simpleGUI\_workbench\SIARDval.nsi]
-TopLine=154
-Caret=70,152
-[c2sLang.nsh]
-TopLine=1
-Caret=1,1
-[getBaseName.nsh]
-TopLine=1
-Caret=22,7
+Caret=35,33
