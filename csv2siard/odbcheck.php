@@ -13,12 +13,13 @@ $odbc_handle              = null;										// used if ODBC instead of CSV
 
 // Read command line
 if (!($argc == 3 or $argc == 2)) {
-	exit("
+	echo "
        Usage :: odbcheck.exe sqlfile [prefs]
      sqlfile :: sql select statement or keyword :TABLES
-       prefs :: configuration file (default) $prefs
-	");
+       prefs :: configuration file (default) $prefs";
+	exit(1);
 }
+
 // Specify preference file
 if ($argc == 3) {
 	$argc = 5; $argv[4] = $argv[2];
@@ -37,8 +38,6 @@ echo "$prg_option[CONNECTION]\n";
 if (!$odbc_handle) {
 	exit("Connection Failed: " . $odbc_handle);
 }
-
-
 
 // Analyse ODBC tables
 $sqlfile = $argv[1];
@@ -86,5 +85,5 @@ while ($row = odbc_fetch_array ($recordset)) {
 }
 echo "\nResult row count: $recordcount\n";
 odbc_close($odbc_handle);
-
+exit(0);
 ?>

@@ -21,7 +21,7 @@ IF %ERRORLEVEL% GTR 1 (
 	EXIT /B
 )
 CALL odbcheck.exe
-IF %ERRORLEVEL% NEQ  100 (
+IF %ERRORLEVEL% GTR 1 (
 	EXIT /B
 )
 REM test function --------------------------------------------------------------
