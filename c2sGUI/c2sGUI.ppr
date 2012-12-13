@@ -22,9 +22,13 @@ c2sGUI
 		relGotoPage.nsh
 [Open project files]
 0=c2sGUI.nsi
+1=c2sGUI.nsh
 [Selected Project Files]
 Main=
 Selected=c2sGUI.nsi
 [c2sGUI.nsi]
-TopLine=1
-Caret=35,33
+TopLine=15
+Caret=21,42
+[c2sGUI.nsh]
+TopLine=66
+Caret=1,110

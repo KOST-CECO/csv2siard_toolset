@@ -63,9 +63,10 @@ Function LeaveDialog
       StrCpy $R9 -1
       Call RelGotoPage
     ${Break}
-      
+    
     ${Default}
       Call RunCSV2SIARD
+      Abort
     ${Break}
   ${EndSwitch}
 FunctionEnd
@@ -79,7 +80,7 @@ Function RunCSV2SIARD
   ${EndIf}
   
   ${If} $MODEL_SWITCH == 1
-    StrCpy $DB_MODEL '$EXEDIR\no_db_model.xml'
+    StrCpy $DB_MODEL ':NO_DB_MODEL'
   ${Else}
     ReadINIStr $DB_MODEL $DIALOG "${DB_MODEL_FileRequest}" "State"
     ${IfNot} ${FileExists} $DB_MODEL
@@ -103,10 +104,9 @@ cancel:
     Abort
 overwrite:
   ${EndIf}
-  MessageBox MB_OK '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"'
-  ExecWait '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"'
-  ;ExecWait 'csv2siard_v.1.8.5\bin\csv2siard.exe >out.txt'
-  ;ExecWait 'csv2siard_v.1.8.5\bin\csv2siard.exe csv2siard_v.1.8.5\gv-model-v9.xml csv2siard_v.1.8.5\csvdata zrdz.siard'
+  ;ExecWait '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"' $0
+  ExecWait '"C:\Software\PCUnixUtils\find.exe" .' $0
+  MessageBox MB_OK $0
 FunctionEnd
 
 ;--------------------------------
