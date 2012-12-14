@@ -104,29 +104,29 @@ global $prg_option, $prgdir;
 		closedir($dirhandle);
 	}
 	if(!isset($csvfile)) {
-		echo("CSV table '$tablename' not found\n"); $prg_option['ERR'] = 2; return;
+		log_echo("CSV table '$tablename' not found\n"); $prg_option['ERR'] = 2; return;
 	}
 
 	setTableOption($table, 'localfile', xml_encode($csvfile));
 
 	if(!is_file($csvfile)) {
-		echo("CSV file '$csvfile' not found\n"); $prg_option['ERR'] = 2; return;
+		log_echo("CSV file '$csvfile' not found\n"); $prg_option['ERR'] = 2; return;
 	}
 	
 	// detect encoding with GNU file-5.03
 	$encoding = detectMimeType($csvfile, 'ENCODING');
-	echo("Process table (encoding: $encoding) $tablename ");
+	log_echo("Process table (encoding: $encoding) $tablename ");
 	
 	$csvhandle = fopen($csvfile, "r");
 	if(!$csvhandle) {
-		echo("Could not read CSV file $csvfile\n"); $prg_option['ERR'] = 2; return;
+		log_echo("Could not read CSV file $csvfile\n"); $prg_option['ERR'] = 2; return;
 	}
 	// open SIARD table XML file for writing
 	$tablefolder = getTableOption($table, 'folder');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
 	$siardhandle = fopen($siardfile, "w");
 	if(!$siardhandle) {
-		echo("Could not write SIARD table XML file $siardfile\n"); $prg_option['ERR'] = 8; return;
+		log_echo("Could not write SIARD table XML file $siardfile\n"); $prg_option['ERR'] = 8; return;
 	}
 	// write SIARD file XML header
 	writeSIARDHeader($siardhandle, $tablefolder);
@@ -143,7 +143,7 @@ global $prg_option, $prgdir;
 		}
 		elseif(count($buf) < $columcount) {
 			if ($prg_option['CHECK_COLUMN']) {
-				echo("\nIncorrect columne count on line $rowcount in file $csvfile"); $prg_option['ERR'] = 4;
+				log_echo("\nIncorrect columne count on line $rowcount in file $csvfile"); $prg_option['ERR'] = 4;
 			}
 		}
 		$b = array_chunk($buf, $columcount); $buffer = $b[0];
@@ -161,7 +161,7 @@ global $prg_option, $prgdir;
 		else {
 			writeSIARDColumn($siardhandle, $buffer, $columcount, $rowcount, $table);
 		}
-		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { echo chr(46); }
+		if (fmod($rowcount, $prg_option['PI_COUNT']*10) == 0) { log_echo(chr(46)); }
 		$rowcount++;
 	}
 
@@ -172,7 +172,7 @@ global $prg_option, $prgdir;
 	$rowcount = ($prg_option['COLUMN_NAMES']) ? $rowcount-2 : $rowcount-1;
 	setTableOption($table, 'rowcount', $rowcount);
 
-	echo("\n");
+	log_echo("\n");
 	fclose($csvhandle);
 	fclose($siardhandle);
 }
@@ -186,7 +186,7 @@ global $prg_option;
 	$siardschema = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xsd";
 	$siardhandle = fopen($siardschema, "w");
 	if(!$siardhandle) {
-		echo("Could not write SIARD table schema file $siardfile\n"); $prg_option['ERR'] = 8; return;
+		log_echo("Could not write SIARD table schema file $siardfile\n"); $prg_option['ERR'] = 8; return;
 	}
 	
 	// write SIARD schema header
@@ -247,7 +247,7 @@ global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $stati
 	$result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments, $parameters);
 	xslt_free($xh);
 	if (!file_put_contents($siardmetadata, $result)) {
-		echo("Could not write SIARD metadata XML file $siardmetadata\n"); $prg_option['ERR'] = 8; return;
+		log_echo("Could not write SIARD metadata XML file $siardmetadata\n"); $prg_option['ERR'] = 8; return;
 	}
 
 	//validate SIARD XML metadata file
@@ -281,7 +281,7 @@ global $wdir, $prgdir, $prg_option;
 	$zipfile = $zipfile.'.zip';
 	
 	// create ZIP file with MD5 Hash
-	echo("ZIP SIARD file ");
+	log_echo("ZIP SIARD file ");
 	chdir($prg_option['SIARD_DIR']);
 	$ZIP = new ZipFile($zipfile);
 

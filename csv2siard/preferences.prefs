@@ -1,14 +1,16 @@
 # Default preferences
 # FILE_MASK: wild card is replaced with table name
-# 
+#
+FILE_MASK=*.dat
+#FILE_MASK=*.csv
+CHARSET=ISO-8859-1
+#CHARSET=UTF-8
 DELIMITED=;
 QUOTE="
 COLUMN_NAMES=TRUE
-CHARSET=ISO-8859-1
-#CHARSET=UTF-8
-FILE_MASK=*.dat
-#FILE_MASK=*.csv
 CHECK_COLUMN=TRUE
 #
-#TMPDIR=c:\tmp
+TMPDIR=c:\tmp
 #VERBOSITY=TRUE
+
+PI_COUNT=2

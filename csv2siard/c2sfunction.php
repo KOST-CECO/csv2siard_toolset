@@ -3,6 +3,18 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
+// writes echo to logfile if specified
+// newline is replaced bei carriage return and newline (0x0d0a)
+function log_echo($logtext) {
+global $logfile, $prg_option;
+	echo $logtext;
+	if ($logfile) {
+		$logtext = str_replace ( "\r\n" , "\n"  ,$logtext );
+		$logtext = str_replace ( "\n" , "\r\n"  ,$logtext );
+		fwrite($logfile, $logtext);
+	}
+}
+// -----------------------------------------------------------------------------
 // detect mime-type and mime-encoding with GNU file-5.03
 // return type or encoding according to $type [TYPE or ENCODING, default is TYPE]
 function detectMimeType($file, $type = 'TYPE') {
@@ -86,13 +98,13 @@ global $prg_option, $prgdir;
 	}
 
 	if ($retval) {
-		echo("$message\n");
+		log_echo("$message\n");
 		//print max 3 xmllint output lines
 		$resultcnt = 1;
 		$resultfile = @fopen("$xml.out", "r");
 		while (!feof($resultfile)) {
 			$resultline = fgets($resultfile);
-			echo $resultline;
+			log_echo($resultline);
 			if ($resultcnt++ >= 3) break;
 		}
 		fclose($resultfile);

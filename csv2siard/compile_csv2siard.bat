@@ -6,22 +6,26 @@ SET UNIX_HOME=C:\Software\PCUnixUtils
 SET PATH=%UNIX_HOME%;%PATH%
 
 REM compile --------------------------------------------------------------------
-DEL csv2siard.exe odbcheck.exe main.php
-GREP -v "dl(" csv2siard.php > main.php
-SLEEP 5
-BAMCOMPILE.EXE csv2siard.bcp
-DEL main.php
+DEL csv2siard.exe main.php out.php
+GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
 
-BAMCOMPILE.EXE odbcheck.bcp
-SLEEP 5
+CAT out.php c2sfunction.php c2stimedate.php c2sxml.php c2sconfig.php c2screate.php c2sconvert.php c2snodbmodel.php c2schema.php zip.php c2odbc.php c2snodbodbc.php >main.php
+BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
+
+REM DEL csv2siard.exe odbcheck.exe main.php
+REM GREP -v "dl(" csv2siard.php > main.php
+REM SLEEP 5
+REM CALL BAMCOMPILE.EXE csv2siard.bcp
+
+CALL BAMCOMPILE.EXE odbcheck.bcp
 
 REM check syntax ---------------------------------------------------------------
 CALL csv2siard.exe
-IF %ERRORLEVEL% GTR 1 (
+IF %ERRORLEVEL% NEQ 1 (
 	EXIT /B
 )
 CALL odbcheck.exe
-IF %ERRORLEVEL% GTR 1 (
+IF %ERRORLEVEL% NEQ 1 (
 	EXIT /B
 )
 REM test function --------------------------------------------------------------

@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 function loadSchema() {
 global $torque_schema, $siard_schema, $siard2html, $torque2siard;
-echo("Load all XML schema into array and write to c2schema.php.php\n");
+log_echo("Load all XML schema into array and write to c2schema.php.php\n");
 	$schema = array();
 	$schema['torque_schema'] = file_get_contents($torque_schema);
 	$schema['siard_schema'] = file_get_contents($siard_schema);
@@ -16,7 +16,7 @@ echo("Load all XML schema into array and write to c2schema.php.php\n");
 }
 function unloadSchema() {
 global $torque_schema, $siard_schema, $siard2html, $torque2siard, $static_torque_schema, $static_siard_schema, $static_siard2html, $static_torque2siard;
-echo("Unload all XML schema\n");
+log_echo("Unload all XML schema\n");
 	file_put_contents($torque_schema, $static_torque_schema);
 	file_put_contents($siard_schema, $static_siard_schema);
 	file_put_contents($siard2html, $static_siard2html);
