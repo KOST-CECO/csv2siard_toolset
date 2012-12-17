@@ -3,7 +3,7 @@
 @ECHO --------- %time% --------- 
 php.exe csv2siard.php table2-model.xml csvdata test.siard 
 @DEL /Q *.siard
-php.exe csv2siard.php table2-model.xml csvdata test.siard :LOG_FILE=ppp/log.txt
+php.exe csv2siard.php table2-model.xml csvdata test.siard :LOG_FILE=log.txt
 @DEL /Q *.siard
 php.exe csv2siard.php table2-model.xml csvdata test.siard preferences.prefs :LOG_FILE=log.txt
 @DEL /Q *.siard

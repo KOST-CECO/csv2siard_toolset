@@ -1,61 +1,82 @@
 @ECHO OFF
 SETLOCAL
+REM SET TMP=E:\bamcompile
+SET TEMP=%TMP%
 
 REM settings -------------------------------------------------------------------
 SET UNIX_HOME=C:\Software\PCUnixUtils
 SET PATH=%UNIX_HOME%;%PATH%
 
 REM compile --------------------------------------------------------------------
-DEL csv2siard.exe main.php out.php
-GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
+rm.exe -f csv2siard.exe odbcheck.exe
 
-CAT out.php c2sfunction.php c2stimedate.php c2sxml.php c2sconfig.php c2screate.php c2sconvert.php c2snodbmodel.php c2schema.php zip.php c2odbc.php c2snodbodbc.php >main.php
-BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
+rm.exe -f %TMP%\* 2> null
+REM GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
+REM cat c2sconfig.php c2screate.php c2sconvert.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php zip.php c2odbc.php c2snodbodbc.php out.php >main.php
+REM BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
+GREP -v "dl(" csv2siard.php > main.php
+CMD.EXE /C "BAMCOMPILE.EXE csv2siard.bcp"
 
-REM DEL csv2siard.exe odbcheck.exe main.php
-REM GREP -v "dl(" csv2siard.php > main.php
-REM SLEEP 5
-REM CALL BAMCOMPILE.EXE csv2siard.bcp
+rm.exe -f %TMP%\* 2> null
+REM GREP -v "dl(" odbcheck.php | GREP -v "include " > out.php
+REM cat c2sconfig.php c2sfunction.php c2sxml.php c2odbc.php out.php >main.php
+REM BAMCOMPILE.EXE -d -e:php_xslt.dll main.php odbcheck.exe
+CMD.EXE /C "BAMCOMPILE.EXE odbcheck.bcp"
 
-CALL BAMCOMPILE.EXE odbcheck.bcp
+rm.exe -f out.php main.php null
 
 REM check syntax ---------------------------------------------------------------
+@ECHO ON
 CALL csv2siard.exe
-IF %ERRORLEVEL% NEQ 1 (
-	EXIT /B
+@IF %ERRORLEVEL% GTR 1 (
+	@EXIT /B
 )
 CALL odbcheck.exe
-IF %ERRORLEVEL% NEQ 1 (
-	EXIT /B
+@IF %ERRORLEVEL% GTR 1 (
+	@EXIT /B
 )
+
 REM test function --------------------------------------------------------------
-@ECHO ON
-ECHO.
-@ECHO --------------------------------------------------------------------------
+@ECHO.
 CALL odbcheck.exe odbcsql\anl.sql odbcsql\odbcsql.prefs
-ECHO.@ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@IF %ERRORLEVEL% NEQ 0 (
+	PAUSE
+	@EXIT /B
+)
+@ECHO.
+
+@ECHO --------------------------------------------------------------------------
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
+@IF %ERRORLEVEL% NEQ 0 (
+	PAUSE
+	@EXIT /B
+)
 unzip -t test.siard
-ECHO.
+@ECHO.
+
 @ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe :NO_DB_MODEL csvdata test.siard
-ECHO.
+@ECHO.
+
 @ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe :NO_DB_MODEL :ODBC test.siard odbcsql\odbcsql.prefs
-ECHO.
+@ECHO.
+
 @ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe datatype-model.xml datatype test.siard datatype\datatype.prefs
-ECHO.
+@ECHO.
+
 @ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe gv-model-nf.xml odbcsql test.siard odbcsql\odbcsql.prefs
-ECHO.
+@ECHO.
+
 @ECHO --------------------------------------------------------------------------
-@DEL /Q *.siard
+@rm.exe -f /Q *.siard
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 
 @ECHO OFF

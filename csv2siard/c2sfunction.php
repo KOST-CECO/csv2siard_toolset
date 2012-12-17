@@ -8,6 +8,7 @@ error_reporting(E_ALL);
 function log_echo($logtext) {
 global $logfile, $prg_option;
 	echo $logtext;
+	return;
 	if ($logfile) {
 		$logtext = str_replace ( "\r\n" , "\n"  ,$logtext );
 		$logtext = str_replace ( "\n" , "\r\n"  ,$logtext );

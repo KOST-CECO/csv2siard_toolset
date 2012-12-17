@@ -9,7 +9,8 @@ CHARSET=ISO-8859-1
 # 
 FILE_MASK=*.sql
 CHECK_COLUMN=TRUE
-#VERBOSITY=TRUE
+# VERBOSITY=TRUE
 #
 # ODBC Settings
-ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\odbcdata
+ODBC_DSN=Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=.\odbcdata
+# ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\odbcdata

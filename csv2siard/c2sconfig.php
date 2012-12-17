@@ -112,7 +112,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['ODBC_PASSWORD'] = '';				// Database password
 
 	// specific preference file
-	if ($argc > 5) {
+	if ($argc >= 5) {
 		$prefsfile = str_replace('\\', '/', realpath($argv[4]));
 		if (!is_file($prefsfile)) {
 			log_echo("Preference file $prefsfile not found\n"); exit(1);

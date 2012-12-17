@@ -9,6 +9,7 @@ include 'c2odbc.php';
 // Globals
 $prefs                    = 'preferences.prefs';		// Preference file
 $prg_option['CSV_FOLDER'] = '.';										// default path
+$prg_option['LOG_FILE']= false;
 $odbc_handle              = null;										// used if ODBC instead of CSV
 
 // Read command line
@@ -16,7 +17,8 @@ if (!($argc == 3 or $argc == 2)) {
 	log_echo("
        Usage :: odbcheck.exe sqlfile [prefs]
      sqlfile :: sql select statement or keyword :TABLES
-       prefs :: configuration file (default) $prefs");
+       prefs :: configuration file (default) $prefs
+");
 	exit(1);
 }
 
