@@ -23,12 +23,28 @@ c2sGUI
 [Open project files]
 0=c2sGUI.nsi
 1=c2sGUI.nsh
+2=c2sLang.nsh
+3=c2sGUI.ini
+4=par.nsi
+5=..\..\simpleGUI\_workbench\SIARDval.nsi
 [Selected Project Files]
 Main=
-Selected=c2sGUI.nsi
+Selected=par.nsi
 [c2sGUI.nsi]
-TopLine=15
-Caret=21,42
+TopLine=18
+Caret=53,12
 [c2sGUI.nsh]
-TopLine=66
-Caret=1,110
+TopLine=49
+Caret=1,68
+[c2sLang.nsh]
+TopLine=1
+Caret=54,2
+[c2sGUI.ini]
+TopLine=30
+Caret=7,42
+[par.nsi]
+TopLine=1
+Caret=1,1
+[..\..\simpleGUI\_workbench\SIARDval.nsi]
+TopLine=91
+Caret=42,115

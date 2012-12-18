@@ -64,6 +64,11 @@ Function LeaveDialog
       Call RelGotoPage
     ${Break}
     
+    ${Case} '${HELP_Button}'
+      ExecShell "open" "$EXEDIR\${CSV2SIARDDHELP}"
+      Abort
+    ${Break}
+    
     ${Default}
       Call RunCSV2SIARD
       Abort
@@ -99,14 +104,20 @@ Function RunCSV2SIARD
   Pop $0
   StrCpy $SIARD_FILE "$EXEDIR\$0.siard"
   ${If} ${FileExists} $SIARD_FILE
-    MessageBox MB_OKCANCEL 'Achtung: soll diese SIARD Datei überschrieben werden$\n$SIARD_FILE' IDOK overwrite IDCANCEL cancel
+    MessageBox MB_OKCANCEL 'Achtung: soll die folgende SIARD Datei überschrieben werden?$\n"$SIARD_FILE"' IDOK overwrite IDCANCEL cancel
 cancel:
     Abort
 overwrite:
+    Delete "$SIARD_FILE"
   ${EndIf}
-  ;ExecWait '${CSV2SIARD} "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE"' $0
-  ExecWait '"C:\Software\PCUnixUtils\find.exe" .' $0
-  MessageBox MB_OK $0
+  
+  ExecWait '"${CSV2SIARD}" "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE" ":LOG_FILE=$LOG"' $0
+  ${If} $0 == 0
+    MessageBox MB_OK 'Die folgende SIARD Datei wurde erfolgreich angelegt:$\n"$SIARD_FILE"';
+  ${Else}
+    MessageBox MB_OK 'Achtung: ein Fehler ist aufgetreten'
+  ${EndIf}
+  ExecWait '"notepad.exe" "$LOG"'
 FunctionEnd
 
 ;--------------------------------
