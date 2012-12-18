@@ -11,8 +11,18 @@
 
 ;--------------------------------
 Function ShowDialog
+  WriteINIStr $DIALOG "${CSV_DirReqest}" "State" $CSV_FOLDER
+  WriteINIStr $DIALOG "${PREFS_FileReqest}" "State" $PREFS_FILE
   ${If} $MODEL_SWITCH == 1
-    WriteINIStr $DIALOG "${DB_MODEL_File}" "Text" '$EXEDIR\\no_db_model.xml'
+    WriteINIStr $DIALOG "${NO_DB_MODEL_RadioButton}" "State" 1
+    WriteINIStr $DIALOG "${DB_MODEL_RadioButton}" "State" 0
+    WriteINIStr $DIALOG "${DB_MODEL_File}" "Text" $EXEDIR\\no_db_model.xml
+    WriteINIStr $DIALOG "${DB_MODEL_FileRequest}" "State" ""
+  ${Else}
+    WriteINIStr $DIALOG "${NO_DB_MODEL_RadioButton}" "State" 0
+    WriteINIStr $DIALOG "${DB_MODEL_RadioButton}" "State" 1
+    WriteINIStr $DIALOG "${DB_MODEL_File}" "Text" ""
+    WriteINIStr $DIALOG "${DB_MODEL_FileRequest}" "State" $DB_MODEL
   ${EndIf}
   InstallOptions::initDialog $DIALOG
   Pop $HWND
@@ -24,6 +34,7 @@ FunctionEnd
 
 ;--------------------------------
 Function LeaveDialog
+  ReadINIStr $CSV_FOLDER $DIALOG "${CSV_DirReqest}" "State"
   ReadINIStr $PREFS_FILE $DIALOG "${PREFS_FileReqest}" "State"
   ReadINIStr $0 $DIALOG "Settings" "State"
   
@@ -44,6 +55,8 @@ Function LeaveDialog
       StrCpy $MODEL_SWITCH 2
       ReadINIStr $1 $DIALOG '${NO_DB_MODEL_RadioButton}' 'HWND'
       SendMessage $1 ${BM_SETCHECK} 0 0
+      ReadINIStr $1 $DIALOG '${DB_MODEL_FileRequest}' 'HWND'
+      SendMessage $1 ${WM_SETTEXT} 1 'STR:$DB_MODEL'
       ReadINIStr $1 $DIALOG '${DB_MODEL_File}' 'HWND'
       SendMessage $1 ${WM_SETTEXT} 1 'STR:'
       Abort
@@ -71,23 +84,26 @@ Function LeaveDialog
     
     ${Default}
       Call RunCSV2SIARD
+      Call SaveSettings
       Abort
     ${Break}
   ${EndSwitch}
 FunctionEnd
 
 ;--------------------------------
+VAR MODEL
+
 Function RunCSV2SIARD
-  ReadINIStr $CSV_FOLDER $DIALOG "${CSV_DirReqest}" "State"
   ${IfNot} ${FileExists} $CSV_FOLDER
     MessageBox MB_OK "Achtung: das gewählte CSV Verzeichnis existiert nicht$\n$CSV_FOLDER"
     Abort
   ${EndIf}
   
   ${If} $MODEL_SWITCH == 1
-    StrCpy $DB_MODEL ':NO_DB_MODEL'
+    StrCpy $MODEL ':NO_DB_MODEL'
   ${Else}
     ReadINIStr $DB_MODEL $DIALOG "${DB_MODEL_FileRequest}" "State"
+    StrCpy $MODEL $DB_MODEL
     ${IfNot} ${FileExists} $DB_MODEL
       MessageBox MB_OK "Achtung: das ausgewählte Daten Modell existiert nicht$\n$DB_MODEL"
       Abort
@@ -102,7 +118,7 @@ Function RunCSV2SIARD
   Push $CSV_FOLDER
   Call GetBaseName
   Pop $0
-  StrCpy $SIARD_FILE "$EXEDIR\$0.siard"
+  StrCpy $SIARD_FILE "$DESKTOP\$0.siard"
   ${If} ${FileExists} $SIARD_FILE
     MessageBox MB_OKCANCEL 'Achtung: soll die folgende SIARD Datei überschrieben werden?$\n"$SIARD_FILE"' IDOK overwrite IDCANCEL cancel
 cancel:
@@ -111,13 +127,14 @@ overwrite:
     Delete "$SIARD_FILE"
   ${EndIf}
   
-  ExecWait '"${CSV2SIARD}" "$DB_MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE" ":LOG_FILE=$LOG"' $0
+  ExecWait '"${CSV2SIARD}" "$MODEL" "$CSV_FOLDER" "$SIARD_FILE" "$PREFS_FILE" ":LOG_FILE=$LOG"' $0
   ${If} $0 == 0
     MessageBox MB_OK 'Die folgende SIARD Datei wurde erfolgreich angelegt:$\n"$SIARD_FILE"';
   ${Else}
     MessageBox MB_OK 'Achtung: ein Fehler ist aufgetreten'
   ${EndIf}
   ExecWait '"notepad.exe" "$LOG"'
+  
 FunctionEnd
 
 ;--------------------------------

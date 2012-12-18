@@ -12,6 +12,7 @@ XPStyle on
 !define CSV2SIARDDHELP  "Anwendungshandbuch_v1.8.pdf"
 !define GUIFILE         "c2sGUI.ini"
 !define PREFFILE        "c2sPREF.ini"
+!define SETTINGS        "csv2siard"
 
 ;--------------------------------
 Var DIALOG
@@ -38,13 +39,16 @@ Page Custom ShowDialog LeaveDialog
 !include LogicLib.nsh
 !include relGotoPage.nsh
 !include getBaseName.nsh
+!include strTrim.nsh
 !include c2sGUI.nsh
 !include c2sPREF.nsh
+!include c2sSET.nsh
 !include c2sLang.nsh
 
 ;--------------------------------
 ; Functions
 Function .onInit
+  Call LoadSettings
   InitPluginsDir
   GetTempFileName $DIALOG $PLUGINSDIR
   GetTempFileName $PREFS $PLUGINSDIR
@@ -52,11 +56,9 @@ Function .onInit
   File /oname=$DIALOG ${GUIFILE}
   File /oname=$PREFS ${PREFFILE}
   StrCpy $PAGE_NO 2
-  StrCpy $MODEL_SWITCH 1
+  ;StrCpy $MODEL_SWITCH 1
   StrCpy $COLUMN_NAMES_SWITCH "TRUE"
   StrCpy $CHECK_COLUMN_SWITCH "TRUE"
-  WriteINIStr $DIALOG "${CSV_DirReqest}" "State" $EXEDIR
-  WriteINIStr $DIALOG "${PREFS_FileReqest}" "State" "$EXEDIR\preferences.prefs"
 FunctionEnd
 
 ;--------------------------------

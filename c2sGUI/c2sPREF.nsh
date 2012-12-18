@@ -59,7 +59,9 @@ Function LeavePrefs
     ${Break}
     
     ${Default}
-      Call WritePREFS
+      ${If} $PAGE_NO == 1
+        Call WritePREFS
+      ${EndIf}
     ${Break}
   ${EndSwitch}
 FunctionEnd
