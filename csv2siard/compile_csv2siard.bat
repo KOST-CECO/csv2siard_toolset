@@ -11,17 +11,17 @@ REM compile --------------------------------------------------------------------
 rm.exe -f csv2siard.exe odbcheck.exe
 
 rm.exe -f %TMP%\* 2> null
-REM GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
-REM cat c2sconfig.php c2screate.php c2sconvert.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php zip.php c2odbc.php c2snodbodbc.php out.php >main.php
-REM BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
-GREP -v "dl(" csv2siard.php > main.php
-CMD.EXE /C "BAMCOMPILE.EXE csv2siard.bcp"
+GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
+cat c2sconfig.php c2screate.php c2sconvert.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php zip.php c2odbc.php c2snodbodbc.php out.php >main.php
+BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
+REM GREP -v "dl(" csv2siard.php > main.php
+REM CMD.EXE /C "BAMCOMPILE.EXE csv2siard.bcp"
 
 rm.exe -f %TMP%\* 2> null
-REM GREP -v "dl(" odbcheck.php | GREP -v "include " > out.php
-REM cat c2sconfig.php c2sfunction.php c2sxml.php c2odbc.php out.php >main.php
-REM BAMCOMPILE.EXE -d -e:php_xslt.dll main.php odbcheck.exe
-CMD.EXE /C "BAMCOMPILE.EXE odbcheck.bcp"
+GREP -v "dl(" odbcheck.php | GREP -v "include " > out.php
+cat c2sconfig.php c2sfunction.php c2sxml.php c2odbc.php out.php >main.php
+BAMCOMPILE.EXE -d -e:php_xslt.dll main.php odbcheck.exe
+REM CMD.EXE /C "BAMCOMPILE.EXE odbcheck.bcp"
 
 rm.exe -f out.php main.php null
 
@@ -53,6 +53,12 @@ CALL csv2siard.exe table2-model.xml csvdata test.siard
 	@EXIT /B
 )
 unzip -t test.siard
+@ECHO.
+
+@ECHO --------------------------------------------------------------------------
+@rm.exe -f /Q *.siard log.txt
+CALL csv2siard.exe gv-model-v9.xml csvdata test.siard :LOG_FILE=log.txt
+pr.exe -n -l 1 log.txt
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------

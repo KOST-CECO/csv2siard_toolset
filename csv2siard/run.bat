@@ -1,11 +1,14 @@
 @ECHO ON
-@DEL /Q *.siard
+@DEL /Q *.siard log.txt
 @ECHO --------- %time% --------- 
-php.exe csv2siard.php table2-model.xml csvdata test.siard 
+php.exe csv2siard.php table2-model.xml csvdata test.siard
+pr.exe -n -l 1 log.txt
 @DEL /Q *.siard
 php.exe csv2siard.php table2-model.xml csvdata test.siard :LOG_FILE=log.txt
-@DEL /Q *.siard
+pr.exe -n -l 1 log.txt
+@DEL /Q *.siard 
 php.exe csv2siard.php table2-model.xml csvdata test.siard preferences.prefs :LOG_FILE=log.txt
+pr.exe -n -l 1 log.txt
 @DEL /Q *.siard
 @ECHO --------- %time% --------- 
 @REM php.exe csv2siard.php :NO_DB_MODEL :ODBC test.siard odbc.prefs

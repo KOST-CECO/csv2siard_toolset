@@ -112,7 +112,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['ODBC_PASSWORD'] = '';				// Database password
 
 	// specific preference file
-	if ($argc >= 5) {
+	if ($argc >= 5 and (strtoupper(substr($argv[4], 0, 10)) != ":LOG_FILE=")) {
 		$prefsfile = str_replace('\\', '/', realpath($argv[4]));
 		if (!is_file($prefsfile)) {
 			log_echo("Preference file $prefsfile not found\n"); exit(1);
@@ -241,13 +241,13 @@ function setLogfile() {
 global $argc, $argv, $prg_option;
 	$prg_option['LOG_FILE'] = false;			// default setting
 	if ($argc == 6) {
-		if (substr($argv[5], 0, 10) == ":LOG_FILE=") {
+		if (strtoupper(substr($argv[5], 0, 10)) == ":LOG_FILE=") {
 			$prg_option['LOG_FILE'] = substr($argv[5], 10);
 			checkLogfile();
 		}
 	}
 	if ($argc == 5) {
-		if (substr($argv[4], 0, 10) == ":LOG_FILE=") {
+		if (strtoupper(substr($argv[4], 0, 10)) == ":LOG_FILE=") {
 			$prg_option['LOG_FILE'] = substr($argv[4], 10);
 			checkLogfile();
 		}
