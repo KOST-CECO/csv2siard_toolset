@@ -16,7 +16,7 @@ Function ShowPrefs
     StrCpy $R9 1
     Call RelGotoPage
   ${Else}
-    WriteINIStr $PREFS "${DEFAULT_PREFS_File}" "Text" '$PREFS_FILE'
+    WriteINIStr $PREFS "${DEFAULT_PREFS_File}" "State" $PREFS_FILE
     InstallOptions::initDialog $PREFS
     Pop $HWND
     ; set button "Back" invisible 
@@ -27,6 +27,11 @@ Function ShowPrefs
 FunctionEnd
 
 Function LeavePrefs
+  ${If} $PAGE_NO == 2
+    Return
+  ${EndIf}
+
+  ReadINIStr $PREFS_FILE $PREFS "${DEFAULT_PREFS_File}" "State"
   ReadINIStr $0 $PREFS "Settings" "State"
   
   ${Switch} "Field $0"
@@ -59,16 +64,14 @@ Function LeavePrefs
     ${Break}
     
     ${Default}
-      ${If} $PAGE_NO == 1
-        Call WritePREFS
-      ${EndIf}
+      Call WritePREFS
     ${Break}
   ${EndSwitch}
 FunctionEnd
 
 Function WritePREFS
   ${If} ${FileExists} $PREFS_FILE
-    MessageBox MB_OKCANCEL 'Achtung: soll die Präferenzdatei neu geschrieben werden$\n$PREFS_FILE' IDOK overwrite IDCANCEL cancel
+    MessageBox MB_YESNO 'Achtung: soll die Präferenzdatei neu geschrieben werden$\n$PREFS_FILE' IDYES overwrite IDNO cancel
 cancel:
     Return
 overwrite:

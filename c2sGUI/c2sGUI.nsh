@@ -120,7 +120,7 @@ Function RunCSV2SIARD
   Pop $0
   StrCpy $SIARD_FILE "$DESKTOP\$0.siard"
   ${If} ${FileExists} $SIARD_FILE
-    MessageBox MB_OKCANCEL 'Achtung: soll die folgende SIARD Datei überschrieben werden?$\n"$SIARD_FILE"' IDOK overwrite IDCANCEL cancel
+    MessageBox MB_YESNO 'Achtung: soll die folgende SIARD Datei auf dem Desktop überschrieben werden?$\n"$SIARD_FILE"' IDYES overwrite IDNO cancel
 cancel:
     Abort
 overwrite:
