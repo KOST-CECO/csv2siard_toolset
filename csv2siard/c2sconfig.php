@@ -27,10 +27,22 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 	}
 	
 	// 1.ARG: check database description XML file
-	if (strcasecmp($argv[1], ':NO_DB_MODEL') == 0) {
+	if (strcasecmp(substr($argv[1],0, 12), ':NO_DB_MODEL') == 0) {
+		// NO_DB_MODEL
 		$prg_option['DB_MODEL'] = 'NO_DB_MODEL';
+		if (substr($argv[1],12, 1) == '=') {
+			$modelbase = basename(substr($argv[1],13));
+			$modeldir = realpath(dirname(substr($argv[1],13)));
+			$prg_option['NO_DB_MODEL'] = str_replace('\\', '/', "$modeldir/$modelbase");
+		}
+		else {
+		 $prg_option['NO_DB_MODEL'] = "$wdir/no_db_model.xml";
+		}
+		$prg_option['NO_DB_MODEL'] = str_replace('\\', '/', $prg_option['NO_DB_MODEL']);
+		checkNO_DB_MODELfile();
 	}
 	else {
+		// Torque v4.0 DB_MODEL
 		$dbmodel = str_replace('\\', '/', realpath($argv[1]));
 		if (!is_file($dbmodel)) {
 			log_echo("Database description $argv[1] not found\n"); exit(1);
@@ -43,6 +55,7 @@ global $argc, $argv, $usage, $wdir, $prgdir, $torque_schema, $static_torque_sche
 		unlink("$temp/$torque_schema");
 		$prg_option['DB_MODEL'] = $dbmodel;
 	}
+	
 	// 2.ARG: heck folder with csv files or ODBC connection
 	$csvpath = str_replace('\\', '/', realpath($argv[2]));
 	if (strcasecmp($argv[2],':ODBC')==0) {
@@ -263,5 +276,18 @@ global $logfile, $prg_option;
 			}
 		}
 	}
+}
+// check NO_DB_MODEL xml file --------------------------------------------------
+function checkNO_DB_MODELfile() {
+global $argv, $prg_option;
+// directory
+	if (!@touch("$prg_option[NO_DB_MODEL]")) {
+		log_echo("You may not have appropriate rights on file: ".substr($argv[1],13)."\n"); exit(16);
+	}
+	@unlink("$prg_option[NO_DB_MODEL]");
+	if (strtoupper(substr($prg_option['NO_DB_MODEL'], -4)) != ".XML") {
+		log_echo("Database model file ".substr($argv[1],13)." must have file extension '.xml'\n"); exit(1);
+	}
+
 }
 ?>

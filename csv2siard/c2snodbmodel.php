@@ -128,7 +128,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 	writeDBModel($file_arr, $csv_arr, basename($prg_option['CSV_FOLDER']));
 
 	// write console message
-	log_echo("\nNew XML database model written: ".ansi2ascii($wdir)."/no_db_model.xml\n");
+	log_echo("\nNew XML database model written: $prg_option[NO_DB_MODEL]\n");
 	reset($file_arr);
 	while (list($key, $val) = each($file_arr)) {
 		$val = ansi2ascii($val);
@@ -163,7 +163,7 @@ global $prg_option, $wdir, $torque_schema, $static_torque_schema;
 	$xmldata = $xmldata . "</database>\n";
 
 	// write database description no_db_model.xml
-	$dbmodel = "$wdir/no_db_model.xml";
+	$dbmodel = $prg_option['NO_DB_MODEL'];
 	if (!file_put_contents("$dbmodel", utf8_encode($xmldata))) {
 		log_echo("Could not write database description $dbmodel\n"); $prg_option['ERR'] = 8; return;
 	}

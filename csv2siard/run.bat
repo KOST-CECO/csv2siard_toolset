@@ -1,16 +1,17 @@
 @ECHO ON
-@DEL /Q *.siard log.txt
-@ECHO --------- %time% --------- 
-php.exe csv2siard.php table2-model.xml csvdata test.siard
-pr.exe -n -l 1 log.txt
-@DEL /Q *.siard
-php.exe csv2siard.php table2-model.xml csvdata test.siard :LOG_FILE=log.txt
-pr.exe -n -l 1 log.txt
-@DEL /Q *.siard 
-php.exe csv2siard.php table2-model.xml csvdata test.siard preferences.prefs :LOG_FILE=log.txt
-pr.exe -n -l 1 log.txt
 @DEL /Q *.siard
 @ECHO --------- %time% --------- 
+php.exe csv2siard.php :NO_DB_MODEL csvdata test.siard 
+@DEL /Q *.siard
+php.exe csv2siard.php :NO_DB_MODEL=test.xml csvdata test.siard 
+@DEL /Q *.siard
+php.exe csv2siard.php :NO_DB_MODEL :ODBC test.siard odbc.prefs
+@DEL /Q *.siard
+php.exe csv2siard.php :NO_DB_MODEL=test_odbc.xml :ODBC test.siard odbc.prefs
+
+@ECHO --------- %time% --------- 
+@REM php.exe csv2siard.php table2-model.xml csvdata test.siard :LOG_FILE=log.txt
+@REM php.exe csv2siard.php table2-model.xml csvdata test.siard preferences.prefs :LOG_FILE=log.txt
 @REM php.exe csv2siard.php :NO_DB_MODEL :ODBC test.siard odbc.prefs
 @REM php.exe csv2siard.php northwind.xml :ODBC test.siard odbc.prefs
 @REM php.exe csv2siard.php gv-model-v9.xml :ODBC test.siard odbc.prefs
