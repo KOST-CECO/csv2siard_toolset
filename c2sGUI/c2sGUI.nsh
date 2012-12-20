@@ -16,7 +16,7 @@ Function ShowDialog
   ${If} $MODEL_SWITCH == 1
     WriteINIStr $DIALOG "${NO_DB_MODEL_RadioButton}" "State" 1
     WriteINIStr $DIALOG "${DB_MODEL_RadioButton}" "State" 0
-    WriteINIStr $DIALOG "${DB_MODEL_File}" "Text" $EXEDIR\\no_db_model.xml
+    WriteINIStr $DIALOG "${DB_MODEL_File}" "Text" $OUT_PATH\\no_db_model.xml
     WriteINIStr $DIALOG "${DB_MODEL_FileRequest}" "State" ""
   ${Else}
     WriteINIStr $DIALOG "${NO_DB_MODEL_RadioButton}" "State" 0
@@ -35,6 +35,7 @@ FunctionEnd
 ;--------------------------------
 Function LeaveDialog
   ReadINIStr $CSV_FOLDER $DIALOG "${CSV_DirReqest}" "State"
+  StrCpy $OUT_PATH $CSV_FOLDER
   ReadINIStr $PREFS_FILE $DIALOG "${PREFS_FileReqest}" "State"
   ReadINIStr $0 $DIALOG "Settings" "State"
   
@@ -46,7 +47,7 @@ Function LeaveDialog
       ReadINIStr $1 $DIALOG '${DB_MODEL_FileRequest}' 'HWND'
       SendMessage $1 ${WM_SETTEXT} 1 'STR:'
       ReadINIStr $1 $DIALOG '${DB_MODEL_File}' 'HWND'
-      SendMessage $1 ${WM_SETTEXT} 1 'STR:$EXEDIR\no_db_model.xml'
+      SendMessage $1 ${WM_SETTEXT} 1 'STR:$OUT_PATH\no_db_model.xml'
       
       Abort
     ${Break}
@@ -82,6 +83,14 @@ Function LeaveDialog
       Abort
     ${Break}
     
+    ${Case} '${CSV_DirReqest}'
+      ${If} $MODEL_SWITCH == 1
+        ReadINIStr $1 $DIALOG '${DB_MODEL_File}' 'HWND'
+        SendMessage $1 ${WM_SETTEXT} 1 'STR:$OUT_PATH\no_db_model.xml'
+      ${EndIf}
+      Abort
+    ${Break}
+    
     ${Default}
       Call RunCSV2SIARD
       Call SaveSettings
@@ -92,15 +101,32 @@ FunctionEnd
 
 ;--------------------------------
 VAR MODEL
+Var TWEEK
 
 Function RunCSV2SIARD
   ${IfNot} ${FileExists} $CSV_FOLDER
     MessageBox MB_OK "Achtung: das gewählte CSV Verzeichnis existiert nicht$\n$CSV_FOLDER"
     Abort
+  ${Else}
+    StrCpy $OUT_PATH $CSV_FOLDER
+  ${EndIf}
+  
+  ; ${GetFileAttributes} $OUT_PATH "READONLY" $R0
+  GetTempFileName $TWEEK $OUT_PATH
+  fileOpen $0 $TWEEK w
+    fileWrite $0 $TWEEK
+  fileClose $0
+  ${IfNot} ${FileExists} $TWEEK
+    MessageBox MB_OK "Achtung: in das Verzeichnis $OUT_PATH kann nicht geschrieben werden$\nes wird stattdessen auf den Desktop geschrieben"
+    StrCpy $OUT_PATH $DESKTOP
+  ${Else}
+    Delete $TWEEK
   ${EndIf}
   
   ${If} $MODEL_SWITCH == 1
-    StrCpy $MODEL ':NO_DB_MODEL'
+    StrCpy $MODEL ":NO_DB_MODEL=$OUT_PATH\no_db_model.xml"
+    ReadINIStr $1 $DIALOG '${DB_MODEL_File}' 'HWND'
+    SendMessage $1 ${WM_SETTEXT} 1 'STR:$OUT_PATH\no_db_model.xml'
   ${Else}
     ReadINIStr $DB_MODEL $DIALOG "${DB_MODEL_FileRequest}" "State"
     StrCpy $MODEL $DB_MODEL
@@ -118,9 +144,9 @@ Function RunCSV2SIARD
   Push $CSV_FOLDER
   Call GetBaseName
   Pop $0
-  StrCpy $SIARD_FILE "$DESKTOP\$0.siard"
+  StrCpy $SIARD_FILE "$OUT_PATH\$0.siard"
   ${If} ${FileExists} $SIARD_FILE
-    MessageBox MB_YESNO 'Achtung: soll die folgende SIARD Datei auf dem Desktop überschrieben werden?$\n"$SIARD_FILE"' IDYES overwrite IDNO cancel
+    MessageBox MB_YESNO 'Achtung: soll die folgende SIARD Datei überschrieben werden?$\n"$SIARD_FILE"' IDYES overwrite IDNO cancel
 cancel:
     Abort
 overwrite:

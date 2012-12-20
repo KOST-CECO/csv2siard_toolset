@@ -25,6 +25,7 @@ VAR CSV_FOLDER
 Var DB_MODEL
 Var PREFS_FILE
 Var SIARD_FILE
+Var OUT_PATH              ; directory for siard and no_db_model.xml
 Var LOG
 Var PAGE_NO               ; 2=Dialog, 1= Prefs
 
@@ -37,6 +38,7 @@ Page Custom ShowDialog LeaveDialog
 ;--------------------------------
 !include WinMessages.nsh
 !include LogicLib.nsh
+!include FileFunc.nsh
 !include relGotoPage.nsh
 !include getBaseName.nsh
 !include strTrim.nsh

@@ -23,6 +23,7 @@ Function LoadSettings
       ${StrTrimNewLines} $MODEL_SWITCH $R0
       fileRead $0 $R0
       ${StrTrimNewLines} $DB_MODEL $R0
+      StrCpy $OUT_PATH $CSV_FOLDER
     fileClose $0
   ${Else}
     ; initial settings
@@ -30,5 +31,6 @@ Function LoadSettings
     StrCpy $PREFS_FILE "$EXEDIR\preferences.prefs"
     StrCpy $MODEL_SWITCH 1
     StrCpy $DB_MODEL ''
+    StrCpy $OUT_PATH $DESKTOP
   ${EndIf}
 FunctionEnd
