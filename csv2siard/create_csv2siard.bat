@@ -47,6 +47,7 @@ REM COPY magic.mime %RUNTIME%\bin
 COPY magic1.dll %RUNTIME%\bin
 COPY regex2.dll %RUNTIME%\bin
 
+COPY preferences.prefs %RUNTIME%
 COPY preferences.prefs %RUNTIME%\bin
 COPY GPL-2.0_COPYING.txt %RUNTIME%\bin
 
@@ -66,6 +67,8 @@ COPY odbcdata\*     %RUNTIME%\odbcdata
 COPY odbcsql\*      %RUNTIME%\odbcsql
 
 COPY demo.*     %RUNTIME%
+
+COPY ..\10_GUI\c2sGUI.exe      %RUNTIME%
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%
