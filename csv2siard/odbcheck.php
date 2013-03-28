@@ -16,7 +16,7 @@ $odbc_handle              = null;										// used if ODBC instead of CSV
 if (!($argc == 3 or $argc == 2)) {
 	log_echo("
        Usage :: odbcheck.exe sqlfile [prefs]
-     sqlfile :: sql select statement or keyword :TABLES
+     sqlfile :: sql select statement or file or keyword :TABLES
        prefs :: configuration file (default) $prefs
 ");
 	exit(1);
@@ -51,11 +51,15 @@ if(strtoupper($sqlfile) == ':TABLES') {
 	print_r($tables);
 	exit();
 }
-// Read and trim SQL file
+// Read and trim SQL string
 elseif(!is_file($sqlfile)) {
-	exit("SQL specification file '$sqlfile' not found\n");
+	//exit("SQL specification file '$sqlfile' not found\n");
+	$query = trim($sqlfile);
 }
-$query = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($sqlfile)),"\x0A\x0D" , "  ")), '; ');
+// Read and trim SQL file
+else {
+	$query = trim(preg_replace('/\s[\s]+/',' ',strtr((file_get_contents($sqlfile)),"\x0A\x0D" , "  ")), '; ');
+}
 
 // Analyse record set
 $columns = odbc_columns($odbc_handle);

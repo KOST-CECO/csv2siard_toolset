@@ -59,6 +59,7 @@ $version = '1.8.4';	// SQL_CUR_USE_DRIVER statt SQL_CUR_USE_ODBC
 $version = '1.8.5';	// table.xsd: minOccurs="0" maxOccurs="unbounded" [-> ROW_COUNT=TRUE]
 $version = '1.8.5';	// look for 'preferences.prefs' first in CWD then Install DIR
 $version = '1.8.6';	// Option :LOG_FILE=fname for GUI and :NO_DB_MODEL=fname
+$version = '1.8.7';	// SQL_CUR_USE_ODBC
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

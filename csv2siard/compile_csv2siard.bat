@@ -46,6 +46,12 @@ CALL odbcheck.exe odbcsql\anl.sql odbcsql\odbcsql.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
+@ECHO.
+CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | wc
+CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | sort -u | wc
+@ECHO.
+
+@ECHO --------------------------------------------------------------------------
 @rm.exe -f /Q *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 @IF %ERRORLEVEL% NEQ 0 (
