@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="datatype" xmlns="http://db.apache.org/torque/4.0/templates/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database database-torque-4-0.xsd">
+	
+	<table name="utf8_without_BOM.csv" description="ODBC Text Driver: Dbq=./datatype">
+		<column name="char_1" type="CHAR"/>
+		<column name="char_2" type="CHAR"/>
+		<column name="varchar_1" type="CHAR"/>
+		<column name="varchar_2" type="CHAR"/>
+		<column name="longvarchar" type="CHAR"/>
+		<column name="clob" type="CHAR"/>
+		<column name="ref" type="CHAR"/>
+	</table>
+</database>

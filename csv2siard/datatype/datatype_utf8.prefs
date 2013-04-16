@@ -1,0 +1,17 @@
+# Default preferences
+# FILE_MASK: wild card is replaced with table name
+# 
+DELIMITED=;
+QUOTE="
+COLUMN_NAMES=TRUE
+# 
+CHARSET=UTF-8
+#CHARSET=ISO-8859-1
+# 
+FILE_MASK=*.sql
+CHECK_COLUMN=TRUE
+#
+# ODBC Settings
+ODBC_DSN=Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=.\datatype
+# ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\datatype
+ODBC_USER=Admin

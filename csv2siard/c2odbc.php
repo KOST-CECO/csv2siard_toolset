@@ -89,6 +89,12 @@ global $prg_option, $prgdir, $odbc_handle;
 			$buf = array();
 			foreach ($columnlist as $column) {
 				$col = @odbc_result($recordset, $column);
+				// UTF-8 ODBC Error correction in case of à (C3A0) on field boundery
+				if($prg_option['CHARSET']=='UTF-8') {
+					if(ord(substr($col, -1))==195) {
+						$col = $col . chr(160);
+					}
+				}
 				if ($col === false) {
 					log_echo("\nColumne name '$column' not found in odbc query $sqlfile"); $prg_option['ERR'] = 4;
 				}

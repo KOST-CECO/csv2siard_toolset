@@ -55,7 +55,7 @@ global $prg_option;
 			$collist[] = $name;
 		}
 	}
-	if ($errflag){ $prg_option['ERR'] = 32; return(null); }
+	if ($errflag){ $prg_option['ERR'] = 32; return($collist); }
 	return($collist);
 }
 // -----------------------------------------------------------------------------

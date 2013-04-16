@@ -47,8 +47,8 @@ CALL odbcheck.exe odbcsql\anl.sql odbcsql\odbcsql.prefs
 
 @ECHO --------------------------------------------------------------------------
 @ECHO.
-CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | wc
-CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | sort -u | wc
+CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | tail -n 21 | sort | wc
+CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | tail -n 21 | sort -u | wc
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
@@ -85,6 +85,11 @@ CALL csv2siard.exe datatype-model.xml datatype test.siard datatype\datatype.pref
 @ECHO --------------------------------------------------------------------------
 @rm.exe -f /Q *.siard
 CALL csv2siard.exe gv-model-nf.xml odbcsql test.siard odbcsql\odbcsql.prefs
+@ECHO.
+
+@ECHO --------------------------------------------------------------------------
+@rm.exe -f /Q *.siard
+CALL csv2siard.exe datatype\utf8_model.xml :ODBC test.siard datatype\datatype_utf8.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
