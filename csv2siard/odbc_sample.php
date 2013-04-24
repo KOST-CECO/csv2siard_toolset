@@ -1,31 +1,48 @@
 <?
 
 //SQL_CUR_USE_IF_NEEDED,SQL_CUR_USE_ODBC ,SQL_CUR_USE_DRIVER SQL_CUR_DEFAULT 
-//$conn = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./odbcdata", '', '', SQL_CUR_USE_IF_NEEDED );
-$conn = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./odbcdata", '', '', SQL_CUR_USE_ODBC );
-//$conn = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./odbcdata", '', '', SQL_CUR_USE_DRIVER );
-//$conn = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./odbcdata", '', '', SQL_CUR_DEFAULT );
-
-if (!$conn) {
-        exit("Connection Failed: " . $conn);
+//$odbc_handle = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./testdata", '', '', SQL_CUR_USE_ODBC );
+$odbc_handle = odbc_connect("Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=./testdata", '', '', SQL_CUR_USE_DRIVER );
+if (!$odbc_handle) {
+        exit("Connection Failed: " . $odbc_handle);
 }
 
-//$sql = "SELECT  TOP 20 id, police_nr, baujahr FROM gv_gebaeude.csv ORDER BY id";
-//$sql = "SELECT * FROM gv_gebaeude.csv WHERE gemeinde = 'Aadorf *' ORDER BY id";
-$sql = "SELECT * FROM gv_list.csv";
-$rs = odbc_exec($conn, $sql);
-if (!$rs) {
+$sql = "
+SELECT 
+	SchaetzPosId AS id, 
+	SchaetzPosSchaetzungId AS Schaetzung_id, 
+	SchaetzPosArtDt AS art, 
+	SchaetzPosText AS [text], 
+	SchaetzPosVolumen AS volumen, 
+	SchaetzPosVersWert AS versicherungswert, 
+	SchaetzPosLaenge AS laenge, 
+	SchaetzPosBreite AS breite, 
+	SchaetzPosHoehe AS hoehe, 
+	SchaetzPosAbnutzProz AS abnutzung, 
+	SchaetzPosErfassWert AS erfasster_wert 
+FROM spo.csv 
+ORDER BY 
+		SchaetzPosSchaetzungId, 
+		SchaetzPosSortierung, 
+		SchaetzPosSortierung2; ";
+
+$recordset = odbc_exec($odbc_handle, $sql);
+if (!$recordset) {
         exit("Error in SQL");
 }
 
-echo "id; police_nr; baujahr;\n";
-
-while (odbc_fetch_row($rs)) {
-        $id=odbc_result($rs,"id");
-        $police_nr=odbc_result($rs,"police_nr");
-        $baujahr=odbc_result($rs,"baujahr");
-        echo "$id; $police_nr; $baujahr\n";
+$recordcount = 0;
+$row = array();
+while ($row = odbc_fetch_array ($recordset)) {
+	if ($recordcount == 0) {
+		foreach ($row as $key => $value) {
+			$header[] = $key;
+		}
+		echo strtoupper(implode(';', $header))."\n";
+	}
+	echo implode(';', $row)."\n";
+	$recordcount++;
 }
-odbc_close($conn);
-
+echo "\nResult row count: $recordcount\n";
+odbc_close($odbc_handle);
 ?>

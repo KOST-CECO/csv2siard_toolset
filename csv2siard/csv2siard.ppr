@@ -47,18 +47,10 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=odbcdata\schema.ini
-1=compile_csv2siard.bat
-2=odbcsql\odbcsql.prefs
+0=odbc_sample.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=odbcdata\schema.ini
-[odbcdata\schema.ini]
-TopLine=40
-Caret=29,63
-[compile_csv2siard.bat]
-TopLine=21
-Caret=69,50
-[odbcsql\odbcsql.prefs]
+Selected=odbc_sample.php
+[odbc_sample.php]
 TopLine=1
-Caret=1,17
+Caret=3,4
