@@ -48,9 +48,13 @@ csv2siard
 		metadata.xsd
 [Open project files]
 0=odbc_sample.php
+1=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=odbc_sample.php
+Selected=csv2siard.php
 [odbc_sample.php]
 TopLine=1
-Caret=3,4
+Caret=118,4
+[csv2siard.php]
+TopLine=48
+Caret=1,58
