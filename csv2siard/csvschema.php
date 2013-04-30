@@ -13,7 +13,6 @@ include 'c2snodbmodel.php';
 include 'c2schema.php';
 include 'c2stimedate.php';
 
-
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
 $prgname = strtolower(basename($argv[0], '.exe'));	// Programm Name
@@ -52,25 +51,19 @@ $argv[1] = ':NO_DB_MODEL';
 $argv[3] = 'dummy.siard';
 
 // MAIN ------------------------------------------------------------------------
-
-print_r($argv);
-
 setLogfile();
-
 checkUtils();
-
 readCommandLine();
-
 readPreferences();
-
 checkTMP();
-
 checkProgramOptions();
-
 printDisclaimer();
 
+$prg_option['NO_DB_MODEL'] = $prg_option['TMPDIR'].'/no_db_model.xml';
 createDBModel();
 log_echo("\n");
+
+unloadSchema();
 
 exit(0);
 ?>
