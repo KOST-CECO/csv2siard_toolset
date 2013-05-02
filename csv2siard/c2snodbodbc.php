@@ -21,6 +21,7 @@ global $prg_option, $wdir, $prgdir, $torque_schema, $static_torque_schema, $odbc
 	// Create encoding list
 	
 	// Create column list for each table
+	$column_arr = array();
 	$columns = odbc_columns($odbc_handle);
 	while ($row = odbc_fetch_array($columns)) {
 		if (array_key_exists ($row['TABLE_NAME'], $table_arr)) {

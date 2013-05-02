@@ -42,6 +42,7 @@
 			<xsl:value-of select="position()"/>
 			<xsl:text>=</xsl:text>
 			<xsl:value-of select="@name"/>
+			<xsl:text> </xsl:text>
 			<xsl:text/>
 			<xsl:choose>
 				<xsl:when test="@type='INTEGER'">

@@ -35,6 +35,7 @@ csv2siard
 		c2odbc.php
 		zip.php
 		odbcheck.php
+		csvschema.php
 	+datamodel
 		gv-model-v9.xml
 		gv-model-nf.xml
@@ -47,14 +48,18 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=odbc_sample.php
-1=csv2siard.php
+0=csvschema.php
+1=c2schema.php
+2=c2schema.php.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=csv2siard.php
-[odbc_sample.php]
+Selected=c2schema.php
+[csvschema.php]
+TopLine=37
+Caret=52,73
+[c2schema.php]
 TopLine=1
-Caret=118,4
-[csv2siard.php]
-TopLine=48
-Caret=1,58
+Caret=34,26
+[c2schema.php.php]
+TopLine=3086
+Caret=61,15

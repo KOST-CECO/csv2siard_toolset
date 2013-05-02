@@ -15,8 +15,8 @@ include 'c2snodbmodel.php';
 include 'c2schema.php';
 include 'c2stimedate.php';
 //include 'zip.php';
-//include 'c2odbc.php';
-//include 'c2snodbodbc.php';
+include 'c2odbc.php';
+include 'c2snodbodbc.php';
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -29,7 +29,7 @@ $torque_schema  = '_torque-4.0.xsd';			// torque.v4 XML database schema
 $siard_schema   = '_metadata-1.0.xsd';		// XML schema defines the structure of the metadata.xml in SIARD
 $siard2html     = '_metadata-1.0.xsl';		// XS transformation: SIARD metadata.xml to xhtml (no function)
 $torque2siard   = '_torque2siard.xsl';		// convert torque.v4 XML datamodel to SIARD XML metadata file
-$torque2schema  = '_torque2schema.xsl';		// convert torque.v4 XML datamodel to SIARD XML metadata file
+$torque2csvschema  = '_torque2csvschema.xsl';		// convert torque.v4 XML datamodel to SIARD XML metadata file
 //loadSchema(); unloadSchema();						// load or unload file based XML schema
 $prefs          = 'preferences.prefs';		// Preference file
 $schema         = 'schema.ini';						// ODBC schema.ini file
@@ -47,6 +47,7 @@ if (!($argc == 3 or $argc == 2)) {
 }
 
 // reorder arguments: [1] => :NO_DB_MODEL [2] => csv folder [3] => dummy.siard [4] => preference file
+if ($argc == 2) { $maninput = TRUE; }
 if ($argc == 3) {
 	$argc = 5; $argv[4] = $argv[2];
 }
@@ -65,23 +66,42 @@ readPreferences();
 checkTMP();
 checkProgramOptions();
 printDisclaimer();
+
+function getParam($prompt_text, $prompt_array) {
+	$stdin = fopen('php://stdin', 'r');
+	do { 
+		echo "$prompt_text (".implode(', ', $prompt_array)."): ";
+		$input = strtoupper(trim(fgets($stdin, 1024)));
+		if ($input == '') { $input = $prompt_array[0]; }
+	} while(!in_array($input, $prompt_array));
+	fclose($stdin);
+	return($input);
+}
+
+if ($maninput) {
+	$prg_option['FILE_MASK'] = '*.' . getParam("Specify file mask", array('CSV', 'TXT'));
+	$prg_option['CHARSET'] = getParam("Specify character set", array('US-ASCII', 'ASCII', 'OEM', 'ANSI', 'ISO-8859-1', 'UTF-8'));
+	$prg_option['DELIMITED'] = getParam("Specify column separator", array(';', '#', '$', 'Comma', 'Tab'));
+	$prg_option['COLUMN_NAMES'] = ( getParam("Field names in the first row", array('YES', 'NO')) == 'YES') ? true : false;
+}
+print_r($prg_option);
 createDBModel();
 log_echo("\n");
 
 //convert torque.v4 XML datamodel to ODBC schema.ini file
-$static_torque2schema = file_get_contents('_torque2csvschema.xsl');
+//$static_torque2csvschema = file_get_contents('_torque2csvschema.xsl');
 $no_db_model = file_get_contents($prg_option['NO_DB_MODEL']);
 
 $xh = xslt_create();
 $parameters = array (
-	'file_mask'     => str_replace('*', '', $prg_option['FILE_MASK']),
+	'file_mask'     => str_replace('.sql', '', (str_replace('?', '', (str_replace('*', '', $prg_option['FILE_MASK']))))),
 	'column_names'  => ($prg_option['COLUMN_NAMES']) ? 'True' : 'False',
 	'delimited'     => $prg_option['DELIMITED'],
 	'charset'       => ($prg_option['CHARSET'] == 'OEM') ? 'OEM' : 'ANSI'
 );
 $arguments = array(
 	'/_xml' => $no_db_model,
-	'/_xsl' => $static_torque2schema
+	'/_xsl' => $static_torque2csvschema
 );
 $result = xslt_process($xh, 'arg:/_xml', 'arg:/_xsl', NULL, $arguments, $parameters);
 xslt_free($xh);
@@ -89,7 +109,6 @@ if (!file_put_contents($prg_option['CSV_FOLDER']."/$schema", $result)) {
 	log_echo("Could not write schema.ini file $prg_option[CSV_FOLDER]/$schema\n"); $prg_option['ERR'] = 8; return;
 }
 log_echo("New CSV schema.ini written: $prg_option[CSV_FOLDER]/$schema\n");
-
 
 exit(0);
 ?>
