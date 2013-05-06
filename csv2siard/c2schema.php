@@ -3184,9 +3184,8 @@ $static_torque2csvschema = '<?xml version="1.0" encoding="UTF-8"?>
 		<xsl:text>ColNameHeader=</xsl:text>
 		<xsl:value-of select="$column_names"/>
 		<xsl:value-of select="$newline"/>
-		<xsl:text>Format=Delimited(</xsl:text>
+		<xsl:text>Format=</xsl:text>
 		<xsl:value-of select="$delimited"/>
-		<xsl:text>)</xsl:text>
 		<xsl:value-of select="$newline"/>
 		<xsl:text>MaxScanRows=25</xsl:text>
 		<xsl:value-of select="$newline"/>

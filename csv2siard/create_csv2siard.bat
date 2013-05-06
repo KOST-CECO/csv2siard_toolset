@@ -30,6 +30,7 @@ MKDIR %RUNTIME%\odbcsql
 
 COPY csv2siard.exe %RUNTIME%\bin
 COPY odbcheck.exe %RUNTIME%\bin
+COPY csvschema.exe %RUNTIME%\bin
 
 COPY xmllint.exe %RUNTIME%\bin
 COPY iconv.dll %RUNTIME%\bin

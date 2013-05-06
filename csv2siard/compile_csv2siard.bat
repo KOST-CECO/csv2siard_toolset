@@ -14,14 +14,16 @@ rm.exe -f %TMP%\* 2> null
 GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
 cat c2sconfig.php c2screate.php c2sconvert.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php zip.php c2odbc.php c2snodbodbc.php out.php >main.php
 BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
-REM GREP -v "dl(" csv2siard.php > main.php
-REM CMD.EXE /C "BAMCOMPILE.EXE csv2siard.bcp"
 
 rm.exe -f %TMP%\* 2> null
 GREP -v "dl(" odbcheck.php | GREP -v "include " > out.php
 cat c2sconfig.php c2sfunction.php c2sxml.php c2odbc.php out.php >main.php
 BAMCOMPILE.EXE -d -e:php_xslt.dll main.php odbcheck.exe
-REM CMD.EXE /C "BAMCOMPILE.EXE odbcheck.bcp"
+
+rm.exe -f %TMP%\* 2> null
+GREP -v "dl(" csvschema.php | GREP -v "include " > out.php
+cat c2sconfig.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php c2odbc.php c2snodbodbc.php out.php >main.php
+BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csvschema.exe
 
 rm.exe -f out.php main.php null
 
@@ -35,7 +37,10 @@ CALL odbcheck.exe
 @IF %ERRORLEVEL% GTR 1 (
 	@EXIT /B
 )
-
+CALL csvschema.exe
+@IF %ERRORLEVEL% GTR 1 (
+	@EXIT /B
+)
 REM test function --------------------------------------------------------------
 @ECHO.
 CALL odbcheck.exe odbcsql\anl.sql odbcsql\odbcsql.prefs

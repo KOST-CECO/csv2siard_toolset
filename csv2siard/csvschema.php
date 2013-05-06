@@ -58,15 +58,7 @@ $argv[2] = $argv[1];
 $argv[1] = ':NO_DB_MODEL='.sys_get_temp_dir().'/no_db_model.xml';
 $argv[3] = 'dummy.siard';
 
-// MAIN ------------------------------------------------------------------------
-setLogfile();
-checkUtils();
-readCommandLine();
-readPreferences();
-checkTMP();
-checkProgramOptions();
-printDisclaimer();
-
+// functions -------------------------------------------------------------------
 function getParam($prompt_text, $prompt_array) {
 	$stdin = fopen('php://stdin', 'r');
 	do { 
@@ -77,14 +69,24 @@ function getParam($prompt_text, $prompt_array) {
 	fclose($stdin);
 	return($input);
 }
+// MAIN ------------------------------------------------------------------------
+setLogfile();
+checkUtils();
+readCommandLine();
+readPreferences();
+checkTMP();
+checkProgramOptions();
+printDisclaimer();
 
+// no prefs file -> manual input
 if ($maninput) {
 	$prg_option['FILE_MASK'] = '*.' . getParam("Specify file mask", array('CSV', 'TXT'));
 	$prg_option['CHARSET'] = getParam("Specify character set", array('US-ASCII', 'ASCII', 'OEM', 'ANSI', 'ISO-8859-1', 'UTF-8'));
-	$prg_option['DELIMITED'] = getParam("Specify column separator", array(';', '#', '$', 'Comma', 'Tab'));
+	$prg_option['DELIMITED'] = getParam("Specify column separator", array(';', '#', '$', 'COMMA', 'TAB'));
+	$prg_option['DELIMITED'] = ($prg_option['DELIMITED'] == 'COMMA') ? ","  : $prg_option['DELIMITED'];
+	$prg_option['DELIMITED'] = ($prg_option['DELIMITED'] == 'TAB')   ? "\t" : $prg_option['DELIMITED'];
 	$prg_option['COLUMN_NAMES'] = ( getParam("Field names in the first row", array('YES', 'NO')) == 'YES') ? true : false;
 }
-print_r($prg_option);
 createDBModel();
 log_echo("\n");
 
@@ -92,11 +94,19 @@ log_echo("\n");
 //$static_torque2csvschema = file_get_contents('_torque2csvschema.xsl');
 $no_db_model = file_get_contents($prg_option['NO_DB_MODEL']);
 
+switch ($prg_option['DELIMITED']) {
+	case ",":
+		$format = "CSVDelimited"; break;
+	case "\t":
+		$format = "TabDelimited"; break;
+	default:
+		$format = "Delimited($prg_option[DELIMITED])"; break;
+}
 $xh = xslt_create();
 $parameters = array (
 	'file_mask'     => str_replace('.sql', '', (str_replace('?', '', (str_replace('*', '', $prg_option['FILE_MASK']))))),
 	'column_names'  => ($prg_option['COLUMN_NAMES']) ? 'True' : 'False',
-	'delimited'     => $prg_option['DELIMITED'],
+	'delimited'     => $format,
 	'charset'       => ($prg_option['CHARSET'] == 'OEM') ? 'OEM' : 'ANSI'
 );
 $arguments = array(
