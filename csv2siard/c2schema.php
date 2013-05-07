@@ -3205,23 +3205,28 @@ $static_torque2csvschema = '<?xml version="1.0" encoding="UTF-8"?>
 					<xsl:text>Integer</xsl:text>
 				</xsl:when>
 				<xsl:when test="@type=\'DECIMAL\'">
-					<xsl:text>Float</xsl:text>
+					<xsl:text>Char width 255</xsl:text>
 				</xsl:when>
 				<xsl:when test="@type=\'FLOAT\'">
 					<xsl:text>Float</xsl:text>
 				</xsl:when>
 				<xsl:when test="@type=\'DATE\'">
-					<xsl:text>Datetime</xsl:text>
+					<xsl:text>Char width 255</xsl:text>
 				</xsl:when>
 				<xsl:when test="@type=\'VARCHAR\'">
 					<xsl:text>Char </xsl:text>
-					<xsl:if test="@size">
-						<xsl:text>width </xsl:text>
-						<xsl:value-of select="@size"/>
-					</xsl:if>
+					<xsl:choose>
+						<xsl:when test="@size">
+							<xsl:text>width </xsl:text>
+							<xsl:value-of select="@size"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:text>Char width 255</xsl:text>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>Char</xsl:text>
+					<xsl:text>Char width 255</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:value-of select="$newline"/>
