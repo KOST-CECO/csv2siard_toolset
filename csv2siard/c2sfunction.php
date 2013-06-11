@@ -3,6 +3,18 @@
 error_reporting(E_ALL);
 
 // -----------------------------------------------------------------------------
+// Reads 3 Bytes from file handle from the begin of the file to check for the BOM
+// if no BOM is found the file is reset to the begin of the file
+function check4BOM ($handle) {
+	$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+	rewind($handle);
+	$str = fread ($handle, 3);
+
+	if (0 != strncmp($str, $bom, 3)) {
+		rewind($handle);
+	}
+}
+// -----------------------------------------------------------------------------
 // writes echo to logfile if specified
 // newline is replaced bei carriage return and newline (0x0d0a)
 function log_echo($logtext) {

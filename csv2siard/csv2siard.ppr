@@ -17,7 +17,6 @@ csv2siard
 		compile_csv2siard.bat
 		create_csv2siard.bat
 		preferences.prefs
-		run.bat
 		csv2siard.bcp
 		odbcheck.bcp
 		php.ini
@@ -48,5 +47,30 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
+0=Neu1.txt
+1=c2screate.php
+2=test.php
+3=test.csv
+4=c2sfunction.php
+5=csv2siard.php
 [Selected Project Files]
 Main=csv2siard.php
+Selected=test.php
+[Neu1.txt]
+TopLine=1
+Caret=1,1
+[c2screate.php]
+TopLine=121
+Caret=24,139
+[test.php]
+TopLine=1
+Caret=27,7
+[test.csv]
+TopLine=1
+Caret=1,4
+[c2sfunction.php]
+TopLine=1
+Caret=18,10
+[csv2siard.php]
+TopLine=5
+Caret=27,34

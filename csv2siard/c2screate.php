@@ -121,6 +121,12 @@ global $prg_option, $prgdir;
 	if(!$csvhandle) {
 		log_echo("Could not read CSV file $csvfile\n"); $prg_option['ERR'] = 2; return;
 	}
+	
+	// in case of UTF-8 remove BOM
+	if ($prg_option['CHARSET'] == 'UTF-8') {
+		check4BOM($csvhandle);
+	}
+	
 	// open SIARD table XML file for writing
 	$tablefolder = getTableOption($table, 'folder');
 	$siardfile = "$prg_option[SIARD_DIR]/content/$prg_option[SIARD_SCHEMA]/$tablefolder/$tablefolder.xml";
