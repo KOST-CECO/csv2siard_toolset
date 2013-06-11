@@ -61,6 +61,7 @@ $version = '1.8.5';	// look for 'preferences.prefs' first in CWD then Install DI
 $version = '1.8.6';	// Option :LOG_FILE=fname for GUI and :NO_DB_MODEL=fname
 $version = '1.8.7';	// ODBC Fehler mit 'à' am Feldende korrigiert
 $version = '1.8.8';	// program csvschema.exe added
+$version = '1.8.9';	// BOM in case of UTF-8 removed
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis

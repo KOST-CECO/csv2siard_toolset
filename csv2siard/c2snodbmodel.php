@@ -63,6 +63,12 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 		if(!$csvhandle) {
 			log_echo("Could not read CSV file $file\n"); exit(2);
 		}
+		
+		// in case of UTF-8 remove BOM
+		if ($prg_option['CHARSET'] == 'UTF-8') {
+			check4BOM($csvhandle);
+		}
+		
 		$rowcount = 0;
 		$colarr = array();
 		while (($buf = fgetcsv($csvhandle, $prg_option['MAX_ROWSIZE'], $prg_option['DELIMITED'], $prg_option['QUOTE'])) !== false) {
