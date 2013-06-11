@@ -1,19 +1,13 @@
 # Default preferences
 # FILE_MASK: wild card is replaced with table name
-# 
+#
+FILE_MASK=*.csv
+CHARSET=ISO-8859-1
+#CHARSET=UTF-8
 DELIMITED=;
 QUOTE="
 COLUMN_NAMES=TRUE
-# 
-CHARSET=ISO-8859-1
-# 
-FILE_MASK=*.sql
 CHECK_COLUMN=TRUE
 #
-# ODBC Settings
-#ODBC_DSN=northwind
-#ODBC_DSN=Driver={Microsoft Excel Driver (*.xls)};Dbq=demo.xls
-#ODBC_DSN=Driver={Microsoft Access Driver (*.mdb)};Dbq=demo.mdb
-ODBC_DSN=Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=.\odbcdata
-# ODBC_DSN=Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=.\odbcdata
-ODBC_USER=Admin
+#TMPDIR=c:\tmp
+#VERBOSITY=TRUE

@@ -47,9 +47,9 @@ if (!($argc == 3 or $argc == 2)) {
 }
 
 // reorder arguments: [1] => :NO_DB_MODEL [2] => csv folder [3] => dummy.siard [4] => preference file
-if ($argc == 2) { $maninput = TRUE; }
+if ($argc == 2) { $maninput = true; }
 if ($argc == 3) {
-	$argc = 5; $argv[4] = $argv[2];
+	$argc = 5; $argv[4] = $argv[2]; $maninput = false;
 }
 else {
 	$argc = 5; $argv[4] = $prefs;
@@ -104,7 +104,7 @@ switch ($prg_option['DELIMITED']) {
 }
 $xh = xslt_create();
 $parameters = array (
-	'file_mask'     => str_replace('.sql', '', (str_replace('?', '', (str_replace('*', '', $prg_option['FILE_MASK']))))),
+	'file_mask'     => strtolower(str_replace('.sql', '', (str_replace('?', '', (str_replace('*', '', $prg_option['FILE_MASK'])))))),
 	'column_names'  => ($prg_option['COLUMN_NAMES']) ? 'True' : 'False',
 	'delimited'     => $format,
 	'charset'       => ($prg_option['CHARSET'] == 'OEM') ? 'OEM' : 'ANSI'
