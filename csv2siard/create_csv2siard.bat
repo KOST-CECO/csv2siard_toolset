@@ -69,7 +69,7 @@ COPY odbcsql\*      %RUNTIME%\odbcsql
 
 COPY demo.*     %RUNTIME%
 
-COPY ..\10_GUI\c2sGUI.exe      %RUNTIME%
+COPY P:\KOST\Tools\simpleGUI\_c2sGUI\c2sGUI.exe      %RUNTIME%
 
 REM test -----------------------------------------------------------------------
 CD %RUNTIME%
