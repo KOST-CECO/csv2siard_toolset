@@ -48,7 +48,7 @@ $static_torque_schema = '<?xml version="1.0" encoding="UTF-8"?>
 -->
 <!--
     Torque XML database schema DTD
-    $Id$
+    $Id: c2schema.php 190 2013-06-11 13:08:30Z U80789367 $
 -->
 <xs:schema targetNamespace="http://db.apache.org/torque/4.0/templates/database" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://db.apache.org/torque/4.0/templates/database" elementFormDefault="qualified" version="4.0">
 	<xs:annotation>
@@ -893,7 +893,7 @@ SQL Standard non-delimited identifiers.
 $static_siard_schema = '<?xml version="1.0" encoding="utf-8" ?>
 <!-- $Workfile: metadata.xsd $	*********************************** -->
 <!-- Metadata schema for SIARD 1.0                                  -->
-<!-- Version    : $Id$ -->
+<!-- Version    : $Id: c2schema.php 190 2013-06-11 13:08:30Z U80789367 $ -->
 <!-- Application: SIARD Suite                                       -->
 <!--    Software-Independent Archival of Relational Databases       -->
 <!-- Platform   : XML 1.0, XML Schema 2001                          -->
@@ -1538,7 +1538,7 @@ $static_siard2html = '<?xml version="1.0" encoding="iso-8859-1"?>
 <!--
 === SiardMetaToXhtml.xsl ===============================================
 Main script.
-Version     : $Id$
+Version     : $Id: c2schema.php 190 2013-06-11 13:08:30Z U80789367 $
 Application : Swiss Federal Archive SIARD v2.x
 Description : XS transformation to transform metadata xml to xhtml.
 Platform    : Xsl transformer. Implemented and tested with Xalan.

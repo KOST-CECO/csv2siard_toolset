@@ -1,0 +1,12 @@
+# Default preferences
+# FILE_MASK: wild card is replaced with table name
+#
+FILE_MASK=*.csv
+CHARSET=ISO-8859-1
+DELIMITED=|
+QUOTE="
+COLUMN_NAMES=FALSE
+CHECK_COLUMN=TRUE
+#
+#TMPDIR=c:\tmp
+#VERBOSITY=TRUE

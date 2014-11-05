@@ -47,14 +47,5 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=csv2siard.php
-1=create_csv2siard.bat
 [Selected Project Files]
 Main=csv2siard.php
-Selected=create_csv2siard.bat
-[csv2siard.php]
-TopLine=35
-Caret=57,67
-[create_csv2siard.bat]
-TopLine=52
-Caret=37,72
