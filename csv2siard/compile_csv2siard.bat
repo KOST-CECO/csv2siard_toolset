@@ -60,7 +60,7 @@ CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | tail -n 2
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
+@rm.exe -f *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 @IF %ERRORLEVEL% NEQ 0 (
 	PAUSE
@@ -70,38 +70,38 @@ unzip -t test.siard
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard log.txt
+@rm.exe -f *.siard log.txt
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard :LOG_FILE=log.txt
 pr.exe -n -l 1 log.txt
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
+@rm.exe -f *.siard
 CALL csv2siard.exe :NO_DB_MODEL csvdata test.siard
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
+@rm.exe -f *.siard
 CALL csv2siard.exe :NO_DB_MODEL :ODBC test.siard odbcsql\odbcsql.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
-CALL csv2siard.exe datatype-model.xml datatype test.siard datatype\datatype.prefs
+@rm.exe -f *.siard
+CALL csv2siard.exe datatype\datatype-model.xml datatype test.siard datatype\datatype.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
+@rm.exe -f *.siard
 CALL csv2siard.exe gv-model-nf.xml odbcsql test.siard odbcsql\odbcsql.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
-CALL csv2siard.exe datatype\utf8_model.xml :ODBC test.siard datatype\datatype_utf8.prefs
+@rm.exe -f *.siard
+CALL csv2siard.exe datatype\datatype-utf8-odbc.xml :ODBC test.siard datatype\datatype_utf8.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f /Q *.siard
+@rm.exe -f *.siard
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 
 @ECHO OFF
@@ -114,3 +114,7 @@ java.exe -Xmx128m -jar siard-val.jar test.siard C:\TEMP
 IF %ERRORLEVEL% NEQ  0 (
 	notepad.exe  C:\TEMP\test.siard.validationlog.log
 )
+@ECHO --------------------------------------------------------------------------
+@rm.exe -f *.siard
+@rm.exe -f no_db_model.xml
+@rm.exe -f log.txt

@@ -7,4 +7,4 @@ SET NSIS=Q:\KOST\Software\NSIS
 REM Make c2sGUI.exe
 CALL %NSIS%\makensis.exe c2sGUI.nsi
 
-CALL c2sGUI.exe
+COPY c2sGUI.exe ..\csv2siard\c2sGUI.exe
