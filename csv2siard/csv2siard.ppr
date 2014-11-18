@@ -15,6 +15,7 @@ FileFormat=0
 csv2siard
 	+batch
 		compile_csv2siard.bat
+		compile_it.bat
 		make_csv2siard.bat
 		preferences.prefs
 		csv2siard.bcp
@@ -48,5 +49,10 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
+0=Neu1.bat
 [Selected Project Files]
 Main=csv2siard.php
+Selected=Neu1.bat
+[Neu1.bat]
+TopLine=85
+Caret=53,110

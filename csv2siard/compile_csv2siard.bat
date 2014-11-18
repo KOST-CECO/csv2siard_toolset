@@ -1,34 +1,29 @@
 @ECHO OFF
 SETLOCAL
-REM SET TMP=E:\bamcompile
-SET TEMP=%TMP%
 
 REM settings -------------------------------------------------------------------
 SET UNIX_HOME=C:\Software\PCUnixUtils
 SET PATH=%UNIX_HOME%;%PATH%
+REM SET TMP=C:\TEMP
 
-REM compile --------------------------------------------------------------------
-rm.exe -f csv2siard.exe odbcheck.exe
+REM remove bamcompile tmp files ------------------------------------------------
+DEL /F /Q %TMP%\*.tmp 2> null
 
-rm.exe -f %TMP%\* 2> null
-rm.exe -f out.php main.php null
-GREP -v "dl(" csv2siard.php | GREP -v "include " > out.php
-cat c2sconfig.php c2screate.php c2sconvert.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php zip.php c2odbc.php c2snodbodbc.php out.php >main.php
-BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csv2siard.exe
+REM get new temp dir -----------------------------------------------------------
+:GETTEMPNAME
+SET TMPFILE=%TMP%\tmpdir-%RANDOM%-%TIME:~6,5%
+if exist "%TMPFILE%" GOTO :GETTEMPNAME 
+MKDIR "%TMPFILE%"
 
-rm.exe -f %TMP%\* 2> null
-rm.exe -f out.php main.php null
-GREP -v "dl(" odbcheck.php | GREP -v "include " > out.php
-cat c2sconfig.php c2sfunction.php c2sxml.php c2odbc.php out.php >main.php
-BAMCOMPILE.EXE -d -e:php_xslt.dll main.php odbcheck.exe
+REM bamcompile on local disk-------------------------------------------------------
+DEL /F csv2siard.exe odbcheck.exe
+COPY *.php "%TMPFILE%"
+COPY php_xslt.dll "%TMPFILE%"
 
-rm.exe -f %TMP%\* 2> null
-rm.exe -f out.php main.php null
-GREP -v "dl(" csvschema.php | GREP -v "include " > out.php
-cat c2sconfig.php c2sfunction.php c2sxml.php c2snodbmodel.php c2schema.php c2stimedate.php c2odbc.php c2snodbodbc.php out.php >main.php
-BAMCOMPILE.EXE -d -e:php_xslt.dll main.php csvschema.exe
+CALL compile_it.bat "%TMPFILE%"
 
-rm.exe -f out.php main.php null
+COPY "%TMPFILE%\*.exe" .
+RMDIR /S /Q "%TMPFILE%"
 
 REM check syntax ---------------------------------------------------------------
 @ECHO ON
@@ -60,7 +55,7 @@ CALL odbcheck.exe "SELECT * FROM gv_list.csv;" odbcsql\odbcsql.prefs | tail -n 2
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe table2-model.xml csvdata test.siard
 @IF %ERRORLEVEL% NEQ 0 (
 	PAUSE
@@ -70,38 +65,38 @@ unzip -t test.siard
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard log.txt
+@DEL /F *.siard log.txt
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard :LOG_FILE=log.txt
 pr.exe -n -l 1 log.txt
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe :NO_DB_MODEL csvdata test.siard
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe :NO_DB_MODEL :ODBC test.siard odbcsql\odbcsql.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe datatype\datatype-model.xml datatype test.siard datatype\datatype.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe gv-model-nf.xml odbcsql test.siard odbcsql\odbcsql.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe datatype\datatype-utf8-odbc.xml :ODBC test.siard datatype\datatype_utf8.prefs
 @ECHO.
 
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
+@DEL /F *.siard
 CALL csv2siard.exe gv-model-v9.xml csvdata test.siard
 
 @ECHO OFF
@@ -115,6 +110,6 @@ IF %ERRORLEVEL% NEQ  0 (
 	notepad.exe  C:\TEMP\test.siard.validationlog.log
 )
 @ECHO --------------------------------------------------------------------------
-@rm.exe -f *.siard
-@rm.exe -f no_db_model.xml
-@rm.exe -f log.txt
+@DEL /F *.siard
+@DEL /F no_db_model.xml
+@DEL /F log.txt
