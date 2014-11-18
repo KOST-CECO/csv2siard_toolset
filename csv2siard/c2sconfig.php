@@ -101,6 +101,7 @@ global $argc, $argv, $wdir, $prgdir, $prefs, $prg_option;
 	$prg_option['CHARSET'] = 'ISO-8859-1';		// default character-set (choose: ASCII, OEM, ANSI, ISO-8859-1 and UTF-8)
 	$prg_option['FILE_MASK'] = '*.dat';				// Wild card is replaced with table name or converted to tablename
 	$prg_option['CHECK_COLUMN'] = true;				// Check column count, not applicable with MS-Exel CSV
+	$prg_option['CHECK_MIMETYPE'] = true;			// Check for MIME-Type 'text/plain'
 	$prg_option['CHECK_DATABASE_INTEGRITY'] = false;	// Not implemented yet
 	$prg_option['TMPDIR'] = sys_get_temp_dir();// default temp dir
 	$prg_option['PI_COUNT'] = 100;						// progress indicator per line processed

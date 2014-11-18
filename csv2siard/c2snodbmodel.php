@@ -18,7 +18,13 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 				if ($name != '') {
 					// detect mime-type with GNU file-5.03
 					$csvfile = $prg_option['CSV_FOLDER'].'/'.$file;
-					$mime_type = detectMimeType($csvfile, 'TYPE');
+					if ($prg_option['CHECK_MIMETYPE']) {
+						$mime_type = detectMimeType($csvfile, 'TYPE');
+					} 
+					// Ignore MIME-Type detection
+					else {
+						$mime_type = 'text/plain';
+					}
 					if ($mime_type == 'text/plain' ) {
 						// check DBMS name conformity
 						if (testDBMSNaming($name) === true){

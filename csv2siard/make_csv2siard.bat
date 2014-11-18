@@ -87,7 +87,7 @@ DEL %TEMP%\%RUNTIME%\no_db_model.xml
 @ECHO OFF
 REM zip ------------------------------------------------------------------------
 %UNIX_HOME%\7z.exe a -mx9 %TEMP%\%RUNTIME%.zip *
-COPY %TEMP%\%RUNTIME%.zip ..\..\..\04_Publikation\%TEMP%\%RUNTIME%.zip
+COPY %TEMP%\%RUNTIME%.zip %WDIR%\..\..\04_Publikation\%RUNTIME%.zip
 DEL /Q %TEMP%\%RUNTIME%.zip
 CD ..
 RMDIR /S /Q C:\Software\csv2siard
