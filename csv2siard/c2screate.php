@@ -107,7 +107,7 @@ global $prg_option, $prgdir;
 		log_echo("CSV table '$tablename' not found\n"); $prg_option['ERR'] = 2; return;
 	}
 
-	setTableOption($table, 'localfile', xml_encode($csvfile));
+	setTableOption($table, 'localfile', xml_encode(utf8_encode($csvfile)));
 
 	if(!is_file($csvfile)) {
 		log_echo("CSV file '$csvfile' not found\n"); $prg_option['ERR'] = 2; return;
@@ -246,6 +246,7 @@ global $_SERVER, $prgdir, $prgname, $version, $prg_option, $torque2siard, $stati
 		'databaseUser'        => $prg_option['SIARD_USER'],
 		'databaseSchema'      => $prg_option['SIARD_SCHEMA']
 );
+
 	$arguments = array(
 		'/_xml' => $xmldata,
 		'/_xsl' => $static_torque2siard

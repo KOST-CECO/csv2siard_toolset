@@ -63,6 +63,7 @@ $version = '1.8.7';	// ODBC Fehler mit 'à' am Feldende korrigiert
 $version = '1.8.8';	// program csvschema.exe added
 $version = '1.8.9';	// BOM in case of UTF-8 removed
 $version = '1.8.9.5';	// Check for MIME-Type 'text/plain' tue/false
+$version = '1.8.9.6';	// UTF-8 encoding of DB key="localfile"
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
