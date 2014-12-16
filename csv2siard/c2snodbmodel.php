@@ -33,6 +33,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 						else {
 							$fl = ansi2ascii($file);
 							log_echo("CSV file name $fl does not conform to SQL naming convention \n");
+							$prg_option['ERR'] = 64;
 						}
 					}
 					else {
@@ -96,6 +97,7 @@ $order_of_datatype = array ('INTEGER' => 0, 'DECIMAL' => 1, 'FLOAT' => 2, 'DATE'
 					$col['name'] = ($prg_option['COLUMN_NAMES']) ? trim($b) : "column$colcnt";
 					if (testDBMSNaming($col['name']) === false){
 						log_echo("\nColumn ". ($colcnt+1) ." does not conform to SQL naming convention \n");
+						$prg_option['ERR'] = 64;
 						$orgname = ($encoding_arr[$name] == 'UTF-8') ? utf8_decode($col['name']) : $col['name'];
 						$col['description'] = "Original column name: '$orgname'";
 						$col['name'] = "column$colcnt";
@@ -179,9 +181,13 @@ global $prg_option, $wdir, $torque_schema, $static_torque_schema;
 	if (!file_put_contents("$dbmodel", utf8_encode($xmldata))) {
 		log_echo("Could not write database description $dbmodel\n"); $prg_option['ERR'] = 8; return;
 	}
-
-	$prg_option['DB_MODEL'] = "$dbmodel";
 	
+	if ($prg_option['ERR'] != 0) {
+		log_echo("aborted\n"); exit($prg_option['ERR']);
+	}
+	
+	$prg_option['DB_MODEL'] = "$dbmodel";
+
 	// validate database description no_db_model.xml according to torque v4.0
 	file_put_contents("$prg_option[TMPDIR]/$torque_schema", $static_torque_schema);
 	if (!validateXML("$prg_option[TMPDIR]/$torque_schema", $dbmodel, "'$dbmodel' is not a valid database schema according to Torque v4.0")) {

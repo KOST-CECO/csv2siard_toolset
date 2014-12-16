@@ -64,6 +64,7 @@ $version = '1.8.8';	// program csvschema.exe added
 $version = '1.8.9';	// BOM in case of UTF-8 removed
 $version = '1.8.9.5';	// Check for MIME-Type 'text/plain' tue/false
 $version = '1.8.9.6';	// UTF-8 encoding of DB key="localfile"
+$version = '1.8.9.7';	// file name does not conform to SQL naming convention -> abort
 
 // global settings -------------------------------------------------------------
 $wdir = getcwd();																		// Arbeitsverzeichnis
@@ -97,7 +98,9 @@ $logfile = false;
 //ERR 32: Column in database model is missing or not confirm with CSV file
 //ERR 32: Column type convertion failed
 //ERR 32: Required restriction violated
+//ERR 64: file name does not conform to SQL naming convention
 //ERR 64: SIARD XML Schema Validation failed
+
 
 $usage ="
        Usage :: $prgname.exe database csvpath siardfile [prefs]
