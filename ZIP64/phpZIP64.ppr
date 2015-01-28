@@ -21,18 +21,5 @@ phpZIP64
 		crc32.php
 		crc32_test.php
 [Open project files]
-0=Neu1.txt
-1=zip.php
-2=run.bat
 [Selected Project Files]
 Main=zip.php
-Selected=run.bat
-[Neu1.txt]
-TopLine=1
-Caret=1,1
-[zip.php]
-TopLine=230
-Caret=1,1
-[run.bat]
-TopLine=1
-Caret=8,5
