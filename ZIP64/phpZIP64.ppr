@@ -20,15 +20,12 @@ phpZIP64
 		file_zip.php
 		crc32.php
 		crc32_test.php
+		filesize_test.php
 [Open project files]
 0=Neu1.txt
-1=run_ziptest.bat
 [Selected Project Files]
 Main=zip.php
-Selected=run_ziptest.bat
+Selected=Neu1.txt
 [Neu1.txt]
 TopLine=1
 Caret=1,1
-[run_ziptest.bat]
-TopLine=24
-Caret=28,24

@@ -5,7 +5,20 @@ include 'zip.php';
 
 // MAIN ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Global
-$_prgdir = dirname(realpath($argv[0]));				//Program directory
+$prgdir = dirname(realpath($argv[0]));				//Program directory
+$prg_option['VERBOSITY'] = true;					// Programm optionen
+// -----------------------------------------------------------------------------
+// writes echo to logfile if specified
+// newline is replaced bei carriage return and newline (0x0d0a)
+function log_echo($logtext) {
+global $logfile, $prg_option;
+	echo $logtext;
+	if ($logfile) {
+		$logtext = str_replace ( "\r\n" , "\n"  ,$logtext );
+		$logtext = str_replace ( "\n" , "\r\n"  ,$logtext );
+		fwrite($logfile, $logtext);
+	}
+}
 // -----------------------------------------------------------------------------
 function walkDir($name) {
 global $ZIP;

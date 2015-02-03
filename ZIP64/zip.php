@@ -67,9 +67,9 @@ function packDate($ts) {
 
 // crc32 file checker using binary crc32sum.exe
 function crc32_exe($filename) {
-	global $_prgdir;
-	echo '>crc32 ';
-	$cmdline = 'CALL "'.$_prgdir.'/crc32sum.exe" "'.$filename.'" ';
+global $prgdir, $prg_option;
+	log_echo(($prg_option['VERBOSITY']) ? '>crc32 ' : chr(46));
+	$cmdline = 'CALL "'.$prgdir.'/crc32sum.exe" "'.$filename.'" ';
 	exec($cmdline, $result, $retval);
 //print_r($result);
 	list($crc32) = split(' ', $result[0]);
@@ -98,8 +98,6 @@ function crc32_exe($filename) {
      $zip->addZipFile("test");        // add folder test to 123.zip
 *    $zip->closeZipFile();            // finalize and close 123.zip
 */
-
-
 // STATIC class variables (not supportet in PHP 4)
 $entries_size = array();	// Filename and size of Central_file_header
 $payload_size = array();	// Filename and size of Local_file_header + actual file size
@@ -119,15 +117,16 @@ class ZipFile {
 	}
 	
 	function addZipFile($file) {
+	global $prg_option;
 		if (is_dir($file)) {
 			// Write folder to ZIP file
-			echo "\n  addFolder: $file/ ";
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file/ " : '');
 			$fn = new DirectoryEntry("$file/");
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader());
 		} 
 		else {
 			// Write file to ZIP file
-			echo "\n  addFile:   $file ";
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file/ " : '');
 			$fn = new DirectoryEntry($file);
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader());
 			$this->writePayload($file);
@@ -146,7 +145,8 @@ class ZipFile {
 	
 	// Read file from disk and append on ZIP file
 	function writePayload($file) {
-		echo '>stuff ';
+	global $prg_option;
+		log_echo(($prg_option['VERBOSITY']) ? '>stuff ' : chr(46));
 		$fh = fopen($file, 'rb');
 		$buffer = '';
 		while (!feof($fh)) {

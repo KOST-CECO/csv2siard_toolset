@@ -22,15 +22,7 @@ $testfile = str_replace('\\', '/', $argv[1]);
 $testfile = str_replace('//', '/', $testfile);
 
 // -----------------------------------------------------------------------------
-echo date($_timeformat, time())."\n"; $s_time = time();
-
-$pruefsumme = crc32(file_get_contents($testfile));
-
-$e_time = time() - $s_time;
-printf("%x", $pruefsumme); printf("\truntime(s): %d\n", $e_time);
-echo date($_timeformat, time())."\n\n";
-
-// -----------------------------------------------------------------------------
+echo "crc32sum.exe\n";
 echo date($_timeformat, time())."\n"; $s_time = time();
 
 $cmdline = 'CALL "'.$prgdir.'/crc32sum.exe" "'.$testfile.'" ';
@@ -42,9 +34,20 @@ printf("%s", $pruefsumme); printf("\truntime(s): %d\n", $e_time);
 echo date($_timeformat, time())."\n\n";
 
 // -----------------------------------------------------------------------------
+echo "php crc32_file()\n";
 echo date($_timeformat, time())."\n"; $s_time = time();
 
 $pruefsumme = crc32_file($testfile);
+
+$e_time = time() - $s_time;
+printf("%x", $pruefsumme); printf("\truntime(s): %d\n", $e_time);
+echo date($_timeformat, time())."\n\n";
+
+// -----------------------------------------------------------------------------
+echo "php crc32()\n";
+echo date($_timeformat, time())."\n"; $s_time = time();
+
+$pruefsumme = crc32(file_get_contents($testfile));
 
 $e_time = time() - $s_time;
 printf("%x", $pruefsumme); printf("\truntime(s): %d\n", $e_time);
