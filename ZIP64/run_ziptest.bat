@@ -21,16 +21,17 @@ DEL shortNamePath.tmp
 SET TESTZIP_SHORTNAME=%SHORTNAME%
 
 REM ----------------------------------------------------------------------------
-SET ZIP_HOME=P:\KOST\Dokumentation\11 Technotes\ZIP\CLI_progs
+SET KOST=P:\KOST
+SET ZIP_HOME=%KOST%\Dokumentation\11 Technotes\ZIP\CLI_progs
 
 @ECHO OFF
 ECHO.
-ECHO +7Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-@ECHO ON
-"%ZIP_HOME%\7z.exe" t %TESTZIP%
-
-@ECHO OFF
-ECHO.
+REM ECHO +7Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+REM @ECHO ON
+REM "%ZIP_HOME%\7z.exe" t %TESTZIP%
+REM 
+REM @ECHO OFF
+REM ECHO.
 ECHO DotNet UNZIP ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
 "%ZIP_HOME%\unzip.exe" -t %TESTZIP%

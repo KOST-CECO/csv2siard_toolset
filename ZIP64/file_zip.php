@@ -22,6 +22,7 @@ global $logfile, $prg_option;
 // -----------------------------------------------------------------------------
 function walkDir($name) {
 global $ZIP;
+	$ZIP->addZipFile($name);
 	if (is_dir($name)) {
 		$dh = opendir($name);
 		while (($file = readdir($dh)) !== false) {
@@ -31,7 +32,6 @@ global $ZIP;
 		}
 		closedir($dh);
 	}
-	$ZIP->addZipFile($name);
 }
 
 // -----------------------------------------------------------------------------

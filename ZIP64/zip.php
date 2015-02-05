@@ -138,20 +138,19 @@ if(!function_exists('str_split')) {
 $entries_size = array();	// Filename and size of Central_file_header
 $payload_size = array();	// Filename and size of Local_file_header + actual file size
 $instance_flag = false;		// Flag indicating that an ZIP object is created
-$zip64_flag = false;		// Flag indicating that an ZIP object is greater 4GB
 
 // 4.4.3 version needed to extract (2 bytes)
 define('IS_FILE', 10);		// 1.0 - Default value
 define('IS_FOLDER', 20);	// 2.0 - File is a folder (directory)
 define('IS_ZIP64', 45);		// 4.5 - File uses ZIP64 format extensions
 //define('MAX_4G', 0xfffffffe);// Max size for non ZIP64 file
-define('MAX_4G', 0x4f);// Max size for non ZIP64 file
+define('MAX_4G', 80);// Max size for non ZIP64 file
 
 
 // -----------------------------------------------------------------------------
 class ZipFile {
 	var $central_dir = ''; 				// Holds consecutive central_directory entries
-	var $zipfile = '';					// ZIP file name
+	var $zipfile = '';						// ZIP file name
 	var $fp_zipfile = null;				// ZIP file pointer
 	
 	function ZipFile($zipfile) {
@@ -164,11 +163,14 @@ class ZipFile {
 	
 	function addZipFile($file) {
 	global $prg_option;
+		$type = IS_FILE;		// 1.0 - Default value
+		
 		if (is_dir($file)) {
 			// Write folder to ZIP file
+			$type = IS_FOLDER;
 			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file/ " : '');
-			$fn = new DirectoryEntry("$file/", 0, IS_FOLDER);
-			fwrite($this->fp_zipfile, $fn->getLocalFileHeader(0));
+			$fn = new DirectoryEntry("$file/", 0, $type);
+			fwrite($this->fp_zipfile, $fn->getLocalFileHeader(0, $type));
 		} 
 		else {
 			// Write file to ZIP file
@@ -176,19 +178,20 @@ class ZipFile {
 			$filesize = getSize($file);
 			// File sizes > 4GB -> ZIP64
 			if ( $filesize > MAX_4G ) {
-				$zip64_flag = true;
+				$type = IS_ZIP64;
 				echo " -ZIP64 - ";
-				$fn = new DirectoryEntry($file, $filesize, IS_ZIP64);
-				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize));
+				$fn = new DirectoryEntry($file, $filesize, $type);
+				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
 				$this->writePayload($file);
 				fwrite($this->fp_zipfile, $fn->getDataDescriptor());
 			} else {
-				$fn = new DirectoryEntry($file, $filesize, IS_FILE);
-				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize));
+				$type = IS_FILE;
+				$fn = new DirectoryEntry($file, $filesize, $type);
+				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
 				$this->writePayload($file);
 			}
 		}
-		$this->central_dir = $this->central_dir . $fn->getCentralDirectoryEntry();
+		$this->central_dir = $this->central_dir . $fn->getCentralDirectoryEntry($type);
 	}
 	
 	function closeZipFile() {
@@ -265,9 +268,11 @@ class DirectoryEntry extends ZipFile{
 		$this->struct['Filename']                      = $filename;
 		$this->struct['Extra_field']                   = '';
 		$this->struct['File_comment']                  = '';
+		$this->struct['Header_id']                     = pack("v", 1);;	// Zip64 extended information extra field
+		$this->struct['Data_size']                     = pack("v",16);;	// Zip64 
 	}
 	
-	function getLocalFileHeader($filesize) {
+	function getLocalFileHeader($filesize, $type) {
 	global $payload_size;
 		$header = $this->struct['Local_file_header_signature'].
 							$this->struct['Version_needed_to_extract'].
@@ -282,6 +287,13 @@ class DirectoryEntry extends ZipFile{
 							$this->struct['Extra_field_length'].
 							$this->struct['Filename'].
 							$this->struct['Extra_field'];
+		if ($type == IS_ZIP64) {
+			$header = $header . 
+							$this->struct['Header_id'].
+							$this->struct['Data_size'].
+							$this->struct['Compressed_size_8byte'].
+							$this->struct['Uncompressed_size_8byte'];
+		}
 		$filename = $this->struct['Filename'];
 		$payload_size[$filename] = strlen($header) + $filesize;
 		return($header);
@@ -297,7 +309,7 @@ class DirectoryEntry extends ZipFile{
 		$payload_size[$filename] = $payload_size[$filename] + 24;
 		return($header);
 	}
-	function getCentralDirectoryEntry() {
+	function getCentralDirectoryEntry($type) {
 	global $entries_size;
 		$entry  = $this->struct['Central_file_header_signature'].
 							$this->struct['Version_made_by'].
@@ -319,6 +331,13 @@ class DirectoryEntry extends ZipFile{
 							$this->struct['Filename'].
 							$this->struct['Extra_field'].
 							$this->struct['File_comment'];
+		if ($type == IS_ZIP64) {
+			$entry = $entry . 
+							$this->struct['Header_id'].
+							$this->struct['Data_size'].
+							$this->struct['Compressed_size_8byte'].
+							$this->struct['Uncompressed_size_8byte'];
+		}
 		$filename = $this->struct['Filename'];
 		$entries_size[$filename] = strlen($entry);
 		return($entry);

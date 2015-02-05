@@ -14,6 +14,8 @@ phpZIP64
 		run.bat
 		run_ziptest.bat
 		run_speedtest.bat
+		run_ZIP64.bat
+		run_compare.bat
 	+source
 		zip.php
 		siard_zip.php
@@ -22,14 +24,18 @@ phpZIP64
 		crc32_test.php
 		filesize_test.php
 [Open project files]
-0=test.php
-1=zip.php
+0=APPNOTE ZIP File Format Specification.txt
+2=test.zip.hex
+3=run_ziptest.bat
 [Selected Project Files]
 Main=zip.php
-Selected=test.php
-[test.php]
+Selected=run_ziptest.bat
+[APPNOTE ZIP File Format Specification.txt]
+TopLine=1038
+Caret=61,1047
+[test.zip.hex]
 TopLine=1
-Caret=26,9
-[zip.php]
-TopLine=212
-Caret=74,233
+Caret=76,20
+[run_ziptest.bat]
+TopLine=9
+Caret=20,25
