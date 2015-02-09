@@ -22,9 +22,13 @@ SET TESTZIP_SHORTNAME=%SHORTNAME%
 
 REM ----------------------------------------------------------------------------
 SET KOST=P:\KOST
+IF NOT EXIST %KOST% (
+	SET KOST=C:\KOST_local
+)
 SET ZIP_HOME=%KOST%\Dokumentation\11 Technotes\ZIP\CLI_progs
 
 @ECHO OFF
+CLS
 ECHO.
 REM ECHO +7Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 REM @ECHO ON
@@ -43,10 +47,10 @@ ECHO ZIP-Info ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "%ZIP_HOME%\zipinfo.exe" -t -l %TESTZIP%
 
 @ECHO OFF
-ECHO.
-ECHO PKZip +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-@ECHO ON
-"%ZIP_HOME%\pkzip.exe" -v %TESTZIP_SHORTNAME%
+REM ECHO.
+REM ECHO PKZip +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+REM @ECHO ON
+REM "%ZIP_HOME%\pkzip.exe" -v %TESTZIP_SHORTNAME%
 
 @ECHO OFF
 ECHO.
@@ -58,7 +62,7 @@ ECHO www.info-zip.org ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ECHO.
 ECHO ZIP64 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @ECHO ON
-java.exe -jar "P:\KOST\Dokumentation\11 Technotes\ZIP\zip64-1.04\lib\zip64.jar" l %TESTZIP%
+java.exe -jar "%KOST%\Dokumentation\11 Technotes\ZIP\zip64-1.04\lib\zip64.jar" l %TESTZIP%
 
 @ECHO OFF
 REM %UNIX_HOME%\hexdump.exe" %TESTZIP% > %TESTZIP%.hex

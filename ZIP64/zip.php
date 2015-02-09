@@ -146,7 +146,6 @@ define('IS_ZIP64', 45);		// 4.5 - File uses ZIP64 format extensions
 //define('MAX_4G', 0xfffffffe);// Max size for non ZIP64 file
 define('MAX_4G', 80);// Max size for non ZIP64 file
 
-
 // -----------------------------------------------------------------------------
 class ZipFile {
 	var $central_dir = ''; 				// Holds consecutive central_directory entries
@@ -235,10 +234,8 @@ class DirectoryEntry extends ZipFile{
 		$this->struct['Data_descriptor_signature']     = pack("V", 0x08074b50);
 		$this->struct['Version_made_by']               = pack("v", 19);
 		$this->struct['Version_needed_to_extract']     = pack("v", $type);
-		if ($type == IS_ZIP64) { 
-			$this->struct['General_purpose_bit_flag']     = pack("v", 4); }
-		else {
-			$this->struct['General_purpose_bit_flag']     = pack("v", 0); }
+		//$this->struct['General_purpose_bit_flag']      = pack("v", ($type==IS_ZIP64 ? 4 : 0));
+		$this->struct['General_purpose_bit_flag']      = pack("v", 0);
 		$this->struct['Compression_method']            = pack("v", 0);
 		$this->struct['Last_mod_file_time']            = packTime(filemtime($filename));
 		$this->struct['Last_mod_file_date']            = packDate(filemtime($filename));
@@ -259,7 +256,7 @@ class DirectoryEntry extends ZipFile{
 		$this->struct['Compressed_size_8byte']         = pack64($filesize);
 		$this->struct['Uncompressed_size_8byte']       = pack64($filesize);
 		$this->struct['Filename_length']               = pack("v", strlen($filename));
-		$this->struct['Extra_field_length']            = pack("v", 0);
+		$this->struct['Extra_field_length']            = pack("v", ($type==IS_ZIP64 ? 20 : 0));
 		$this->struct['File_comment_length']           = pack("v", 0);
 		$this->struct['Disk_number_start']             = pack("v", 0);
 		$this->struct['Internal_file_attributes']      = pack("v", 0);

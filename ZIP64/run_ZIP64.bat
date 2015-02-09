@@ -13,9 +13,12 @@ IF NOT EXIST %2 (
 
 
 REM ----------------------------------------------------------------------------
-SET ZIP_HOME=P:\KOST\Dokumentation\11 Technotes\ZIP
+SET KOST=P:\KOST
+IF NOT EXIST %KOST% (
+	SET KOST=C:\KOST_local
+)
+SET ZIP_HOME=%KOST%\Dokumentation\11 Technotes\ZIP\
 
 REM ZIP64 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 java.exe -jar "%ZIP_HOME%\zip64-1.04\lib\zip64.jar" n %1 %2
 
