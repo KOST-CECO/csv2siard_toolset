@@ -28,7 +28,7 @@ IF NOT EXIST %KOST% (
 SET ZIP_HOME=%KOST%\Dokumentation\11 Technotes\ZIP\CLI_progs
 
 @ECHO OFF
-CLS
+
 ECHO.
 REM ECHO +7Z +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 REM @ECHO ON

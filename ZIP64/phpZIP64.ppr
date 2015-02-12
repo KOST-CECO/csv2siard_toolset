@@ -25,17 +25,9 @@ phpZIP64
 		filesize_test.php
 [Open project files]
 0=zip.php
-1=APPNOTE ZIP File Format Specification.txt
-2=run_ZIP64.bat
 [Selected Project Files]
 Main=zip.php
-Selected=APPNOTE ZIP File Format Specification.txt
+Selected=zip.php
 [zip.php]
-TopLine=230
-Caret=63,238
-[APPNOTE ZIP File Format Specification.txt]
-TopLine=508
-Caret=49,508
-[run_ZIP64.bat]
-TopLine=1
-Caret=14,4
+TopLine=347
+Caret=9,363

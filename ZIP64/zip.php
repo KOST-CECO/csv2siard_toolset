@@ -173,22 +173,15 @@ class ZipFile {
 		} 
 		else {
 			// Write file to ZIP file
-			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file/ " : '');
 			$filesize = getSize($file);
-			// File sizes > 4GB -> ZIP64
-			if ( $filesize > MAX_4G ) {
-				$type = IS_ZIP64;
-				echo " -ZIP64 - ";
-				$fn = new DirectoryEntry($file, $filesize, $type);
-				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
-				$this->writePayload($file);
+			$type = ($filesize > MAX_4G ? IS_ZIP64 : IS_FILE);
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file/ " : '');
+			$fn = new DirectoryEntry($file, $filesize, $type);
+			fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
+			$this->writePayload($file);
+			if ($type==IS_ZIP64) {
 				fwrite($this->fp_zipfile, $fn->getDataDescriptor());
-			} else {
-				$type = IS_FILE;
-				$fn = new DirectoryEntry($file, $filesize, $type);
-				fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
-				$this->writePayload($file);
-			}
+			} 
 		}
 		$this->central_dir = $this->central_dir . $fn->getCentralDirectoryEntry($type);
 	}
@@ -233,26 +226,17 @@ class DirectoryEntry extends ZipFile{
 		$this->struct['Local_file_header_signature']   = pack("V", 0x04034b50);
 		$this->struct['Data_descriptor_signature']     = pack("V", 0x08074b50);
 		$this->struct['Version_made_by']               = pack("v", 19);
-		$this->struct['Version_needed_to_extract']     = pack("v", $type);
+		$this->struct['Version_needed_to_extract']     = pack("v", $type);	// 1.0 - default, 2.0 - folder, 4.5 - ZIP64 
 		//$this->struct['General_purpose_bit_flag']      = pack("v", ($type==IS_ZIP64 ? 4 : 0));
 		$this->struct['General_purpose_bit_flag']      = pack("v", 0);
 		$this->struct['Compression_method']            = pack("v", 0);
 		$this->struct['Last_mod_file_time']            = packTime(filemtime($filename));
 		$this->struct['Last_mod_file_date']            = packDate(filemtime($filename));
-		if (is_dir($filename)) { 
-			$this->struct['CRC-32']                      = pack("V", 0); }
-		else {
-			$this->struct['CRC-32']                      = pack("V", crc32_exe($filename));
-			//$this->struct['CRC-32']                      = pack("V", crc32_file($filename));
-			//$this->struct['CRC-32']                      = pack("V", crc32(file_get_contents($filename)));
-		}
-		if ($type == IS_ZIP64) { 
-			$this->struct['Compressed_size']               = pack("V", 0xffffffff);
-			$this->struct['Uncompressed_size']             = pack("V", 0xffffffff); } 
-		else {
-			$this->struct['Compressed_size']               = pack("V", $filesize);
-			$this->struct['Uncompressed_size']             = pack("V", $filesize); 
-		} 
+		$this->struct['CRC-32']                        = pack("V", (is_dir($filename) ? 0 : crc32_exe($filename)));
+		//$this->struct['CRC-32']                      = pack("V", crc32_file($filename));
+		//$this->struct['CRC-32']                      = pack("V", crc32(file_get_contents($filename)));
+		$this->struct['Compressed_size']               = pack("V", ($filesize > MAX_4G ? 0xffffffff : $filesize));
+		$this->struct['Uncompressed_size']             = pack("V", ($filesize > MAX_4G ? 0xffffffff : $filesize));
 		$this->struct['Compressed_size_8byte']         = pack64($filesize);
 		$this->struct['Uncompressed_size_8byte']       = pack64($filesize);
 		$this->struct['Filename_length']               = pack("v", strlen($filename));
@@ -308,7 +292,7 @@ class DirectoryEntry extends ZipFile{
 	}
 	function getCentralDirectoryEntry($type) {
 	global $entries_size;
-		$entry  = $this->struct['Central_file_header_signature'].
+		$entry = $this->struct['Central_file_header_signature'].
 							$this->struct['Version_made_by'].
 							$this->struct['Version_needed_to_extract'].
 							$this->struct['General_purpose_bit_flag'].
@@ -343,7 +327,9 @@ class DirectoryEntry extends ZipFile{
 
 // -----------------------------------------------------------------------------
 class DirectoryEnd extends ZipFile {
-	var $struct;	// Structure holding Local File Header
+	var $struct;	// Structure holding End of Central Directory Record
+	var $struct64;	// Structure holding ZIP64 End of Central Directory Record
+	var $structloc;	// Zip64 end of central directory locator
 	
 	function DirectoryEnd() {
 	global $entries_size, $payload_size;
@@ -352,22 +338,46 @@ class DirectoryEnd extends ZipFile {
 		$this->struct['Disk_where_central_directory_starts']              = pack("v", 0);
 		$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($entries_size));
 		$this->struct['Total_number_of_central_directory_records']        = pack("v", count($entries_size));
-		$this->struct['Size_of_central_directory']                        = pack("V", array_sum($entries_size));
-		$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack("V", array_sum($payload_size));
+		$this->struct['Size_of_central_directory']                        = pack("V", array_sum($payload_size));
+		if (array_sum($payload_size) > MAX_4G) {
+			$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack("V", 0xffffffff);
+		} else {
+		
+			$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack("V", array_sum($payload_size));
+		}
 		$this->struct['zipfile_comment_length']        = pack("v", 0);
 		$this->struct['zipfile_comment']               = '';
+		
+		$this->struct64['End_of_central_dir_signature']  = pack("V", 0x06064b50);
+		$this->struct64['size_of_zip64_end_of_central_directory_record']    = pack64(44);;
+		$this->struct64['Version_made_by']                                  = pack("v", 19);
+		$this->struct64['Version_needed_to_extract']                        = pack("v", IS_ZIP64);
+		$this->struct64['Number_of_this_disk']                              = pack("V", 0);
+		$this->struct64['Disk_where_central_directory_starts']              = pack("V", 0);
+		$this->struct64['Number_of_central_directory_records_on_this_disk'] = pack64(count($entries_size));
+		$this->struct64['Total_number_of_central_directory_records']        = pack64(count($entries_size));	
+		$this->struct64['Size_of_central_directory']                        = pack64(array_sum($entries_size));
+		$this->struct64['Offset_of_start_of_central_directory,_relative_to_start_of_archive'] = pack64(array_sum($payload_size));
+		$this->struct64['zip64_extensible_data_sector']                     = '';
+		
+echo "\npayloadsize: ". array_sum($payload_size) . "\n";
+echo "entrysize: ". array_sum($entries_size) . "\n";
+echo "ZIP64 offset: ". (array_sum($payload_size) + array_sum($entries_size)) . "\n";
+
+		$this->structloc['End_of_central_dir_signature']  = pack("V", 0x07064b50);
+		$this->structloc['number_of_the_disk_with_the_start_of_the_zip64_end_ofcentral_directory'] = pack("V", 0);
+		$this->structloc['relative_offset_of_the_zip64_end_of_central_directory_record']           = pack64(array_sum($payload_size) + array_sum($entries_size));
+		$this->structloc['total_number_of_disks']                                                  = pack("V", 1);
 	}
 
 	function getEndofCentralDirectoryRecord() {
-		$end    = $this->struct['End of_central_dir_signature']  = pack("V", 0x06054b50).
-							$this->struct['Number_of_this_disk'].
-							$this->struct['Disk_where_central_directory_starts'].
-							$this->struct['Number_of_central_directory_records_on_this_disk'].
-							$this->struct['Total_number_of_central_directory_records'].
-							$this->struct['Size_of_central_directory'].
-							$this->struct['Offset_of_start_of_central_directory,_relative_to_start_of_archive'].
-							$this->struct['zipfile_comment_length'].
-							$this->struct['zipfile_comment'];
+	global $entries_size, $payload_size;
+		$end = '';
+		if (array_sum($payload_size) > MAX_4G) {
+			$end .= implode($this->struct64);
+			$end .= implode($this->structloc);
+		}
+		$end .= implode($this->struct);
 		return($end);
 	}
 }
