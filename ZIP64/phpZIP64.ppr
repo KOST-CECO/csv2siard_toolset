@@ -24,10 +24,14 @@ phpZIP64
 		crc32_test.php
 		filesize_test.php
 [Open project files]
-0=zip.php
+0=Neu1.txt
+1=zip.php
 [Selected Project Files]
 Main=zip.php
 Selected=zip.php
+[Neu1.txt]
+TopLine=1
+Caret=1,1
 [zip.php]
-TopLine=347
-Caret=9,363
+TopLine=1
+Caret=1,1

@@ -31,8 +31,14 @@ java.exe -jar "%ZIP_HOME%\zip64-1.04\lib\zip64.jar" n "%1ZIP64.zip" "%1\*"
 
 REM compare ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 DEL "%1.zip.hex" "%1ZIP64.zip.hex"
-hexdump %1.zip > "%1.zip.hex"
-hexdump %1ZIP64.zip > "%1ZIP64.zip.hex"
+
+tail1k.exe "%1.zip" > "%1.zip.1k"
+tail1k.exe "%1ZIP64.zip" > "%1ZIP64.zip.1k"
+
+hexdump %1.zip.1k > "%1.zip.hex"
+hexdump %1ZIP64.zip.1k > "%1ZIP64.zip.hex"
+
+DEL "%1.zip.1k" "%1ZIP64.zip.1k"
 
 START tkdiff.exe "%1.zip.hex" "%1ZIP64.zip.hex"
 
