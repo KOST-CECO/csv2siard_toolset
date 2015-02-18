@@ -234,9 +234,12 @@ class DirectoryEntry extends ZipFile{
 		$this->struct['Compression_method']            = pack("v", 0);
 		$this->struct['Last_mod_file_time']            = packTime(filemtime($filename));
 		$this->struct['Last_mod_file_date']            = packDate(filemtime($filename));
-		$this->struct['CRC-32']                        = pack("V", (is_dir($filename) ? 0 : crc32_exe($filename)));
-		//$this->struct['CRC-32']                      = pack("V", crc32_file($filename));
-		//$this->struct['CRC-32']                      = pack("V", crc32(file_get_contents($filename)));
+		if ($filesize > 100000) {
+			$this->struct['CRC-32']                        = pack("V", (is_dir($filename) ? 0 : crc32_exe($filename)));
+		} else {
+			$this->struct['CRC-32']                        = pack("V", (is_dir($filename) ? 0 : crc32(file_get_contents($filename))));
+		}
+		//$this->struct['CRC-32']                        = pack("V", (is_dir($filename) ? 0 : crc32_file($filename)));
 		$this->struct['Compressed_size']               = pack("V", ($filesize > MAX_4G ? 0xffffffff : $filesize));
 		$this->struct['Uncompressed_size']             = pack("V", ($filesize > MAX_4G ? 0xffffffff : $filesize));
 		$this->struct['Compressed_size_8byte']         = pack64($filesize);
@@ -348,15 +351,20 @@ class DirectoryEntry extends ZipFile{
 class DirectoryEnd extends ZipFile {
 	var $struct;	// Structure holding End of Central Directory Record
 	var $struct64;	// Structure holding ZIP64 End of Central Directory Record
-	var $structloc;	// Zip64 end of central directory locator
+	var $structloc;	// ZIP64 end of central directory locator
 	
 	function DirectoryEnd() {
 	global $entries_size, $payload_size;
 		$this->struct['End of_central_dir_signature']  = pack("V", 0x06054b50);
 		$this->struct['Number_of_this_disk']                              = pack("v", 0);
 		$this->struct['Disk_where_central_directory_starts']              = pack("v", 0);
-		$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($entries_size));
-		$this->struct['Total_number_of_central_directory_records']        = pack("v", count($entries_size));
+		if (count($entries_size) > 0xfffffffe) {
+			$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", 0xffffffff);
+			$this->struct['Total_number_of_central_directory_records']        = pack("v", 0xffffffff);
+		} else {
+			$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($entries_size));
+			$this->struct['Total_number_of_central_directory_records']        = pack("v", count($entries_size));
+		}
 		if (array_sum($entries_size) > MAX_4G) {
 			$this->struct['Size_of_central_directory']                        = pack("V", 0xffffffff);
 		} else {
@@ -391,10 +399,15 @@ class DirectoryEnd extends ZipFile {
 	function getEndofCentralDirectoryRecord() {
 	global $entries_size, $payload_size;
 		$end = '';
-		if (array_sum($payload_size) > MAX_4G) {
+		if ((array_sum($payload_size) > MAX_4G) 
+			or (array_sum($entries_size) > MAX_4G)
+			or (count($entries_size) > 0xfffffffe)) {
+			// ZIP64 End of Central Directory Record
 			$end .= implode($this->struct64);
+			// ZIP64 end of central directory locator
 			$end .= implode($this->structloc);
 		}
+		// End of Central Directory Record
 		$end .= implode($this->struct);
 		return($end);
 	}

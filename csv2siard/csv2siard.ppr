@@ -49,10 +49,5 @@ csv2siard
 		database-torque-4-0.xsd
 		metadata.xsd
 [Open project files]
-0=c2sfunction.php
 [Selected Project Files]
 Main=csv2siard.php
-Selected=c2sfunction.php
-[c2sfunction.php]
-TopLine=196
-Caret=1,207
