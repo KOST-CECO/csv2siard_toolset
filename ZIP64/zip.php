@@ -83,9 +83,10 @@ global $prgdir, $prg_option;
 
 // get file sizes > 4GB on Windows
 function getSize($file) {
+	$rfile = realpath($file);
 	$size = -1;
 	$fsobj = new COM("Scripting.FileSystemObject");
-	$f = $fsobj->GetFile($file);
+	$f = $fsobj->GetFile($rfile);
 	$size = $f->Size;
 	return $size;
 }
