@@ -16,6 +16,7 @@ phpZIP64
 		run_speedtest.bat
 		run_ZIP64.bat
 		run_compare.bat
+		run_validate.bat
 	+source
 		zip.php
 		siard_zip.php
@@ -26,12 +27,16 @@ phpZIP64
 [Open project files]
 0=Neu1.txt
 1=zip.php
+2=test.php
 [Selected Project Files]
 Main=zip.php
-Selected=zip.php
+Selected=test.php
 [Neu1.txt]
 TopLine=1
 Caret=1,1
 [zip.php]
-TopLine=224
-Caret=4,241
+TopLine=1
+Caret=1,1
+[test.php]
+TopLine=23
+Caret=1,43

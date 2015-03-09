@@ -7,6 +7,7 @@ include 'zip.php';
 // Global
 $prgdir = dirname(realpath($argv[0]));				//Program directory
 $prg_option['VERBOSITY'] = true;					// Programm optionen
+$countit = 0;
 // -----------------------------------------------------------------------------
 // writes echo to logfile if specified
 // newline is replaced bei carriage return and newline (0x0d0a)
@@ -21,7 +22,8 @@ global $logfile, $prg_option;
 }
 // -----------------------------------------------------------------------------
 function walkDir($name) {
-global $ZIP;
+global $ZIP, $countit;
+//	echo "\n addZipFile: $name " . $countit++;
 	$ZIP->addZipFile($name);
 	if (is_dir($name)) {
 		$dh = opendir($name);
