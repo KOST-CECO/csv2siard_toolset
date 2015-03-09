@@ -145,8 +145,8 @@ define('VERSION', 45);				// Version made by
 define('IS_FILE', 10);				// 1.0 - Default value
 define('IS_FOLDER', 20);			// 2.0 - File is a folder (directory)
 define('IS_ZIP64', 45);				// 4.5 - File uses ZIP64 format extensions
-define('MAX_4G', 0xfffffffe);	// Max size for non ZIP64 file
-//define('MAX_4G', 80);// Max size for non ZIP64 file
+define('MAX_4G', 0xfffffffe);	// Max file size for non ZIP64
+define('MAX_2O', 0xfffe);			// Max no of files for non ZIP64
 
 // -----------------------------------------------------------------------------
 class ZipFile {
@@ -163,13 +163,17 @@ class ZipFile {
 	}
 	
 	function addZipFile($file) {
-	global $prg_option;
+	global $prg_option, $entries_size;
 		$type = IS_FILE;		// 1.0 - Default value
-		
+		if (isset($entries_size) and array_key_exists($file, $entries_size)) {
+			// File or folder entry exists
+			log_echo(($prg_option['VERBOSITY']) ? "\n  Entry exists: $file " : '');
+			return;
+		}
 		if (is_dir($file)) {
 			// Write folder to ZIP file
 			$type = IS_FOLDER;
-			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file/ " : '');
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file " : '');
 			$fn = new DirectoryEntry("$file/", 0, $type);
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader(0, $type));
 		} 
@@ -177,7 +181,7 @@ class ZipFile {
 			// Write file to ZIP file
 			$filesize = getSize($file);
 			$type = ($filesize > MAX_4G ? IS_ZIP64 : IS_FILE);
-			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file/ " : '');
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file " : '');
 			$fn = new DirectoryEntry($file, $filesize, $type);
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
 			$this->writePayload($file);
@@ -358,9 +362,9 @@ class DirectoryEnd extends ZipFile {
 		$this->struct['End of_central_dir_signature']  = pack("V", 0x06054b50);
 		$this->struct['Number_of_this_disk']                              = pack("v", 0);
 		$this->struct['Disk_where_central_directory_starts']              = pack("v", 0);
-		if (count($entries_size) > 0xfffffffe) {
-			$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", 0xffffffff);
-			$this->struct['Total_number_of_central_directory_records']        = pack("v", 0xffffffff);
+		if (count($entries_size) > MAX_2O) {
+			$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", 0xffff);
+			$this->struct['Total_number_of_central_directory_records']        = pack("v", 0xffff);
 		} else {
 			$this->struct['Number_of_central_directory_records_on_this_disk'] = pack("v", count($entries_size));
 			$this->struct['Total_number_of_central_directory_records']        = pack("v", count($entries_size));
@@ -401,7 +405,7 @@ class DirectoryEnd extends ZipFile {
 		$end = '';
 		if ((array_sum($payload_size) > MAX_4G) 
 			or (array_sum($entries_size) > MAX_4G)
-			or (count($entries_size) > 0xfffffffe)) {
+			or (count($entries_size) > MAX_2O)) {
 			// ZIP64 End of Central Directory Record
 			$end .= implode($this->struct64);
 			// ZIP64 end of central directory locator
