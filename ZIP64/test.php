@@ -38,8 +38,10 @@ $prgdir = dirname(realpath($argv[0]));				//Program directory
 $prg_option['VERBOSITY'] = true;					// Programm optionen
 
 $ZIP = new ZipFile("test.zip");
-$ZIP->addZipFile("65535/xaa");
-$ZIP->addZipFile("65535/xaa");
+$ZIP->addZipFile("ZIP_testdata\data\payload.csv");
+$ZIP->addZipFile("ZIP_testdata\data\payload.csv");
+$ZIP->addZipFile("ZIP_testdata\data\payload1.csv");
+$ZIP->addZipFile("ZIP_testdata\data\payload2.csv");
 $ZIP->closeZipFile();
 
 /*

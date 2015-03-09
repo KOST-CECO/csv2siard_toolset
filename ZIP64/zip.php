@@ -163,13 +163,17 @@ class ZipFile {
 	}
 	
 	function addZipFile($file) {
-	global $prg_option;
+	global $prg_option, $entries_size;
 		$type = IS_FILE;		// 1.0 - Default value
-		
+		if (isset($entries_size) and array_key_exists($file, $entries_size)) {
+			// File or folder entry exists
+			log_echo(($prg_option['VERBOSITY']) ? "\n  Entry exists: $file " : '');
+			return;
+		}
 		if (is_dir($file)) {
 			// Write folder to ZIP file
 			$type = IS_FOLDER;
-			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file/ " : '');
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFolder: $file " : '');
 			$fn = new DirectoryEntry("$file/", 0, $type);
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader(0, $type));
 		} 
@@ -177,7 +181,7 @@ class ZipFile {
 			// Write file to ZIP file
 			$filesize = getSize($file);
 			$type = ($filesize > MAX_4G ? IS_ZIP64 : IS_FILE);
-			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file/ " : '');
+			log_echo(($prg_option['VERBOSITY']) ? "\n  addFile:   $file " : '');
 			$fn = new DirectoryEntry($file, $filesize, $type);
 			fwrite($this->fp_zipfile, $fn->getLocalFileHeader($filesize, $type));
 			$this->writePayload($file);

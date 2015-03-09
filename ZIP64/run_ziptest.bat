@@ -1,5 +1,8 @@
 @ECHO OFF
 SETLOCAL
+REM ----------------------------------------------------------------------------
+REM ZIP File mit verschiedenen ZIP Tools auf konsistenz testen
+REM ----------------------------------------------------------------------------
 
 IF [%1]==[] (
 	ECHO usage: %0zipfile
